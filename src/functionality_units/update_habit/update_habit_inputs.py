@@ -9,7 +9,6 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent
 
 class UpdateHabitInputs(Habit_Inputs):
-
     def __init__(self):
         self.__update_habit_validator = UpdateHabitValidator()
         self.__number_of_habit_fields = None
@@ -23,7 +22,8 @@ class UpdateHabitInputs(Habit_Inputs):
 
     def __my_input(self,message,history_file_name,commands):
         autocompleter = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
-        return autocompleter.prompt_input(message).lower()
+        modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
+        return autocompleter.prompt_input(message,location=f"Home/UpdateHabit/{modified_history_file_name}").lower()
     
     @retry_until_success
     def find_habit_id(self,message):
