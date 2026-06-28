@@ -23,15 +23,17 @@ def retry_until_success(function):
                 return message
     return wrapper
 
-def ran_common_functions(user_input,help_message='to be written'):
+def ran_common_functions(user_input,function=None):
     '''
     try to make the help function that will help the user to pick things up quick
     e.g use html to show gifs
     '''
     match user_input:
         case 'help':
-            print(help_message)
-            # lets make this to be a function the function must have the map
+            if function==None:
+                print('to be written')
+            else:
+                function()
             return True
         case 'clear':
             clear_screen()
@@ -39,6 +41,18 @@ def ran_common_functions(user_input,help_message='to be written'):
         case 'esc':
             return False
     return None
+
+def find_message(message):
+    match message:
+        case 'esc':
+            return 'escaping'
+        case 'clear':
+            return 'clearing screen'
+        case 'help':
+            return 'help function'
+    return None
+
+
 
 def retry_until_success_v2(function):
     """
