@@ -70,7 +70,7 @@ class Database:
             self.__connect.commit()
             return "success", None
         except Exception as e:
-            return "errpr", str(e)        
+            return "error", str(e)        
 
 if __name__=="__main__":
     x = Database()

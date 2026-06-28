@@ -185,5 +185,5 @@ class UpdateHabitInputs(Habit_Inputs):
             return True, 'Find the habit first'
         if self.__number_of_habit_fields==None:
             return True, 'Choose the number of fields first'
-        self._Habit_Inputs__habit.update_habit(**self.update_field_dict())
-        return True,'success'
+        success,message = self._Habit_Inputs__habit.update_habit(**self.update_field_dict())
+        return True,message
