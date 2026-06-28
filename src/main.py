@@ -2,6 +2,7 @@ from .data.db_manager import DB_Interface,Habits
 from .functionality_units.delete_unit.delete_habit import DeleteHabit
 from .functionality_units.time_project.time_manager import HabitDateTimeManager
 from .functionality_units.update_habit.update_habit_inputs import UpdateHabitInputs
+from .functionality_units.update_habit.update_habit import UpdateHabit
 import threading
 import time
 
@@ -23,12 +24,14 @@ def background_task():
 def main_program():
     # x = DeleteHabit()
     # x.delete("Enter the id of the habit you want to delete")
-    x = UpdateHabitInputs()
-    x.find_habit_id('Enter id: ')
-    x.set_habit_field_number('Enter the number of fields: ')
-    x.choose_fields_to_update('Enter the fields you want to update: ')
-    x.set_fields_to_update()
-    x.update()
+    # x = UpdateHabitInputs()
+    # x.find_habit_id('Enter id: ')
+    # x.set_habit_field_number('Enter the number of fields: ')
+    # x.choose_fields_to_update('Enter the fields you want to update: ')
+    # x.set_fields_to_update()
+    # x.update()
+    x = UpdateHabit()
+    x.run()
 
 def main():
     main_program()

@@ -24,9 +24,14 @@ def retry_until_success(function):
     return wrapper
 
 def ran_common_functions(user_input,help_message='to be written'):
+    '''
+    try to make the help function that will help the user to pick things up quick
+    e.g use html to show gifs
+    '''
     match user_input:
         case 'help':
             print(help_message)
+            # lets make this to be a function the function must have the map
             return True
         case 'clear':
             clear_screen()

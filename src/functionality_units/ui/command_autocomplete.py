@@ -49,7 +49,7 @@ class AutoCompleter:
     def set_has_progress_bar(self,has_progress_bar):
         self.__has_progress_bar = has_progress_bar
 
-    def set_has_status(self,has_status):
+    def set_has_status(self,has_status: bool):
         self.__has_status = has_status
 
     def prompt_input(self, message, commands=None,example=None,location='Home'):
@@ -59,5 +59,5 @@ class AutoCompleter:
         if self.__has_progress_bar:
             pass
         if self.__has_status:
-            print()
+            print('State of field: ❌ not filled')
         return self.get_session().prompt(ANSI(prompt_string)).strip()

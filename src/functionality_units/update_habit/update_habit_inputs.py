@@ -22,6 +22,7 @@ class UpdateHabitInputs(Habit_Inputs):
 
     def __my_input(self,message,history_file_name,commands):
         autocompleter = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
+        # autocompleter.set_has_status(True)
         modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
         return autocompleter.prompt_input(message,location=f"Home/UpdateHabit/{modified_history_file_name}").lower()
     
@@ -113,7 +114,10 @@ class UpdateHabitInputs(Habit_Inputs):
         
         commands = ['name','start_datetime','duration']
         history_file_name = 'choose_fields_to_update'
-
+        if int(self.__number_of_habit_fields)==3:
+            self.__field_names.extend(['name','start_datetime','duration'])
+            return True, 'ran common functions'
+        
         habit_field = self.__my_input(message,history_file_name,commands)
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(habit_field)
@@ -130,13 +134,14 @@ class UpdateHabitInputs(Habit_Inputs):
         return True, 'success...'
     
     def choose_fields_to_update(self,message):
-        if int(self.__number_of_habit_fields)==3:
-            self.__field_names.extend(['name','start_datetime','duration'])
-            return
         count = 0
-        while count<self.__number_of_habit_fields:
+        while True:
             message_to_display = self.__choose_fields_to_update(message)
+            if message_to_display!='success...':
+                break
             count+=1
+            if count == self.__number_of_habit_fields:
+                break
     
     def set_fields_to_update(self):
         commands = {
@@ -174,5 +179,11 @@ class UpdateHabitInputs(Habit_Inputs):
         field_dict = {field_name:field_dict[field_name] for field_name in field_dict.keys() if field_dict[field_name]!='default'}
         return field_dict
 
+    @retry_until_success
     def update(self):
+        if not self.__is_habit_id_found:
+            return True, 'Find the habit first'
+        if self.__number_of_habit_fields==None:
+            return True, 'Choose the number of fields first'
         self._Habit_Inputs__habit.update_habit(**self.update_field_dict())
+        return True,'success'
