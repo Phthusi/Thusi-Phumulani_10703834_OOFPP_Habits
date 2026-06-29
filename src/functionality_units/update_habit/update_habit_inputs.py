@@ -1,5 +1,5 @@
 from ..ui.command_autocomplete import AutoCompleter
-from ..ui.terminal_utils import ran_common_functions, retry_until_success
+from ..ui.terminal_utils import ran_common_functions, retry_until_success, find_message
 from ..ui.tables import MyTable
 from ..habit_input import Habit_Inputs
 from .update_habit_validator import UpdateHabitValidator
@@ -34,10 +34,12 @@ class UpdateHabitInputs(Habit_Inputs):
         habit_id = self.__my_input(message,history_file_name,commands)
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(habit_id)
+        
+        message_to_display = find_message(habit_id)
         if did_run_common_func==False:
-            return True, 'ran common functions'
+            return True, message_to_display
         elif did_run_common_func==True:
-            return False, 'switching'
+            return False, message_to_display
         # ********** end of common functions ************
         try:
             habit_id = int(habit_id)
@@ -73,10 +75,11 @@ class UpdateHabitInputs(Habit_Inputs):
         habit_field_number = self.__my_input(message,history_file_name,commands)
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(habit_field_number)
+        message_to_display = find_message(habit_field_number)
         if did_run_common_func==False:
-            return True, 'ran common functions'
+            return True, message_to_display
         elif did_run_common_func==True:
-            return False, 'switching'
+            return False, message_to_display
         # ********** end of common functions ************
         if not self.__update_habit_validator.is_valid_habit_field_number(habit_field_number):
             return False, f"{habit_field_number} is not an integer in the set "+'{1,2,3}'
@@ -92,10 +95,11 @@ class UpdateHabitInputs(Habit_Inputs):
         want_to_view_habit = self.__my_input(message,history_file_name,commands)
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(want_to_view_habit)
+        message_to_display = find_message(want_to_view_habit)
         if did_run_common_func==False:
-            return True, 'ran common functions'
+            return True, message_to_display
         elif did_run_common_func==True:
-            return False, 'switching'
+            return False, message_to_display
         # ********** end of common functions ************
         if want_to_view_habit not in commands:
             return False,f"'{want_to_view_habit}' is not in the given options,please press space to see you options"
@@ -121,10 +125,11 @@ class UpdateHabitInputs(Habit_Inputs):
         habit_field = self.__my_input(message,history_file_name,commands)
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(habit_field)
+        message_to_display = find_message(habit_field)
         if did_run_common_func==False:
-            return True, 'ran common functions'
-        elif  did_run_common_func==True:
-            return False, 'switching'
+            return True, message_to_display
+        elif did_run_common_func==True:
+            return False, message_to_display
         # ********** end of common functions ************
         
         if not self.__update_habit_validator.is_field_name_valid(habit_field):
