@@ -1,4 +1,5 @@
-from .update_habit_inputs import UpdateHabitInputs,retry_until_success,ran_common_functions,AutoCompleter
+from .update_habit_inputs import UpdateHabitInputs,retry_until_success,ran_common_functions, AutoCompleter
+from ..ui.command_autocomplete import ProgressBar
 from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -58,3 +59,5 @@ class UpdateHabit:
                 
             if user_input not in commands:
                 print(f"'{user_input}' is not in the given options,please press space to see you options")
+
+            # update the progress thingy

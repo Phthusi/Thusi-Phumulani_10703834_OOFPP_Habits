@@ -123,7 +123,7 @@ class UpdateHabitInputs(Habit_Inputs):
         did_run_common_func = ran_common_functions(habit_field)
         if did_run_common_func==False:
             return True, 'ran common functions'
-        elif did_run_common_func==True:
+        elif  did_run_common_func==True:
             return False, 'switching'
         # ********** end of common functions ************
         
@@ -147,15 +147,15 @@ class UpdateHabitInputs(Habit_Inputs):
         commands = {
             'name':[
                     self.set_habit_name,
-                    "Enter the habit name you want this to be updated to"
+                    "Enter the habit name you want this to be updated to: "
                     ],
             'start_datetime':[
                     self.set_start_datetime,
-                    "Enter the habit datetime you want this to be updated to"
+                    "Enter the habit datetime you want this to be updated to: "
                 ],
             'duration':[
                 self.set_session_duration,
-                "Enter the habit session duration you want this to be updated to"
+                "Enter the habit session duration you want this to be updated to: "
             ]
         }
 
@@ -187,3 +187,6 @@ class UpdateHabitInputs(Habit_Inputs):
             return True, 'Choose the number of fields first'
         success,message = self._Habit_Inputs__habit.update_habit(**self.update_field_dict())
         return True,message
+    
+    def get_filled_fields(self):
+        pass

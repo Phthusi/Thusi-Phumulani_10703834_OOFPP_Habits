@@ -31,7 +31,7 @@ class AutoCompleter:
         self.__has_progress_bar = False
         self.__has_status = False
         self.__number_of_fields = number_of_fields
-        self.__progress_bar = ProgressBar(number_of_fields)
+        # self.__progress_bar = ProgressBar(number_of_fields)
 
     def get_completer(self):
         return FuzzyCompleter(WordCompleter(self.__commands, ignore_case=True))
