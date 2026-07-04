@@ -30,3 +30,15 @@ if __name__ == "__main__":
                                     [ Exit complete. Stay disciplined. ]
     ===========================================================================================================
     """)
+
+'''
+priorities
+1. progress bar functionality
+2. status functionality
+3. message colors
+4. help command
+5. repeat command
+6. testing
+7. documentation 
+
+'''

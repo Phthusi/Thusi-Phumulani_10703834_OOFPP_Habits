@@ -37,7 +37,7 @@ class AddHabit:
         history_file_name='start_datetime'
         commands = []
         autocompleter = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
-        return autocompleter.prompt_input(message,[],'(format: yyyy-mm-dd, HH:MM e.g 2026-06-08, 08:53)')
+        return autocompleter.prompt_input(message,[],'format: yyyy-mm-dd, HH:MM e.g 2026-06-08, 08:53')
 
 
     @retry_until_success

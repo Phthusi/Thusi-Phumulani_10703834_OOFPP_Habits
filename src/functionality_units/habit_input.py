@@ -35,13 +35,13 @@ class Habit_Inputs:
         history_file_name='start_datetime'
         commands = []
         autocompleter = AutoCompleter(self.__BASE_DIR / f"history/{history_file_name}",commands)
-        return autocompleter.prompt_input(message,[],'(format: yyyy-mm-dd, HH:MM e.g 2026-06-08, 08:53)')
+        return autocompleter.prompt_input(message,[],'format: yyyy-mm-dd, HH:MM e.g 2026-06-08, 08:53')
 
 
     @retry_until_success
     def set_start_datetime(self,message):
-        habit_start_datetime = self.__set_habit_start_datetime(message)
-        
+        habit_start_datetime = self.__set_habit_start_datetime(message).replace(',','')
+
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(habit_start_datetime)
         if did_run_common_func==False:
@@ -50,6 +50,15 @@ class Habit_Inputs:
             return False, 'switching'
         # ********** end of common functions ************
 
+        date, time = habit_start_datetime.split(' ')
+        if not (isinstance(date,str) and isinstance(date,str)):
+            return False, 'Invalid format'
+
+        time_list = time.split(':')
+        if len(time_list)!=2:
+            return False, 'Invalid format: time is not in a valid format'
+
+        habit_start_datetime +=":00"
         if not self.__datetime_validator.is_date_valid(habit_start_datetime):
             return False, 'Invalid format'
         

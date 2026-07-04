@@ -17,21 +17,22 @@ class UpdateHabitInputs(Habit_Inputs):
         self.__is_habit_id_found = False
         self.__my_table = MyTable('Habit',['Id','Name','Start time','Duration'])
         self.__habits = Habits()
+        self.__auto_completer = None
         self.__current_fields = dict()
         super().__init__(BASE_DIR)
 
-    def __my_input(self,message,history_file_name,commands):
-        autocompleter = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
-        # autocompleter.set_has_status(True)
+    def __my_input(self,message,history_file_name,commands,field_name=None):
+        self.__auto_completer = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
+        self.__auto_completer.set_has_status(True)
         modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
-        return autocompleter.prompt_input(message,location=f"Home/UpdateHabit/{modified_history_file_name}").lower()
-    
+        return self.__auto_completer.prompt_input(message,location=f"Home/UpdateHabit/{modified_history_file_name}",field_name=field_name).lower()
+
     @retry_until_success
     def find_habit_id(self,message):
         # reset habit to habit we found
         commands = []
         history_file_name='find_habit_id'
-        habit_id = self.__my_input(message,history_file_name,commands)
+        habit_id = self.__my_input(message,history_file_name,commands,field_name='id')
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(habit_id)
         
@@ -72,7 +73,7 @@ class UpdateHabitInputs(Habit_Inputs):
         commands = ['1','2','3']
         history_file_name = 'num_habit_fields'
         self.view_habit('Do you want to view the habit you selected: ')
-        habit_field_number = self.__my_input(message,history_file_name,commands)
+        habit_field_number = self.__my_input(message,history_file_name,commands,field_name='number_of_habit_fields')
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(habit_field_number)
         message_to_display = find_message(habit_field_number)
@@ -110,11 +111,13 @@ class UpdateHabitInputs(Habit_Inputs):
 
     @retry_until_success
     def __choose_fields_to_update(self,message):
+        if self.__auto_completer.get_form()!=None:
+            self.__auto_completer.get_form().reset_fields()
         if not self.__is_habit_id_found:
             return True, 'Find the habit first'
         
         if self.__number_of_habit_fields==None:
-            return False, 'You cannot choose fields to update before successfully setting the habit field number'
+            return True, 'You cannot choose fields to update before successfully setting the habit field number'
         
         commands = ['name','start_datetime','duration']
         history_file_name = 'choose_fields_to_update'
@@ -136,6 +139,7 @@ class UpdateHabitInputs(Habit_Inputs):
             return False, f'Invalid habit field, it must be one of the following:{'\n'.join(commands)}'
 
         self.__field_names.append(habit_field)
+        self.__auto_completer.add_field_to_form(habit_field)
         return True, 'success...'
     
     def choose_fields_to_update(self,message):
