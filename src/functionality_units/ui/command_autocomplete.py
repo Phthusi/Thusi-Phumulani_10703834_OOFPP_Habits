@@ -67,22 +67,20 @@ class Form:
     def get_unfilled_fields(self):
         return [field for field, filled in self.fields.items() if not filled]
 
+    def set_field_status(self, field_name, status):
+        if field_name in self.fields:
+            self.fields[field_name] = status
+
 class AutoCompleter:
-    def __init__(self,history_file_name, commands=[],fields_to_fill=[]):
+    def __init__(self,history_file_name, commands=[]):
         self.__history = FileHistory(f"{history_file_name}.txt")
         self.__common_commands = read_json_files()['common_commands']
         self.__commands = [*commands,*self.__common_commands]
         self.__session = PromptSession(completer=self.get_completer(), history=self.__history)
-        self.__has_progress_bar = False
         self.__has_status = False
-        self.__form = Form({field: False for field in fields_to_fill})
-        self.__progress_bar = None
 
     def get_completer(self):
         return FuzzyCompleter(WordCompleter(self.__commands, ignore_case=True))
-    
-    def get_form(self): 
-        return self.__form
 
     def get_commands(self):
         return self.__commands
@@ -93,25 +91,19 @@ class AutoCompleter:
     def set_commmands(self,commands):
         self.__commands = commands
         self.__session = PromptSession(completer=self.get_completer(), history=self.__history)
+
+    def set_has_status(self, has_status):
+        self.__has_status = has_status
     
     def get_session(self):
         return self.__session
 
-    def set_progress_bar(self, progress_bar:ProgressBar):
-        self.__progress_bar = progress_bar
-
-    def set_has_progress_bar(self,has_progress_bar):
-        self.__has_progress_bar = has_progress_bar
-
-    def set_has_status(self,has_status: bool):
-        self.__has_status = has_status
-
-    def prompt_input(self, message, commands=None,example=None,location='Home',field_name=None):
+    def prompt_input(self, message, commands=None,example=None,location='Home',field_status=None):
         prompt_string = f"[📍location] {location} "+Style.BRIGHT + f"> {Fore.MAGENTA + message}"
         if example!=None:
             prompt_string = f"{Fore.LIGHTBLACK_EX+ example}\n"+prompt_string
         if self.__has_status:
-            status = self.__form.get_field_status(field_name)
+            status = field_status
             if status!=None:
                 print(f"{Fore.LIGHTBLACK_EX}Status: {status}")
         return self.get_session().prompt(ANSI(prompt_string)).strip()

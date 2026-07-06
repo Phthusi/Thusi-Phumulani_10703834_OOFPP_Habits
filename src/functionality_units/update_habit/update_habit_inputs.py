@@ -1,4 +1,4 @@
-from ..ui.command_autocomplete import AutoCompleter
+from ..ui.command_autocomplete import AutoCompleter,Form
 from ..ui.terminal_utils import ran_common_functions, retry_until_success, find_message
 from ..ui.tables import MyTable
 from ..habit_input import Habit_Inputs
@@ -17,22 +17,23 @@ class UpdateHabitInputs(Habit_Inputs):
         self.__is_habit_id_found = False
         self.__my_table = MyTable('Habit',['Id','Name','Start time','Duration'])
         self.__habits = Habits()
-        self.__auto_completer = None
+        self.__main_form = Form({field: False for field in ['id','number_of_habit_fields']})
+        self.__fields_to_update_form = None
         self.__current_fields = dict()
         super().__init__(BASE_DIR)
 
-    def __my_input(self,message,history_file_name,commands,field_name=None):
-        self.__auto_completer = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
-        self.__auto_completer.set_has_status(True)
+    def __my_input(self,message,history_file_name,commands,field_status=None):
+        self.__main_auto_completer = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
+        self.__main_auto_completer.set_has_status(True)
         modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
-        return self.__auto_completer.prompt_input(message,location=f"Home/UpdateHabit/{modified_history_file_name}",field_name=field_name).lower()
+        return self.__main_auto_completer.prompt_input(message,location=f"Home/UpdateHabit/{modified_history_file_name}",field_status=field_status).lower()
 
     @retry_until_success
     def find_habit_id(self,message):
         # reset habit to habit we found
         commands = []
         history_file_name='find_habit_id'
-        habit_id = self.__my_input(message,history_file_name,commands,field_name='id')
+        habit_id = self.__my_input(message,history_file_name,commands,field_status=self.__main_form.get_field_status('id'))
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(habit_id)
         
@@ -64,6 +65,7 @@ class UpdateHabitInputs(Habit_Inputs):
             [(str(id),name,start_datetime,duration),]
         )
         self.__habit = CompleteHabit(name,duration,start_datetime,status,id)
+        self.__main_form.set_field_status('id',True)
         return True, f'success'
 
     @retry_until_success
@@ -72,8 +74,7 @@ class UpdateHabitInputs(Habit_Inputs):
             return True, 'Find the habit first'
         commands = ['1','2','3']
         history_file_name = 'num_habit_fields'
-        self.view_habit('Do you want to view the habit you selected: ')
-        habit_field_number = self.__my_input(message,history_file_name,commands,field_name='number_of_habit_fields')
+        habit_field_number = self.__my_input(message,history_file_name,commands,field_status=self.__main_form.get_field_status('number_of_habit_fields'))
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(habit_field_number)
         message_to_display = find_message(habit_field_number)
@@ -85,6 +86,7 @@ class UpdateHabitInputs(Habit_Inputs):
         if not self.__update_habit_validator.is_valid_habit_field_number(habit_field_number):
             return False, f"{habit_field_number} is not an integer in the set "+'{1,2,3}'
         self.__number_of_habit_fields = int(habit_field_number)
+        self.__main_form.set_field_status('number_of_habit_fields',True)
         return True, 'success..'
 
     @retry_until_success
@@ -111,8 +113,8 @@ class UpdateHabitInputs(Habit_Inputs):
 
     @retry_until_success
     def __choose_fields_to_update(self,message):
-        if self.__auto_completer.get_form()!=None:
-            self.__auto_completer.get_form().reset_fields()
+        if self.__main_auto_completer.get_form()!=None:
+            self.__main_auto_completer.get_form().reset_fields()
         if not self.__is_habit_id_found:
             return True, 'Find the habit first'
         
@@ -139,7 +141,7 @@ class UpdateHabitInputs(Habit_Inputs):
             return False, f'Invalid habit field, it must be one of the following:{'\n'.join(commands)}'
 
         self.__field_names.append(habit_field)
-        self.__auto_completer.add_field_to_form(habit_field)
+        # self.__main_auto_completer.add_field_to_form(habit_field)
         return True, 'success...'
     
     def choose_fields_to_update(self,message):
@@ -151,7 +153,10 @@ class UpdateHabitInputs(Habit_Inputs):
             count+=1
             if count == self.__number_of_habit_fields:
                 break
-    
+        self.__fields_to_update_form = Form({field: False for field in self.__field_names})
+        
+        
+
     def set_fields_to_update(self):
         commands = {
             'name':[
@@ -195,7 +200,6 @@ class UpdateHabitInputs(Habit_Inputs):
         if self.__number_of_habit_fields==None:
             return True, 'Choose the number of fields first'
         success,message = self._Habit_Inputs__habit.update_habit(**self.update_field_dict())
+        self.__main_form.reset_fields()
         return True,message
     
-    def get_filled_fields(self):
-        pass
