@@ -21,19 +21,24 @@ class UpdateHabitInputs(Habit_Inputs):
         self.__fields_to_update_form = None
         self.__current_fields = dict()
         super().__init__(BASE_DIR)
+        self.__habit = None
 
-    def __my_input(self,message,history_file_name,commands,field_status=None):
+    def __my_input(self,message,history_file_name,commands,field_pair=None):
         self.__main_auto_completer = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
         self.__main_auto_completer.set_has_status(True)
         modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
-        return self.__main_auto_completer.prompt_input(message,location=f"Home/UpdateHabit/{modified_history_file_name}",field_status=field_status).lower()
+        return self.__main_auto_completer.prompt_input(message,location=f"Home/UpdateHabit/{modified_history_file_name}",field_pair=field_pair).lower()
+
+    def get_main_form(self):
+        return self.__main_form
 
     @retry_until_success
     def find_habit_id(self,message):
         # reset habit to habit we found
         commands = []
         history_file_name='find_habit_id'
-        habit_id = self.__my_input(message,history_file_name,commands,field_status=self.__main_form.get_field_status('id'))
+        id = None if self.__habit is None else self.__habit.get_id()
+        habit_id = self.__my_input(message,history_file_name,commands,field_pair=(self.__main_form.get_field_status('id'),id))
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(habit_id)
         
@@ -74,7 +79,7 @@ class UpdateHabitInputs(Habit_Inputs):
             return True, 'Find the habit first'
         commands = ['1','2','3']
         history_file_name = 'num_habit_fields'
-        habit_field_number = self.__my_input(message,history_file_name,commands,field_status=self.__main_form.get_field_status('number_of_habit_fields'))
+        habit_field_number = self.__my_input(message,history_file_name,commands,(self.__main_form.get_field_status('number_of_habit_fields'),self.__number_of_habit_fields))
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(habit_field_number)
         message_to_display = find_message(habit_field_number)

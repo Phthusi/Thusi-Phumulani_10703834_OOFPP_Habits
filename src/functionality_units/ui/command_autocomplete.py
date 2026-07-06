@@ -4,24 +4,34 @@ from prompt_toolkit.completion import WordCompleter, FuzzyCompleter
 from prompt_toolkit.history import FileHistory
 from .read_json import read_json_files
 from colorama import Fore, Style
-from rich.progress import Progress
+from rich.progress import Progress, BarColumn, TextColumn
 
 class ProgressBar:
     def __init__(self, number_of_fields):
         self.__advance = 1/number_of_fields *100
         self.__progress_percentage = 0
 
-    def completion(self):
-        with Progress() as progress:
+    def display_progress_bar(self):
+        with Progress(
+        TextColumn("[bold magenta]Complete:[/]"),
+        BarColumn(
+            complete_style="blue",
+            finished_style="bright_white",
+            style="on rgb(40,40,40)",
+        ),
+        TextColumn("[white]{task.percentage:>3.0f}%"),
+        ) as progress:
             task = progress.add_task("Completing: ", total=100)
             progress.update(task, advance=self.__progress_percentage)
 
     def increase_progress_percentage(self,increase_by=0):
         if increase_by==0:
-            self.__progress_percentage += self.__advance
             return
-        self.__progress_percentage += increase_by
-        self.__progress_percentage = min(self.__progress_percentage, 100)
+        self.__progress_percentage += increase_by * self.__advance
+        self.__progress_percentage = min(self.__progress_percentage, 95)
+
+    def complete_progress(self):
+        self.__progress_percentage = 100
 
 class Form:
     def __init__(self, fields: dict[str, bool]):
@@ -95,15 +105,25 @@ class AutoCompleter:
     def set_has_status(self, has_status):
         self.__has_status = has_status
     
+    def set_has_progress_bar(self, has_progress_bar):
+        self.__has_progress_bar = has_progress_bar
+
     def get_session(self):
         return self.__session
 
-    def prompt_input(self, message, commands=None,example=None,location='Home',field_status=None):
+    def prompt_input(self, message, commands=None,example=None,location='Home',field_pair=None):
+        if field_pair is None:
+            field_status=None
+            field_value=None
+        else:
+            field_status,field_value = field_pair
         prompt_string = f"[📍location] {location} "+Style.BRIGHT + f"> {Fore.MAGENTA + message}"
         if example!=None:
             prompt_string = f"{Fore.LIGHTBLACK_EX+ example}\n"+prompt_string
+        
         if self.__has_status:
             status = field_status
             if status!=None:
-                print(f"{Fore.LIGHTBLACK_EX}Status: {status}")
+                print(f"""{Fore.LIGHTBLACK_EX}Status: {status}
+Current Value: {Fore.LIGHTBLUE_EX if field_value is None else Fore.LIGHTGREEN_EX}{field_value if field_value is not None else 'N/A'}{Fore.RESET}""")
         return self.get_session().prompt(ANSI(prompt_string)).strip()

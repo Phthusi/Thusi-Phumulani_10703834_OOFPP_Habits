@@ -1,4 +1,5 @@
 from .update_habit_inputs import UpdateHabitInputs,retry_until_success,ran_common_functions, AutoCompleter
+from ..ui.terminal_utils import clear_screen
 from ..ui.command_autocomplete import ProgressBar
 from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent
@@ -6,9 +7,16 @@ BASE_DIR = Path(__file__).resolve().parent
 class UpdateHabit:
     def __init__(self):
         self.__update_habit_inputs = UpdateHabitInputs()
+        self.__form = self.__update_habit_inputs.get_main_form()
+        self.progress_bar = ProgressBar(2)
+        self.__current_filled_fields = self.__form.number_of_filled_fields()
 
     def __my_input(self,message,history_file_name,commands):
         autocompleter = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
+        if self.__current_filled_fields != self.__form.number_of_filled_fields():
+            self.progress_bar.increase_progress_percentage(self.__form.number_of_filled_fields())
+            self.__current_filled_fields = self.__form.number_of_filled_fields()
+        self.progress_bar.display_progress_bar()
         return autocompleter.prompt_input(message,location=f"Home/UpdateHabit").lower()
 
     def run(self):
@@ -32,6 +40,7 @@ class UpdateHabit:
         }
 
         while True:        
+            clear_screen()
             commands = list(command_functions.keys())
             history_file_name = 'update_habit'
             user_input = self.__my_input("Enter command: ",history_file_name,commands)
