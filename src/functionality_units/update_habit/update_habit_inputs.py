@@ -1,9 +1,7 @@
 from ..ui.command_autocomplete import AutoCompleter,Form
 from ..ui.terminal_utils import ran_common_functions, retry_until_success, find_message
-from ..ui.tables import MyTable
 from ..habit_input import Habit_Inputs
 from .update_habit_validator import UpdateHabitValidator
-from ...data.db_manager import Habits
 from ..pipe import Pipe
 from colorama import Fore
 
@@ -16,8 +14,6 @@ class UpdateHabitInputs(Habit_Inputs):
         self.__number_of_habit_fields = None
         self.__field_names  = []
         self.__is_habit_found_in_pipe = False
-        self.__my_table = MyTable('Habit',['Id','Name','Start time','Duration'])
-        self.__habits = Habits()
         self.__main_form = Form({field: False for field in ['id','number_of_habit_fields']})
         self.__fields_to_update_form = None
         self.__current_fields = dict()
