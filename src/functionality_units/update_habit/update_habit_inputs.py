@@ -3,7 +3,7 @@ from ..ui.terminal_utils import ran_common_functions, retry_until_success, find_
 from ..ui.tables import MyTable
 from ..habit_input import Habit_Inputs
 from .update_habit_validator import UpdateHabitValidator
-from ...data.db_manager import CompleteHabit, Habits
+from ...data.db_manager import Habits
 from ..pipe import Pipe
 from colorama import Fore
 
@@ -15,7 +15,6 @@ class UpdateHabitInputs(Habit_Inputs):
         self.__update_habit_validator = UpdateHabitValidator()
         self.__number_of_habit_fields = None
         self.__field_names  = []
-        self.__habit_to_update = CompleteHabit()
         self.__is_habit_found_in_pipe = False
         self.__my_table = MyTable('Habit',['Id','Name','Start time','Duration'])
         self.__habits = Habits()
@@ -78,28 +77,6 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
         return True, 'success..'
 
     @retry_until_success
-    def view_habit(self,message):
-        if not self.__is_habit_found_in_pipe:
-            return True, 'Find the habit first'
-        commands = ['no','yes']
-        history_file_name = 'view_habit'
-        want_to_view_habit = self.__my_input(message,history_file_name,commands)
-        # ********* start of common functions ************        
-        did_run_common_func = ran_common_functions(want_to_view_habit)
-        message_to_display = find_message(want_to_view_habit)
-        if did_run_common_func==False:
-            return True, message_to_display
-        elif did_run_common_func==True:
-            return False, message_to_display
-        # ********** end of common functions ************
-        if want_to_view_habit not in commands:
-            return False,f"'{want_to_view_habit}' is not in the given options,please press space to see you options"
-        if want_to_view_habit=='yes':
-            self.__my_table.display_table()
-            return True,'success...'
-        return True,'success...'
-
-    @retry_until_success
     def __choose_fields_to_update(self,message):
         if not self.__is_habit_found_in_pipe:
             return True, 'Find the habit first'
@@ -140,8 +117,6 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
             if count == self.__number_of_habit_fields:
                 break
         self.__fields_to_update_form = Form({field: False for field in self.__field_names})
-
-        
 
     def set_fields_to_update(self):
         commands = {
