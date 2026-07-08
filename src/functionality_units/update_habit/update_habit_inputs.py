@@ -118,8 +118,6 @@ class UpdateHabitInputs(Habit_Inputs):
 
     @retry_until_success
     def __choose_fields_to_update(self,message):
-        if self.__main_auto_completer.get_form()!=None:
-            self.__main_auto_completer.get_form().reset_fields()
         if not self.__is_habit_id_found:
             return True, 'Find the habit first'
         
@@ -159,7 +157,7 @@ class UpdateHabitInputs(Habit_Inputs):
             if count == self.__number_of_habit_fields:
                 break
         self.__fields_to_update_form = Form({field: False for field in self.__field_names})
-        
+
         
 
     def set_fields_to_update(self):
@@ -178,7 +176,7 @@ class UpdateHabitInputs(Habit_Inputs):
             ]
         }
 
-        for field_name in self.__field_names:
+        for field_name in set(self.__field_names):
             func,message = commands[field_name]
             display_message = func(message)
     

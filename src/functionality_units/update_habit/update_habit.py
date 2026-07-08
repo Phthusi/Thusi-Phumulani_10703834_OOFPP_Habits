@@ -11,12 +11,22 @@ class UpdateHabit:
         self.progress_bar = ProgressBar(2)
         self.__current_filled_fields = self.__form.number_of_filled_fields()
 
+    def stages(self):
+        stages = [
+            "[_______find habit ID_____] ---→",
+            "[___number of fields to update___] ---→",
+            "[___choose fields to update___] ---→",
+            "[__complete update__]"
+        ]
+        # [✅ find habit ID] ---→ [✅ number of fields to update] ---→ [🔄 choose fields to update] ---→ [⬜ complete update]
+
     def __my_input(self,message,history_file_name,commands):
         autocompleter = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
         if self.__current_filled_fields != self.__form.number_of_filled_fields():
             self.progress_bar.increase_progress_percentage(self.__form.number_of_filled_fields())
             self.__current_filled_fields = self.__form.number_of_filled_fields()
         self.progress_bar.display_progress_bar()
+        # print("fill flow : ✅ find habit ID --→ ✅ number of fields to update --→ [empty]  choose fields to update --→ ❌ complete update")
         return autocompleter.prompt_input(message,location=f"Home/UpdateHabit").lower()
 
     def run(self):

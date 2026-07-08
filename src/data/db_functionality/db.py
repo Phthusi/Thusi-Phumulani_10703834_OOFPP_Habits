@@ -68,7 +68,7 @@ class Database:
             f"UPDATE habit SET {', '.join([f'{k}=?' for k in kwargs.keys()])} WHERE id = ?",
             (*kwargs.values(), id))
             self.__connect.commit()
-            return "success", None
+            return "success", f"habit Habit(id={id},) has been updated successfully..."
         except Exception as e:
             return "error", str(e)        
 
