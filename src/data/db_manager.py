@@ -34,6 +34,9 @@ class CompleteHabit(Habit):
         
         return self.__db_interface.update_habit(self.get_id(),**kwargs)
 
+    def copy_habit(self):
+        return CompleteHabit(self.get_name(), self.get_session_duration(), self.get_start_date(), self.get_status())
+
     def delete_habit(self):
         if self.get_id() == None:
             return False, "Habit has no id"
