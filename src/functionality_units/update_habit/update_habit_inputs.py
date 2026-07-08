@@ -3,7 +3,9 @@ from ..ui.terminal_utils import ran_common_functions, retry_until_success, find_
 from ..ui.tables import MyTable
 from ..habit_input import Habit_Inputs
 from .update_habit_validator import UpdateHabitValidator
-from ...data.db_manager import CompleteHabit, Habits, Habit
+from ...data.db_manager import CompleteHabit, Habits
+from ..pipe import Pipe
+from colorama import Fore
 
 from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent
@@ -14,7 +16,7 @@ class UpdateHabitInputs(Habit_Inputs):
         self.__number_of_habit_fields = None
         self.__field_names  = []
         self.__habit_to_update = CompleteHabit()
-        self.__is_habit_id_found = False
+        self.__is_habit_found_in_pipe = False
         self.__my_table = MyTable('Habit',['Id','Name','Start time','Duration'])
         self.__habits = Habits()
         self.__main_form = Form({field: False for field in ['id','number_of_habit_fields']})
@@ -22,6 +24,8 @@ class UpdateHabitInputs(Habit_Inputs):
         self.__current_fields = dict()
         super().__init__(BASE_DIR)
         self.__habit = None
+        self.__pipe = Pipe()
+        self.__grabbed_habit_status = "No habit has been grabbed from the pipe, please grab a habit first"
 
     def __my_input(self,message,history_file_name,commands,field_pair=None):
         self.__main_auto_completer = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
@@ -32,50 +36,29 @@ class UpdateHabitInputs(Habit_Inputs):
     def get_main_form(self):
         return self.__main_form
 
-    @retry_until_success
-    def find_habit_id(self,message):
-        # reset habit to habit we found
-        commands = []
-        history_file_name='find_habit_id'
-        id = None if self.__habit is None else self.__habit.get_id()
-        habit_id = self.__my_input(message,history_file_name,commands,field_pair=(self.__main_form.get_field_status('id'),id))
-        # ********* start of common functions ************        
-        did_run_common_func = ran_common_functions(habit_id)
-        
-        message_to_display = find_message(habit_id)
-        if did_run_common_func==False:
-            return True, message_to_display
-        elif did_run_common_func==True:
-            return False, message_to_display
-        # ********** end of common functions ************
-        try:
-            habit_id = int(habit_id)
-        except Exception as e:
-            return False, e
-               
-        if not self.__habits.id_is_available(habit_id):
-            return True, f'{habit_id} habit with Id does not exist'
+    def display_grabbed_habit(self):
+        if self.__habit is None:
+            print(f'''{Fore.LIGHTBLACK_EX}Status        : ❌ {self.__grabbed_habit_status}
+Habit ID      : {Fore.LIGHTBLUE_EX}N/A''')
+            return
+        print(f'''{Fore.LIGHTBLACK_EX}Status        : ✅ {self.__grabbed_habit_status}
+Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
 
-        self.__is_habit_id_found = True
-        habit = self.__habits.get_habit_by_id(habit_id)[0]
-        id, name, start_datetime, duration, status = habit
-        self.__current_fields = {
-            'id':id,
-            'name':name,
-            'start_datetime':start_datetime,
-            'duration':duration,
-            'status':status
-        }
-        self.__my_table.add_rows(
-            [(str(id),name,start_datetime,duration),]
-        )
-        self.__habit = CompleteHabit(name,duration,start_datetime,status,id)
+    def collect_grabbed_habit(self):
+        habit = self.__pipe.release_last_taken()
+        if habit is None:
+            self.__grabbed_habit_status = 'No habit was found in the pipe, please grab a habit first'
+            return self.__grabbed_habit_status
+        
+        self.__habit = habit
+        self.__grabbed_habit_status = "Habit has been grabbed from the pipe successfully"
+        self.__is_habit_found_in_pipe = True
         self.__main_form.set_field_status('id',True)
-        return True, f'success'
+        return 'success...'
 
     @retry_until_success
     def set_habit_field_number(self,message):
-        if not self.__is_habit_id_found:
+        if not self.__is_habit_found_in_pipe:
             return True, 'Find the habit first'
         commands = ['1','2','3']
         history_file_name = 'num_habit_fields'
@@ -96,7 +79,7 @@ class UpdateHabitInputs(Habit_Inputs):
 
     @retry_until_success
     def view_habit(self,message):
-        if not self.__is_habit_id_found:
+        if not self.__is_habit_found_in_pipe:
             return True, 'Find the habit first'
         commands = ['no','yes']
         history_file_name = 'view_habit'
@@ -118,7 +101,7 @@ class UpdateHabitInputs(Habit_Inputs):
 
     @retry_until_success
     def __choose_fields_to_update(self,message):
-        if not self.__is_habit_id_found:
+        if not self.__is_habit_found_in_pipe:
             return True, 'Find the habit first'
         
         if self.__number_of_habit_fields==None:
@@ -198,7 +181,7 @@ class UpdateHabitInputs(Habit_Inputs):
 
     @retry_until_success
     def update(self):
-        if not self.__is_habit_id_found:
+        if not self.__is_habit_found_in_pipe:
             return True, 'Find the habit first'
         if self.__number_of_habit_fields==None:
             return True, 'Choose the number of fields first'

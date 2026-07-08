@@ -26,15 +26,12 @@ class UpdateHabit:
             self.progress_bar.increase_progress_percentage(self.__form.number_of_filled_fields())
             self.__current_filled_fields = self.__form.number_of_filled_fields()
         self.progress_bar.display_progress_bar()
+        self.__update_habit_inputs.display_grabbed_habit()
         # print("fill flow : ✅ find habit ID --→ ✅ number of fields to update --→ [empty]  choose fields to update --→ ❌ complete update")
         return autocompleter.prompt_input(message,location=f"Home/UpdateHabit").lower()
 
     def run(self):
         command_functions = {
-            'find habit':[
-                self.__update_habit_inputs.find_habit_id,
-                'Enter habit ID: '
-            ],
             'number of fields to update':[
                 self.__update_habit_inputs.set_habit_field_number,
                 'Enter the number of fields: '
@@ -46,6 +43,9 @@ class UpdateHabit:
             ],
             'complete update':[
                 self.__update_habit_inputs.update
+            ],
+            'collect grabbed habit':[
+                self.__update_habit_inputs.collect_grabbed_habit,
             ]
         }
 
@@ -61,7 +61,7 @@ class UpdateHabit:
                     break
                 continue
             # ********** end of common functions ************            
-            if user_input in commands[:2]:
+            if user_input in commands[:1]:
                 funct,message = command_functions[user_input]
                 funct(message)
             
@@ -73,6 +73,10 @@ class UpdateHabit:
                 except Exception as e:
                     pass
             elif user_input=='complete update':
+                funct = command_functions[user_input][0]
+                funct()
+            
+            elif user_input=='collect grabbed habit':
                 funct = command_functions[user_input][0]
                 funct()
                 

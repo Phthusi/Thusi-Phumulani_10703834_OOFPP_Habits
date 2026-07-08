@@ -1,9 +1,11 @@
 from src.data.db_manager import CompleteHabit
-class Transport:
+class Pipe:
     __habits:list[CompleteHabit] = []
 
     @classmethod
-    def take_habit(cls,habit:CompleteHabit):
+    def take_habit(cls,habit:dict):
+        id, name, start_datetime, duration, status = habit
+        habit = CompleteHabit(name,duration,start_datetime,status,id)
         cls.__habits.append(habit)
         return True, "Habit taken"
     

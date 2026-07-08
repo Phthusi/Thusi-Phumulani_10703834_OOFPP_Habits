@@ -13,7 +13,7 @@ class ProgressBar:
 
     def display_progress_bar(self):
         with Progress(
-        TextColumn("[bold magenta]Complete  :[/]"),
+        TextColumn("[bold magenta]Complete      :[/]"),
         BarColumn(
             complete_style="blue",
             finished_style="bright_white",
@@ -124,6 +124,6 @@ class AutoCompleter:
         if self.__has_status:
             status = field_status
             if status!=None:
-                print(f"""{Fore.LIGHTBLACK_EX}Status: {status}
-Current Value: {Fore.LIGHTBLUE_EX if field_value is None else Fore.LIGHTGREEN_EX}{field_value if field_value is not None else 'N/A'}{Fore.RESET}""")
+                print(f"""{Fore.LIGHTBLACK_EX}Status        : {status}
+Current Value : {Fore.LIGHTBLUE_EX if field_value is None else Fore.LIGHTGREEN_EX}{field_value if field_value is not None else 'N/A'}{Fore.RESET}""")
         return self.get_session().prompt(ANSI(prompt_string)).strip()
