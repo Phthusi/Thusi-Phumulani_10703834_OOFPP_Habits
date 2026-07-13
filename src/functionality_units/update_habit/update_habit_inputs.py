@@ -4,6 +4,7 @@ from ..habit_input import Habit_Inputs
 from .update_habit_validator import UpdateHabitValidator
 from ..pipe import Pipe
 from colorama import Fore
+from ...data.db_manager import CompleteHabit
 
 from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent
@@ -40,7 +41,7 @@ Habit ID      : {Fore.LIGHTBLUE_EX}N/A''')
 Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
 
     def collect_grabbed_habit(self):
-        habit = self.__pipe.release_last_taken()
+        habit = CompleteHabit('running','00:00:15','date','UPCOMING',10)
         if habit is None:
             self.__grabbed_habit_status = 'No habit was found in the pipe, please grab a habit first'
             return self.__grabbed_habit_status
