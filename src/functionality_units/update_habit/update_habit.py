@@ -27,7 +27,7 @@ class UpdateHabit:
             self.__current_filled_fields = self.__form.number_of_filled_fields()
         # print("Flow          : ✅ Find ID --→ ✅ Num Fields --→ ❌ Choose Fields --→ ❌ Complete")
         self.progress_bar.display_progress_bar()
-        print('Pipe Status   : ❌ Empty')
+        print('Shelf Status   : ❌ Empty')
         self.__update_habit_inputs.display_grabbed_habit()
         return autocompleter.prompt_input(message,location=f"Home/UpdateHabit").lower()
 

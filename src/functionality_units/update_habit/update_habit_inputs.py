@@ -2,7 +2,7 @@ from ..ui.command_autocomplete import AutoCompleter,Form
 from ..ui.terminal_utils import ran_common_functions, retry_until_success, find_message
 from ..habit_input import Habit_Inputs
 from .update_habit_validator import UpdateHabitValidator
-from ..shelf import Pipe
+from ..shelf import Shelf
 from colorama import Fore
 from ...data.db_manager import CompleteHabit
 
@@ -14,14 +14,14 @@ class UpdateHabitInputs(Habit_Inputs):
         self.__update_habit_validator = UpdateHabitValidator()
         self.__number_of_habit_fields = None
         self.__field_names  = []
-        self.__is_habit_found_in_pipe = False
+        self.__is_habit_found_in_shelf = False
         self.__main_form = Form({field: False for field in ['id','number_of_habit_fields']})
         self.__fields_to_update_form = None
         self.__current_fields = dict()
         super().__init__(BASE_DIR)
         self.__habit = None
-        self.__pipe = Pipe()
-        self.__grabbed_habit_status = "No habit has been grabbed from the pipe, please grab a habit first"
+        self.__shelf = Shelf()
+        self.__grabbed_habit_status = "No habit has been grabbed from the shelf, please grab a habit first"
 
     def __my_input(self,message,history_file_name,commands,field_pair=None):
         self.__main_auto_completer = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
@@ -43,18 +43,18 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
     def collect_grabbed_habit(self):
         habit = CompleteHabit('running','00:00:15','date','UPCOMING',10)
         if habit is None:
-            self.__grabbed_habit_status = 'No habit was found in the pipe, please grab a habit first'
+            self.__grabbed_habit_status = 'No habit was found in the shelf, please grab a habit first'
             return self.__grabbed_habit_status
         
         self.__habit = habit
-        self.__grabbed_habit_status = "Habit has been grabbed from the pipe successfully"
-        self.__is_habit_found_in_pipe = True
+        self.__grabbed_habit_status = "Habit has been grabbed from the shelf successfully"
+        self.__is_habit_found_in_shelf = True
         self.__main_form.set_field_status('id',True)
         return 'success...'
 
     @retry_until_success
     def set_habit_field_number(self,message):
-        if not self.__is_habit_found_in_pipe:
+        if not self.__is_habit_found_in_shelf:
             return True, 'Find the habit first'
         commands = ['1','2','3']
         history_file_name = 'num_habit_fields'
@@ -75,7 +75,7 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
 
     @retry_until_success
     def __choose_fields_to_update(self,message):
-        if not self.__is_habit_found_in_pipe:
+        if not self.__is_habit_found_in_shelf:
             return True, 'Find the habit first'
         
         if self.__number_of_habit_fields==None:
@@ -153,7 +153,7 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
 
     @retry_until_success
     def update(self):
-        if not self.__is_habit_found_in_pipe:
+        if not self.__is_habit_found_in_shelf:
             return True, 'Find the habit first'
         if self.__number_of_habit_fields==None:
             return True, 'Choose the number of fields first'
