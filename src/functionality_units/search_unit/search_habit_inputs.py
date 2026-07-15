@@ -1,7 +1,7 @@
 from ..ui.command_autocomplete import AutoCompleter,Form
 from ..ui.terminal_utils import ran_common_functions, retry_until_success, find_message
 from ...data.db_manager import CompleteHabit, Habits
-from ..habit_input import Habit_Inputs
+from ..habit_input import Habit_Inputs 
 from colorama import Fore
 from ..shelf import Shelf
 
@@ -17,31 +17,71 @@ class SearchHabitInputs(Habit_Inputs):
         self.__shelf = Shelf()
         self.__current_fields = dict()
         super().__init__(BASE_DIR)
-        self.__habits = None
-        self.__searched_habits_status = "No habit search has been done, please search for habits first"
+        self.__habits = []
+        self.__habit_search = Habits()
+        self.__habit = None
+        self.__searched_habits_status = "No habit search has been done yet, please search for habits first"
 
-    def __my_input(self,message,history_file_name,commands,field_pair=None):
+    def __my_input(self,message,history_file_name,commands,field_pair=None,base='Home/SearchHabit/'):
         self.__main_auto_completer = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
         self.__main_auto_completer.set_has_status(True)
         modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
-        return self.__main_auto_completer.prompt_input(message,location=f"Home/SearchHabit/{modified_history_file_name}",field_pair=field_pair).lower()
+        return self.__main_auto_completer.prompt_input(message,location=f"{base}{modified_history_file_name}",field_pair=field_pair).lower()
 
     def get_main_form(self):
         return self.__main_form
 
     def display_grabbed_habit(self):
-        if self.__habit is None:
-            print(f'''{Fore.LIGHTBLACK_EX}Status        : ❌ {self.__searched_habits_status}
-Habit ID      : {Fore.LIGHTBLUE_EX}N/A''')
+        if self.__habit==None:
+            print(f'''{Fore.LIGHTBLACK_EX}Status          : ❌ {self.__searched_habits_status}
+Shared Habit ID : {Fore.LIGHTBLUE_EX}N/A''')
             return
-        print(f'''{Fore.LIGHTBLACK_EX}Status        : ✅ {self.__searched_habits_status}
-Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
+        print(f'''{Fore.LIGHTBLACK_EX}Status          : ✅ {self.__searched_habits_status}
+Shared Habit ID : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
 
     @retry_until_success
-    def find_habits(self,message):
-        commands = ['sort','get habits','save','grab habit','filter results','view']
+    def handle_get_time(self):
+        commands = ['time before','time at','time after']
+        history_file_name = 'get_time'
+        habit_field_number = self.__my_input('Choose blah blah blah: ',history_file_name,commands,base='Home/SearchHabit/FindHabit/')
+        # ********* start of common functions ************        
+        did_run_common_func = ran_common_functions(habit_field_number)
+        message_to_display = find_message(habit_field_number)
+        if did_run_common_func==False:
+            return True, message_to_display
+        elif did_run_common_func==True:
+            return False, message_to_display
+        # ********** end of common functions ************
+
+    @retry_until_success
+    def handle_get_duration(self):
+        pass
+
+    @retry_until_success
+    def handle_get_date(self):
+        commands = ['find habit before','find habits after','find habits at']
+        history_file_name = 'get_date'
+        habit_field_number = self.__my_input('Choose how you choose to find the habit(s): ',history_file_name,commands)
+        # ********* start of common functions ************        
+        did_run_common_func = ran_common_functions(habit_field_number)
+        message_to_display = find_message(habit_field_number)
+        if did_run_common_func==False:
+            return True, message_to_display
+        elif did_run_common_func==True:
+            return False, message_to_display
+        # ********** end of common functions ************
+
+        return True,'hello'
+    
+    @retry_until_success
+    def handle_get_name(self):
+        pass
+
+    @retry_until_success
+    def find_habits(self):
+        commands = ['get by date','get by time','get by duration','get by name','get by status','get by id']
         history_file_name = 'find_habit'
-        habit_field_number = self.__my_input(message,history_file_name,commands)
+        habit_field_number = self.__my_input('Choose how you choose to find the habit(s): ',history_file_name,commands)
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(habit_field_number)
         message_to_display = find_message(habit_field_number)
@@ -50,57 +90,17 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
         elif did_run_common_func==True:
             return False, message_to_display
         # ********** end of common functions ************
+        command_functions = {
+            'get by date':self.handle_get_date,
+            'get by time':self.handle_get_time,
+            'get by duration':self.handle_get_duration,
+            'get by name':self.handle_get_name,
+            'get by status':1,
+            'get by id':1
+        }
+        command_functions[habit_field_number]()
         return True,'hello'
     
-    @retry_until_success
-    def sort_results(self,message):
-        commands = ['asc','desc']
-        history_file_name = 'sort_results'
-        habit_field_number = self.__my_input(message,history_file_name,commands)
-        # ********* start of common functions ************        
-        did_run_common_func = ran_common_functions(habit_field_number)
-        message_to_display = find_message(habit_field_number)
-        if did_run_common_func==False:
-            return True, message_to_display
-        elif did_run_common_func==True:
-            return False, message_to_display
-        # ********** end of common functions ************
-        return True,'hello'
-    
-    @retry_until_success
-    def sort_by(self,message):
-        commands = ['name','datetime','status','duration']
-        history_file_name = 'sort_by'
-        habit_field_number = self.__my_input(message,history_file_name,commands)
-        # ********* start of common functions ************        
-        did_run_common_func = ran_common_functions(habit_field_number)
-        message_to_display = find_message(habit_field_number)
-        if did_run_common_func==False:
-            return True, message_to_display
-        elif did_run_common_func==True:
-            return False, message_to_display
-        # ********** end of common functions ************
-        return True,'hello'
-
-    @retry_until_success
-    def sort_by_name(self):
-        pass
-
-    @retry_until_success
-    def sort_by_time(self):
-        pass
-
-    @retry_until_success
-    def sort_by_date(self):
-        pass
-
-    @retry_until_success
-    def sort_by_datetime(self):
-        pass
-
-    @retry_until_success
-    def sort_by_status(self):
-        pass
 
     @retry_until_success
     def filter(self):

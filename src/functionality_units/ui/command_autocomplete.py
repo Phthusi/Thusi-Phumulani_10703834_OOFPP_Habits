@@ -13,7 +13,7 @@ class ProgressBar:
 
     def display_progress_bar(self):
         with Progress(
-        TextColumn("[bold magenta]Complete      :[/]"),
+        TextColumn("[bold magenta]Complete        :[/]"),
         BarColumn(
             complete_style="blue",
             finished_style="bright_white",
