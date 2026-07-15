@@ -3,7 +3,7 @@ from .functionality_units.delete_unit.delete_habit import DeleteHabit
 from .functionality_units.time_project.time_manager import HabitDateTimeManager
 from .functionality_units.update_habit.update_habit_inputs import UpdateHabitInputs
 from .functionality_units.update_habit.update_habit import UpdateHabit
-from .functionality_units.search_unit.search_habit_inputs import SearchHabit
+from .functionality_units.search_unit.search_habit_inputs import SearchHabitInputs
 import threading
 import time
 
@@ -31,10 +31,10 @@ def main_program():
     # x.choose_fields_to_update('Enter the fields you want to update: ')
     # x.set_fields_to_update()
     # x.update()
-    # x = UpdateHabit()
-    # x.run()
-    x = SearchHabit()
-    x.find_habits('Enter habit: ')
+    x = UpdateHabit()
+    x.run()
+    # x = SearchHabitInputs()
+    # x.find_habits('Enter habit: ')
 
 def main():
     main_program()

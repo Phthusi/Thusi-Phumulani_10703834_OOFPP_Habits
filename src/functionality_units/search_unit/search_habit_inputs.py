@@ -8,18 +8,34 @@ from ..pipe import Pipe
 from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent
 
-class SearchHabit(Habit_Inputs):
+class SearchHabitInputs(Habit_Inputs):
     def __init__(self):
-        self.__is_habit_found_in_pipe = False
-        self.__grabbed_habit_status = "No habit has been grabbed from the pipe, please grab a habit first"
+        self.__number_of_habit_fields = None
+        self.__field_names  = []
+        self.__main_form = Form({field: False for field in ['id','number_of_habit_fields']})
         self.__fields_to_update_form = None
         self.__pipe = Pipe()
+        self.__current_fields = dict()
+        super().__init__(BASE_DIR)
+        self.__habits = None
+        self.__searched_habits_status = "No habit search has been done, please search for habits first"
 
     def __my_input(self,message,history_file_name,commands,field_pair=None):
         self.__main_auto_completer = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
         self.__main_auto_completer.set_has_status(True)
         modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
         return self.__main_auto_completer.prompt_input(message,location=f"Home/SearchHabit/{modified_history_file_name}",field_pair=field_pair).lower()
+
+    def get_main_form(self):
+        return self.__main_form
+
+    def display_grabbed_habit(self):
+        if self.__habit is None:
+            print(f'''{Fore.LIGHTBLACK_EX}Status        : ❌ {self.__searched_habits_status}
+Habit ID      : {Fore.LIGHTBLUE_EX}N/A''')
+            return
+        print(f'''{Fore.LIGHTBLACK_EX}Status        : ✅ {self.__searched_habits_status}
+Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
 
     @retry_until_success
     def find_habits(self,message):
@@ -71,6 +87,14 @@ class SearchHabit(Habit_Inputs):
         pass
 
     @retry_until_success
+    def sort_by_time(self):
+        pass
+
+    @retry_until_success
+    def sort_by_date(self):
+        pass
+
+    @retry_until_success
     def sort_by_datetime(self):
         pass
 
@@ -84,4 +108,12 @@ class SearchHabit(Habit_Inputs):
 
     @retry_until_success
     def filter_by_name(self):
+        pass
+
+    @retry_until_success
+    def filter_by_datetime(self):
+        pass
+
+    @retry_until_success
+    def filter_by_duration(self):
         pass
