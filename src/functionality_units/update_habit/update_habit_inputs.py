@@ -2,7 +2,7 @@ from ..ui.command_autocomplete import AutoCompleter,Form
 from ..ui.terminal_utils import ran_common_functions, retry_until_success, find_message
 from ..habit_input import Habit_Inputs
 from .update_habit_validator import UpdateHabitValidator
-from ..pipe import Pipe
+from ..shelf import Pipe
 from colorama import Fore
 from ...data.db_manager import CompleteHabit
 

@@ -3,7 +3,7 @@ from ..ui.terminal_utils import ran_common_functions, retry_until_success, find_
 from ...data.db_manager import CompleteHabit, Habits
 from ..habit_input import Habit_Inputs
 from colorama import Fore
-from ..pipe import Pipe
+from ..shelf import Shelf
 
 from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent
@@ -14,7 +14,7 @@ class SearchHabitInputs(Habit_Inputs):
         self.__field_names  = []
         self.__main_form = Form({field: False for field in ['id','number_of_habit_fields']})
         self.__fields_to_update_form = None
-        self.__pipe = Pipe()
+        self.__shelf = Shelf()
         self.__current_fields = dict()
         super().__init__(BASE_DIR)
         self.__habits = None
