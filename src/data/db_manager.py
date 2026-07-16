@@ -90,6 +90,39 @@ class Habits:
     def id_is_available(self,id):
         return len([entry for entry in self.__cached_data if entry[0]==id])==1
 
+    def get_habit_before_time(self,time):
+        habits = self.__cached_data
+        results = []
+        for habit in habits:
+            id,name,datetime,duration,status = habit
+            habit_date,habit_time = datetime.split(' ')
+            if habit_time<time:
+                results.append(habit)
+        return results
+    
+    def get_habit_after_time(self,time):
+        habits = self.__cached_data
+        results = []
+        for habit in habits:
+            id,name,datetime,duration,status = habit
+            habit_date,habit_time = datetime.split(' ')
+            if habit_time>time:
+                results.append(habit)
+        print(results)
+        return results
+
+    def get_habit_exactly_at(self,time):
+        habits = self.__cached_data
+        results = []
+        for habit in habits:
+            id,name,datetime,duration,status = habit
+            habit_date,habit_time = datetime.split(' ')
+            if habit_time==time:
+                results.append(habit)
+        print(results)
+        return results
+
+
     def get_habit_by_date(self, date):
         habits = self.__cached_data
         return [target_habit for target_habit in habits if date in target_habit[2]]

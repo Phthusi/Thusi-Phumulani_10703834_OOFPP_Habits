@@ -40,15 +40,9 @@ class SearchHabit:
             'get habit(s)':[
                 self.__search_habit_inputs.find_habits
             ],
-            'save search results':[
-
-            ],
-            'share habit(s)':[
-                
-            ],
-            'filter':[
-
-            ],
+            # 'share habit(s)':[
+                # this will be done by view
+            # ],
             'view':[
 
             ]
