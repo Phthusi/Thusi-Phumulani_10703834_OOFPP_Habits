@@ -1,58 +1,3 @@
-    # @retry_until_success
-    # def sort_habits(self):
-    #     commands = ['asc','desc']
-    #     history_file_name = 'sort_results'
-    #     if self.__habits==[]:
-    #         return True, 'sorry there are no habits to sort'
-
-    #     order = self.__my_input('Enter the way you want to sort habits: ',history_file_name,commands)
-    #     # ********* start of common functions ************        
-    #     did_run_common_func = ran_common_functions(order)
-    #     message_to_display = find_message(order)
-    #     if did_run_common_func==False:
-    #         return True, message_to_display
-    #     elif did_run_common_func==True:
-    #         return False, message_to_display
-    #     # ********** end of common functions ************
-    #     if order not in commands:
-    #         return False, f'\'{order}\' is not a valid input'
-        
-    #     return True,'hello'
-    
-    # @retry_until_success
-    # def sort_by(self,message):
-    #     commands = ['name','datetime','status','duration']
-    #     history_file_name = 'sort_by'
-    #     order_by = self.__my_input(message,history_file_name,commands)
-    #     # ********* start of common functions ************        
-    #     did_run_common_func = ran_common_functions(order_by)
-    #     message_to_display = find_message(order_by)
-    #     if did_run_common_func==False:
-    #         return True, message_to_display
-    #     elif did_run_common_func==True:
-    #         return False, message_to_display
-    #     # ********** end of common functions ************
-    #     return True,'hello'
-
-    # @retry_until_success
-    # def sort_by_name(self):
-    #     pass
-
-    # @retry_until_success
-    # def sort_by_time(self):
-    #     pass
-
-    # @retry_until_success
-    # def sort_by_date(self):
-    #     pass
-
-    # @retry_until_success
-    # def sort_by_datetime(self):
-    #     pass
-
-    # @retry_until_success
-    # def sort_by_status(self):
-        # pass
 from rich.table import Table
 from rich.console import Console
 
@@ -61,7 +6,7 @@ class View:
     def __init__(self):
         self.console = Console()
         self.__create_table()
-
+        self.__page_number = 1
     def __create_table(self):
         self.table = Table(title="Habits")
         self.table.add_column("Id")
@@ -82,9 +27,12 @@ class View:
     def __next(self,initial_index,final_index,max_len):
         final_index = final_index+10        
         initial_index += 10
+        self.__page_number +=1
+
         if final_index>max_len:
             final_index=max_len
             if final_index-initial_index<0:
+                self.__page_number -=1
                 return initial_index-10,final_index
 
         if final_index-initial_index!=10:
@@ -95,24 +43,28 @@ class View:
     def __back(self,initial_index,final_index):
         initial_index-=10
         final_index-=10
+        self.__page_number -=1
+        
         if initial_index<0:
             initial_index = 0
+            self.__page_number +=1
 
         if final_index<10:
             final_index=10
 
         if final_index-initial_index!=10:
             final_index=initial_index+10
-            
+
         return initial_index,final_index
 
     def display_habits(self,habits):
         max_len = len(habits)
-        print(f'search results: {max_len}')
+        print(f'search results : {max_len}')
         initial_index = 0
         final_index = 10
         habits_to_display = habits[initial_index:final_index]
         while(True):
+            print(f'pages : {self.__page_number} of {max_len//10 + 1 if max_len%10!=0 else 0}')
             self.add_to_table(habits_to_display)
             self.display_habit()
             x = input('Enter x: ')
@@ -155,5 +107,7 @@ if '__main__'==__name__:
     (21, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
     (22, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
     (23, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
+    (24, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
+    (25, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
     ]
     x.display_habits(results)
