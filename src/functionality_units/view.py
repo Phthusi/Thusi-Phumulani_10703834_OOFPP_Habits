@@ -29,9 +29,9 @@ class View:
         initial_index += 10
         self.__page_number +=1
 
-        if final_index>max_len:
+        if final_index>=max_len:
             final_index=max_len
-            if final_index-initial_index<0:
+            if final_index-initial_index<=0:
                 self.__page_number -=1
                 return initial_index-10,final_index
 
@@ -64,7 +64,7 @@ class View:
         final_index = 10
         habits_to_display = habits[initial_index:final_index]
         while(True):
-            print(f'pages : {self.__page_number} of {max_len//10 + 1 if max_len%10!=0 else 0}')
+            print(f'pages : {self.__page_number} of {max_len//10 + 1 if max_len%10!=0 else max_len//10 + 0}')
             self.add_to_table(habits_to_display)
             self.display_habit()
             x = input('Enter x: ')
@@ -109,5 +109,7 @@ if '__main__'==__name__:
     (23, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
     (24, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
     (25, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
+    (26, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
+
     ]
     x.display_habits(results)
