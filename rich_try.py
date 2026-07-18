@@ -15,7 +15,6 @@ table.add_column("progress")
 table.add_row("1","Alice enfdeudnuuednunerff", "2023-01-01 10:00:00", "30m", "completed","100%")
 table.add_row("2","Bob", "2023-01-02 11:00:00", "45m", "in_progress","50%")
 table.add_row("3","Sam", "2027-01-05 14:00:00", "1hr20m", "upcoming","-")
-
 console.print(table)
 
 # html = """

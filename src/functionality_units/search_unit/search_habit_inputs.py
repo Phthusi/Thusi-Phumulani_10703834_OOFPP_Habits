@@ -4,10 +4,13 @@ from ...data.db_manager import CompleteHabit, Habits
 from ..habit_input import Habit_Inputs 
 from colorama import Fore
 from ..shelf import Shelf
+from ..view import View
+
 
 from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent
 
+# view after finding results -> decide stacking queries ->
 class SearchHabitInputs(Habit_Inputs):
     def __init__(self):
         self.__number_of_habit_fields = None
@@ -22,6 +25,7 @@ class SearchHabitInputs(Habit_Inputs):
         self.__habit = None
         self.__searched_habits_status = "No habit search has been done yet, please search for habits first"
         self.__saved_results = dict()
+        self.__view = View()
 
     def __my_input(self,message,history_file_name,commands,field_pair=None,base='Home/SearchHabit/'):
         self.__main_auto_completer = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
@@ -59,7 +63,8 @@ Shared Habit ID : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
             return False,f'\'{user_input}\' is not a valid status'
         
         results = self.__habit_search.get_habit_by_status(user_input)
-        print(results)
+        self.__view.add_to_table(results)
+        self.__view.display_habit()
         return True,'success...'
     
     @retry_until_success
@@ -94,6 +99,8 @@ Shared Habit ID : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
 
         results = self.__habit_search.get_habit_before_time(user_input)
         print(results)
+        self.__view.add_to_table(results)
+        self.__view.display_habit()
         return True,'success...'
 
     @retry_until_success
@@ -110,7 +117,8 @@ Shared Habit ID : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
             return False, message_to_display
         # ********** end of common functions ************
         results = self.__habit_search.get_habit_after_time(user_input)
-        print(results)
+        self.__view.add_to_table(results)
+        self.__view.display_habit()
         return True,'success...'
         
     @retry_until_success
@@ -127,7 +135,8 @@ Shared Habit ID : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
             return False, message_to_display
         # ********** end of common functions ************
         results = self.__habit_search.get_habit_exactly_at(user_input)
-        print(results)
+        self.__view.add_to_table(results)
+        self.__view.display_habit()
         return True,'success...'
 
     
