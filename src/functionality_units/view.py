@@ -1,6 +1,11 @@
 from rich.table import Table
 from rich.console import Console
+from .ui.command_autocomplete import AutoCompleter,Form
+from pathlib import Path
 
+
+
+BASE_DIR = Path(__file__).resolve().parent
 class View:
 
     def __init__(self):
@@ -14,6 +19,12 @@ class View:
         self.table.add_column("start_datetime")
         self.table.add_column("duration")
         self.table.add_column("status")
+
+    def __my_input(self,message,history_file_name,commands,field_pair=None,base='Home/SearchHabit/'):
+        self.__main_auto_completer = AutoCompleter(BASE_DIR / f"view_history/{history_file_name}",commands)
+        self.__main_auto_completer.set_has_status(True)
+        modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
+        return self.__main_auto_completer.prompt_input(message,location=f"{base}{modified_history_file_name}",field_pair=field_pair).lower()
 
     def add_to_table(self,habits):
         for habit in habits:
@@ -57,7 +68,10 @@ class View:
 
         return initial_index,final_index
 
-    def display_habits(self,habits):
+    def select_functionality(self):
+        pass
+
+    def display_habits(self,habits,location_base):
         max_len = len(habits)
         print(f'search results : {max_len}')
         initial_index = 0
@@ -67,14 +81,17 @@ class View:
             print(f'pages : {self.__page_number} of {max_len//10 + 1 if max_len%10!=0 else max_len//10 + 0}')
             self.add_to_table(habits_to_display)
             self.display_habit()
-            x = input('Enter x: ')
+            commands =  ['next','back','esc','select']
+            history_file_name = 'view'
+            x = self.__my_input('Enter : ',history_file_name,commands,base=location_base)
             match x:
                 case 'next':
                     initial_index,final_index = self.__next(initial_index,final_index,max_len)
                 case 'back':
                     initial_index,final_index = self.__back(initial_index,final_index)
-
-                case 'quit':
+                case 'select':
+                    pass
+                case 'esc':
                     break
                 case default:
                     print(f'\'{x}\' is an invalid input')

@@ -63,8 +63,7 @@ Shared Habit ID : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
             return False,f'\'{user_input}\' is not a valid status'
         
         results = self.__habit_search.get_habit_by_status(user_input)
-        self.__view.add_to_table(results)
-        self.__view.display_habit()
+        self.__view.display_habits(results,'Home/SearchHabit/Filter/Status')
         return True,'success...'
     
     @retry_until_success
@@ -98,9 +97,7 @@ Shared Habit ID : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
         # ********** end of common functions ************
 
         results = self.__habit_search.get_habit_before_time(user_input)
-        print(results)
-        self.__view.add_to_table(results)
-        self.__view.display_habit()
+        self.__view.display_habits(results,'Home/SearchHabit/Filter/Before')
         return True,'success...'
 
     @retry_until_success
@@ -117,8 +114,7 @@ Shared Habit ID : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
             return False, message_to_display
         # ********** end of common functions ************
         results = self.__habit_search.get_habit_after_time(user_input)
-        self.__view.add_to_table(results)
-        self.__view.display_habit()
+        self.__view.display_habits(results,'Home/SearchHabit/Filter/After')
         return True,'success...'
         
     @retry_until_success
@@ -135,8 +131,7 @@ Shared Habit ID : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
             return False, message_to_display
         # ********** end of common functions ************
         results = self.__habit_search.get_habit_exactly_at(user_input)
-        self.__view.add_to_table(results)
-        self.__view.display_habit()
+        self.__view.display_habits(results,'Home/SearchHabit/Filter/At')
         return True,'success...'
 
     
