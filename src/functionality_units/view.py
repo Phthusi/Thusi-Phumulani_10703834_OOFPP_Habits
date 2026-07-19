@@ -88,10 +88,14 @@ class View:
             self.__current_index = self.__page_number*10
 
     def down(self,max_len):
+        print(max_len)
         self.__current_index += 1
-        new_max_len = max_len if max_len<self.__page_number*10 else self.__page_number*10
-        if self.__current_index>new_max_len:
+        new_max_len = max_len if max_len<self.__page_number*10 -1 else self.__page_number*10 -1
+        if self.__current_index > new_max_len:
             self.__current_index = new_max_len
+
+        if new_max_len==max_len and self.__current_index >= new_max_len:
+            self.__current_index = new_max_len-1
 
     def display_habits(self,habits,location_base):
         max_len = len(habits)
@@ -127,7 +131,7 @@ class View:
                 case default:
                     print(f'\'{x}\' is an invalid input')
             habits_to_display = habits[initial_index:final_index]
-            clear_screen()
+            # clear_screen()
 
 if '__main__'==__name__:
     x = View()
