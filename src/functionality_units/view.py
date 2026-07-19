@@ -82,13 +82,13 @@ class View:
     def select_functionality(self):
         pass
 
-    def up(self):
+    def up(self,min_len):
         self.__current_index -= 1
-        if self.__current_index<self.__page_number*10:
-            self.__current_index = self.__page_number*10
+        if self.__current_index<min_len:
+            self.__current_index=min_len
+        
 
     def down(self,max_len):
-        print(max_len)
         self.__current_index += 1
         new_max_len = max_len if max_len<self.__page_number*10 -1 else self.__page_number*10 -1
         if self.__current_index > new_max_len:
@@ -108,7 +108,8 @@ class View:
         habits_to_display = habits[initial_index:final_index]
         while(True):
             print(f'\n\npages : {self.__page_number} of {max_len//10 + 1 if max_len%10!=0 else max_len//10 + 0}')
-            self.add_to_table(habits_to_display,list(range(initial_index,final_index)))
+            list_of_indices = list(range(initial_index,final_index))
+            self.add_to_table(habits_to_display,list_of_indices)
             self.display_habit()
             commands =  ['up','down','select','next page','prev page','esc']
             history_file_name = 'view'
@@ -121,7 +122,7 @@ class View:
                 case 'down':
                     self.down(max_len)
                 case 'up':
-                    self.up()
+                    self.up(list_of_indices[0])
                 case 'select':
                     pass
                 case 'clear':
