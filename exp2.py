@@ -1,115 +1,247 @@
 from rich.table import Table
 from rich.console import Console
+from prompt_toolkit import Application
 from prompt_toolkit.key_binding import KeyBindings
+from prompt_toolkit.layout import Layout
+from prompt_toolkit.widgets import Frame, TextArea
+from io import StringIO
+
+
 class View:
 
     def __init__(self):
-        self.console = Console()
-        self.__create_table()
-        self.__page_number = 1
-    def __create_table(self):
-        self.table = Table(title="Habits")
-        self.table.add_column("Id")
-        self.table.add_column("Name")
-        self.table.add_column("start_datetime")
-        self.table.add_column("duration")
-        self.table.add_column("status")
 
-    def add_to_table(self,habits):
-        for habit in habits:
-            id,name,datetime,duration,status = list(map(str,habit))
-            self.table.add_row(id,name,datetime,duration,status)
+        self.pages = {
+            "p1": [
+                (1, "jogging", "2026-06-01 14:00:00", "00:15:00", "MISSED"),
+                (2, "reading", "2026-06-02 14:00:00", "00:20:00", "DONE"),
+                (3, "coding", "2026-06-03 14:00:00", "01:00:00", "MISSED"),
+            ],
 
-    def display_habit(self):
-        self.console.print(self.table)
-        self.__create_table()
+            "p2": [
+                (4, "studying", "2026-06-10 14:10:00", "02:00:00", "UPCOMING"),
+                (5, "gym", "2026-06-11 14:10:00", "00:45:00", "UPCOMING"),
+            ],
 
-    def __next(self,initial_index,final_index,max_len):
-        final_index = final_index+10        
-        initial_index += 10
-        self.__page_number +=1
-
-        if final_index>=max_len:
-            final_index=max_len
-            if final_index-initial_index<=0:
-                self.__page_number -=1
-                return initial_index-10,final_index
-
-        if final_index-initial_index!=10:
-            final_index=initial_index+10
-
-        return initial_index,final_index
-
-    def __back(self,initial_index,final_index):
-        initial_index-=10
-        final_index-=10
-        self.__page_number -=1
-        
-        if initial_index<0:
-            initial_index = 0
-            self.__page_number +=1
-
-        if final_index<10:
-            final_index=10
-
-        if final_index-initial_index!=10:
-            final_index=initial_index+10
-
-        return initial_index,final_index
-
-    def display_habits(self,habits):
-        max_len = len(habits)
-        print(f'search results : {max_len}')
-        initial_index = 0
-        final_index = 10
-        habits_to_display = habits[initial_index:final_index]
-        while(True):
-            print(f'pages : {self.__page_number} of {max_len//10 + 1 if max_len%10!=0 else max_len//10 + 0}')
-            self.add_to_table(habits_to_display)
-            self.display_habit()
-            x = input('Enter x: ')
-            match x:
-                case 'next':
-                    initial_index,final_index = self.__next(initial_index,final_index,max_len)
-                case 'back':
-                    initial_index,final_index = self.__back(initial_index,final_index)
-
-                case 'quit':
-                    break
-                case default:
-                    print(f'\'{x}\' is an invalid input')
-            habits_to_display = habits[initial_index:final_index]
+            "p3": [
+                (6, "meditation", "2026-06-25 14:10:00", "00:15:00", "UPCOMING"),
+                (7, "walking", "2026-06-26 14:10:00", "00:30:00", "UPCOMING"),
+            ]
+        }
 
 
-if '__main__'==__name__:
-    x = View()
-    results = [
-    (1, 'jogging', '2026-06-01 14:00:00', '00:15:00', 'MISSED'), 
-    (2, 'jogging', '2026-06-01 14:00:00', '00:15:00', 'MISSED'), 
-    (3, 'jogging', '2026-06-01 14:00:00', '00:15:00', 'MISSED'), 
-    (4, 'jogging', '2026-06-01 14:00:00', '00:15:00', 'MISSED'), 
-    (5, 'jogging', '2026-06-01 14:00:00', '00:15:00', 'MISSED'), 
-    (6, 'jogging', '2026-06-01 14:00:00', '00:15:00', 'MISSED'), 
-    (7, 'jogging', '2026-06-01 14:00:00', '00:15:00', 'MISSED'), 
-    (8, 'jogging', '2026-06-01 14:00:00', '00:15:00', 'MISSED'), 
-    (9, 'jogging', '2026-06-01 14:00:00', '00:15:00', 'MISSED'), 
-    (10, 'jogging', '2026-06-01 14:00:00', '00:15:00', 'MISSED'), 
-    (11, 'studying all day', '2026-06-01 14:10:00', '00:15:00', 'UPCOMING'), 
-    (12, 'jogging', '2026-06-10 14:10:00', '00:15:00', 'UPCOMING'), 
-    (13, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
-    (14, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
-    (15, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
-    (16, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
-    (17, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
-    (18, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
-    (19, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
-    (20, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
-    (21, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
-    (22, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
-    (23, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
-    (24, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
-    (25, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
-    (26, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
+        self.page_names = list(self.pages.keys())
 
-    ]
-    x.display_habits(results)
+        self.current_page = 0
+        self.current_option = 0
+
+
+        self.buffer = StringIO()
+
+        self.console = Console(
+            record=True,
+            file=self.buffer
+        )
+
+
+        self.content = TextArea(
+            focusable=False
+        )
+
+
+
+    def render_table(self):
+
+        # clear buffer
+        self.buffer.seek(0)
+        self.buffer.truncate(0)
+
+
+        table = Table(
+            title="Habits"
+        )
+
+
+        table.add_column("ID")
+        table.add_column("Name")
+        table.add_column("Start")
+        table.add_column("Duration")
+        table.add_column("Status")
+
+
+        habits = self.pages[
+            self.page_names[self.current_page]
+        ]
+
+
+        for index, habit in enumerate(habits):
+
+            style = (
+                "reverse"
+                if index == self.current_option
+                else ""
+            )
+
+
+            table.add_row(
+                str(habit[0]),
+                habit[1],
+                habit[2],
+                habit[3],
+                habit[4],
+                style=style
+            )
+
+
+        self.console.print(table)
+
+
+        return self.buffer.getvalue()
+
+
+
+    def refresh(self):
+
+        tabs = " | ".join(
+            f"[{page}]"
+            if i == self.current_page
+            else page
+            for i, page in enumerate(self.page_names)
+        )
+
+
+        page = self.page_names[
+            self.current_page
+        ]
+
+
+        self.content.text = (
+            tabs
+            + "\n\n"
+            + f"Page: {page}\n\n"
+            + self.render_table()
+            + "\n\n"
+            + "↑ ↓ Move   ← → Pages   Enter Select   Q Quit"
+        )
+
+
+
+
+
+def run():
+
+    view = View()
+
+    view.refresh()
+
+
+    kb = KeyBindings()
+
+
+
+    @kb.add("down", eager=True)
+    def _(event):
+
+        habits = view.pages[
+            view.page_names[view.current_page]
+        ]
+
+
+        if view.current_option < len(habits)-1:
+            view.current_option += 1
+
+
+        view.refresh()
+
+        event.app.invalidate()
+
+
+
+    @kb.add("up", eager=True)
+    def _(event):
+
+        if view.current_option > 0:
+            view.current_option -= 1
+
+
+        view.refresh()
+
+        event.app.invalidate()
+
+
+
+    @kb.add("right", eager=True)
+    def _(event):
+
+        if view.current_page < len(view.page_names)-1:
+
+            view.current_page += 1
+            view.current_option = 0
+
+
+        view.refresh()
+
+        event.app.invalidate()
+
+
+
+    @kb.add("left", eager=True)
+    def _(event):
+
+        if view.current_page > 0:
+
+            view.current_page -= 1
+            view.current_option = 0
+
+
+        view.refresh()
+
+        event.app.invalidate()
+
+
+
+    @kb.add("enter", eager=True)
+    def _(event):
+
+        page = view.page_names[
+            view.current_page
+        ]
+
+
+        selected = view.pages[page][
+            view.current_option
+        ]
+
+
+        print("\nSelected:")
+        print(selected)
+
+        event.app.exit()
+
+
+
+    @kb.add("q", eager=True)
+    def _(event):
+
+        event.app.exit()
+
+
+
+    app = Application(
+        layout=Layout(
+            Frame(
+                view.content,
+                title="Habit Tracker"
+            )
+        ),
+        key_bindings=kb,
+        full_screen=True
+    )
+
+
+    app.run()
+
+
+
+if __name__ == "__main__":
+    run()

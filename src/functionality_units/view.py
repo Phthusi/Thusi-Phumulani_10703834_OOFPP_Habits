@@ -1,8 +1,8 @@
 from rich.table import Table
 from rich.console import Console
-from .ui.command_autocomplete import AutoCompleter,Form
+from .ui.command_autocomplete import AutoCompleter
 from pathlib import Path
-
+from .ui.terminal_utils import clear_screen
 
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -12,8 +12,11 @@ class View:
         self.console = Console()
         self.__create_table()
         self.__page_number = 1
+        self.__current_index =0
+
     def __create_table(self):
         self.table = Table(title="Habits")
+        self.table.add_column(" ")
         self.table.add_column("Id")
         self.table.add_column("Name")
         self.table.add_column("start_datetime")
@@ -26,10 +29,13 @@ class View:
         modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
         return self.__main_auto_completer.prompt_input(message,location=f"{base}{modified_history_file_name}",field_pair=field_pair).lower()
 
-    def add_to_table(self,habits):
-        for habit in habits:
+    def add_to_table(self,habits,indices):
+        for index,habit in zip(indices,habits):
             id,name,datetime,duration,status = list(map(str,habit))
-            self.table.add_row(id,name,datetime,duration,status)
+            if index==self.__current_index:
+                self.table.add_row('→',id,name,datetime,duration,status)
+                continue
+            self.table.add_row(' ',id,name,datetime,duration,status)
 
     def display_habit(self):
         self.console.print(self.table)
@@ -39,11 +45,13 @@ class View:
         final_index = final_index+10        
         initial_index += 10
         self.__page_number +=1
-
+        self.__current_index += 10
+        self.__current_index -= self.__current_index%10
         if final_index>=max_len:
             final_index=max_len
             if final_index-initial_index<=0:
                 self.__page_number -=1
+                self.__current_index -= 10
                 return initial_index-10,final_index
 
         if final_index-initial_index!=10:
@@ -55,10 +63,13 @@ class View:
         initial_index-=10
         final_index-=10
         self.__page_number -=1
-        
+        self.__current_index -= 10
+        self.__current_index -= self.__current_index%10
+
         if initial_index<0:
             initial_index = 0
             self.__page_number +=1
+            self.__current_index += 10
 
         if final_index<10:
             final_index=10
@@ -71,32 +82,52 @@ class View:
     def select_functionality(self):
         pass
 
+    def up(self):
+        self.__current_index -= 1
+        if self.__current_index<self.__page_number*10:
+            self.__current_index = self.__page_number*10
+
+    def down(self,max_len):
+        self.__current_index += 1
+        new_max_len = max_len if max_len<self.__page_number*10 else self.__page_number*10
+        if self.__current_index>new_max_len:
+            self.__current_index = new_max_len
+
     def display_habits(self,habits,location_base):
         max_len = len(habits)
-        print(f'search results : {max_len}')
+        if max_len==0:
+            print('search results : 0')
+            return
+        print(f'\nsearch results : {max_len}')
         initial_index = 0
         final_index = 10
         habits_to_display = habits[initial_index:final_index]
         while(True):
-            print(f'pages : {self.__page_number} of {max_len//10 + 1 if max_len%10!=0 else max_len//10 + 0}')
-            self.add_to_table(habits_to_display)
+            print(f'\n\npages : {self.__page_number} of {max_len//10 + 1 if max_len%10!=0 else max_len//10 + 0}')
+            self.add_to_table(habits_to_display,list(range(initial_index,final_index)))
             self.display_habit()
-            commands =  ['next','back','esc','select']
+            commands =  ['up','down','select','next page','prev page','esc']
             history_file_name = 'view'
             x = self.__my_input('Enter : ',history_file_name,commands,base=location_base)
             match x:
-                case 'next':
+                case 'next page':
                     initial_index,final_index = self.__next(initial_index,final_index,max_len)
-                case 'back':
+                case 'prev page':
                     initial_index,final_index = self.__back(initial_index,final_index)
+                case 'down':
+                    self.down(max_len)
+                case 'up':
+                    self.up()
                 case 'select':
                     pass
+                case 'clear':
+                    clear_screen()
                 case 'esc':
                     break
                 case default:
                     print(f'\'{x}\' is an invalid input')
             habits_to_display = habits[initial_index:final_index]
-
+            clear_screen()
 
 if '__main__'==__name__:
     x = View()
@@ -127,6 +158,5 @@ if '__main__'==__name__:
     (24, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
     (25, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
     (26, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
-
     ]
     x.display_habits(results)
