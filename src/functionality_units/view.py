@@ -12,7 +12,8 @@ class View:
         self.console = Console()
         self.__create_table()
         self.__page_number = 1
-        self.__current_index =0
+        self.__current_index = 0
+        self.__selected_habit = None
 
     def __create_table(self):
         self.table = Table(title="Habits")
@@ -79,14 +80,13 @@ class View:
 
         return initial_index,final_index
 
-    def select_functionality(self):
-        pass
+    def select_functionality(self,habits):
+        self.__selected_habit = habits[self.__current_index]
 
     def up(self,min_len):
         self.__current_index -= 1
         if self.__current_index<min_len:
             self.__current_index=min_len
-        
 
     def down(self,max_len):
         self.__current_index += 1
@@ -124,7 +124,8 @@ class View:
                 case 'up':
                     self.up(list_of_indices[0])
                 case 'select':
-                    pass
+                    self.select_functionality(habits)
+                    break
                 case 'clear':
                     clear_screen()
                 case 'esc':
