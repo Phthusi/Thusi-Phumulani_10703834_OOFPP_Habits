@@ -97,34 +97,6 @@ Shared Habit ID : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
         # ********** end of common functions ************
 
         results = self.__habit_search.get_habit_before_time(user_input)
-        results = [
-    (1, 'jogging', '2026-06-01 14:00:00', '00:15:00', 'MISSED'), 
-    (2, 'jogging', '2026-06-01 14:00:00', '00:15:00', 'MISSED'), 
-    (3, 'jogging', '2026-06-01 14:00:00', '00:15:00', 'MISSED'), 
-    (4, 'jogging', '2026-06-01 14:00:00', '00:15:00', 'MISSED'), 
-    (5, 'jogging', '2026-06-01 14:00:00', '00:15:00', 'MISSED'), 
-    (6, 'jogging', '2026-06-01 14:00:00', '00:15:00', 'MISSED'), 
-    (7, 'jogging', '2026-06-01 14:00:00', '00:15:00', 'MISSED'), 
-    (8, 'jogging', '2026-06-01 14:00:00', '00:15:00', 'MISSED'), 
-    (9, 'jogging', '2026-06-01 14:00:00', '00:15:00', 'MISSED'), 
-    (10, 'jogging', '2026-06-01 14:00:00', '00:15:00', 'MISSED'), 
-    (11, 'studying all day', '2026-06-01 14:10:00', '00:15:00', 'UPCOMING'), 
-    (12, 'jogging', '2026-06-10 14:10:00', '00:15:00', 'UPCOMING'), 
-    (13, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
-    (14, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
-    (15, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
-    (16, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
-    (17, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
-    (18, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
-    (19, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
-    (20, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
-    (21, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
-    (22, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
-    (23, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
-    (24, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
-    (25, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
-    (26, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
-    ]
         self.__view.display_habits(results,'Home/SearchHabit/Filter/Before/')
         return True,'success...'
 

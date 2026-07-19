@@ -133,7 +133,7 @@ class View:
                 case default:
                     print(f'\'{x}\' is an invalid input')
             habits_to_display = habits[initial_index:final_index]
-            # clear_screen()
+            clear_screen()
 
 if '__main__'==__name__:
     x = View()
