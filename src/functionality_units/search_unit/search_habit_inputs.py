@@ -209,14 +209,6 @@ Shared Habit ID : {Fore.LIGHTGREEN_EX}{self.__habit[0]}''')
 
     @retry_until_success
     def find_habits(self):
-        data_source,success = self.__choose_data_source()
-        if 'clearing screen'==success:
-            return False,success
-        if success=='escaping':
-            return True,success
-        if not success:
-            return success, f'\'{data_source}\' does not exits'
-    
         commands = ['date','time','duration','name','status','id']
         history_file_name = 'filter'
         habit_field_number = self.__my_input('How would you like to search for habits: ',history_file_name,commands)
@@ -238,35 +230,8 @@ Shared Habit ID : {Fore.LIGHTGREEN_EX}{self.__habit[0]}''')
         }
         command_functions[habit_field_number]()
         
-        # self.__save_results()
         return False,'hello'
     
-    def __choose_data_source(self):
-        commands = [i for i in self.__saved_results.keys() if i!='']
-        commands.append('database')
-        data_source = self.__my_input(
-            'Where do you want to search from: ',
-            'data_source',
-            commands,
-            base='Home/SearchHabit/'
-        )
-        # ********* start of common functions ************        
-        did_run_common_func = ran_common_functions(data_source)
-        message_to_display = find_message(data_source)
-        if did_run_common_func==False:
-            return True, message_to_display
-        elif did_run_common_func==True:
-            return False, message_to_display
-        # ********** end of common functions ************
-        if data_source not in commands:
-            return data_source, False
-        return data_source, True
-
-    @retry_until_success
-    def __save_results(self):
-        pass
-
-
     @retry_until_success
     def view_selected_habit(self):
         habit = Shelf.copy_last_place_habit()
