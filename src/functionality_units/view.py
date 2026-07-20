@@ -30,6 +30,17 @@ class View:
         modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
         return self.__main_auto_completer.prompt_input(message,location=f"{base}{modified_history_file_name}",field_pair=field_pair).lower()
 
+    def draw_plain_table(self,habit):
+        table = Table(title="Habits")
+        table.add_column("Id")
+        table.add_column("Name")
+        table.add_column("start_datetime")
+        table.add_column("duration")
+        table.add_column("status")
+        id,name,datetime,duration,status = list(map(str,habit))
+        table.add_row(id,name,datetime,duration,status)
+        self.console.print(table)
+
     def add_to_table(self,habits,indices):
         for index,habit in zip(indices,habits):
             id,name,datetime,duration,status = list(map(str,habit))

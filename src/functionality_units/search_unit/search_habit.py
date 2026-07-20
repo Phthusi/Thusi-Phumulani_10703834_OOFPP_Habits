@@ -40,11 +40,8 @@ class SearchHabit:
             'get habit(s)':[
                 self.__search_habit_inputs.find_habits
             ],
-            # 'share habit(s)':[
-                # this will be done by view
-            # ],
-            'view':[
-
+            'view selected habit':[
+                self.__search_habit_inputs.view_selected_habit
             ]
         }
 
