@@ -42,7 +42,7 @@ class SearchHabitInputs(Habit_Inputs):
             print(f'''{Fore.LIGHTBLACK_EX}Status          : ❌ {self.__searched_habits_status}
 Shared Habit ID : {Fore.LIGHTBLUE_EX}N/A''')
             return
-        print(f'''{Fore.LIGHTBLACK_EX}Status          : ✅ {self.__searched_habits_status}
+        print(f'''{Fore.LIGHTBLACK_EX}Status          : ✅ Habit Selected successfully!
 Shared Habit ID : {Fore.LIGHTGREEN_EX}{self.__habit[0]}''')
 
     @retry_until_success

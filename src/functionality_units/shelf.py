@@ -3,6 +3,7 @@ class Shelf:
 
     @classmethod
     def preserve_habit(cls,habit):
+        cls.__habits_shelf = set()
         cls.__habits_shelf.add(habit)
 
     @classmethod
