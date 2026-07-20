@@ -83,6 +83,8 @@ class View:
     def select_functionality(self,habits):
         self.__selected_habit = habits[self.__current_index]
         Shelf.preserve_habit(self.__selected_habit)
+        self.__page_number = 1
+        self.__current_index = 0
 
     def up(self,min_len):
         self.__current_index -= 1
@@ -130,6 +132,8 @@ class View:
                 case 'clear':
                     clear_screen()
                 case 'esc':
+                    self.__page_number = 1
+                    self.__current_index = 0
                     break
                 case default:
                     print(f'\'{x}\' is an invalid input')
