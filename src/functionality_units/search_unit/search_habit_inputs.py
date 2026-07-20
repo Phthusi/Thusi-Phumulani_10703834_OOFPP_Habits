@@ -37,12 +37,13 @@ class SearchHabitInputs(Habit_Inputs):
         return self.__main_form
 
     def display_grabbed_habit(self):
+        self.__habit = Shelf.copy_last_place_habit() 
         if self.__habit==None:
             print(f'''{Fore.LIGHTBLACK_EX}Status          : ❌ {self.__searched_habits_status}
 Shared Habit ID : {Fore.LIGHTBLUE_EX}N/A''')
             return
         print(f'''{Fore.LIGHTBLACK_EX}Status          : ✅ {self.__searched_habits_status}
-Shared Habit ID : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
+Shared Habit ID : {Fore.LIGHTGREEN_EX}{self.__habit[0]}''')
 
     @retry_until_success
     def handle_get_status(self):
@@ -97,6 +98,34 @@ Shared Habit ID : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
         # ********** end of common functions ************
 
         results = self.__habit_search.get_habit_before_time(user_input)
+        results = [
+    (1, 'jogging', '2026-06-01 14:00:00', '00:15:00', 'MISSED'), 
+    (2, 'jogging', '2026-06-01 14:00:00', '00:15:00', 'MISSED'), 
+    (3, 'jogging', '2026-06-01 14:00:00', '00:15:00', 'MISSED'), 
+    (4, 'jogging', '2026-06-01 14:00:00', '00:15:00', 'MISSED'), 
+    (5, 'jogging', '2026-06-01 14:00:00', '00:15:00', 'MISSED'), 
+    (6, 'jogging', '2026-06-01 14:00:00', '00:15:00', 'MISSED'), 
+    (7, 'jogging', '2026-06-01 14:00:00', '00:15:00', 'MISSED'), 
+    (8, 'jogging', '2026-06-01 14:00:00', '00:15:00', 'MISSED'), 
+    (9, 'jogging', '2026-06-01 14:00:00', '00:15:00', 'MISSED'), 
+    (10, 'jogging', '2026-06-01 14:00:00', '00:15:00', 'MISSED'), 
+    (11, 'studying all day', '2026-06-01 14:10:00', '00:15:00', 'UPCOMING'), 
+    (12, 'jogging', '2026-06-10 14:10:00', '00:15:00', 'UPCOMING'), 
+    (13, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
+    (14, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
+    (15, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
+    (16, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
+    (17, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
+    (18, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
+    (19, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
+    (20, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
+    (21, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
+    (22, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
+    (23, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
+    (24, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
+    (25, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
+    (26, 'jogging', '2026-06-25 14:10:00', '00:15:00', 'UPCOMING'),
+    ]
         self.__view.display_habits(results,'Home/SearchHabit/Filter/Before/')
         return True,'success...'
 
@@ -244,6 +273,7 @@ Shared Habit ID : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
     def __choose_data_source(self):
         commands = [i for i in self.__saved_results.keys() if i!='']
         commands.append('database')
+        print(f'Selected Habit: {'N\A'} ')
         data_source = self.__my_input(
             'Where do you want to search from: ',
             'data_source',

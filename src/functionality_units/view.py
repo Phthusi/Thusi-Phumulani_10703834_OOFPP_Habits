@@ -3,7 +3,7 @@ from rich.console import Console
 from .ui.command_autocomplete import AutoCompleter
 from pathlib import Path
 from .ui.terminal_utils import clear_screen
-
+from .shelf import Shelf
 
 BASE_DIR = Path(__file__).resolve().parent
 class View:
@@ -82,6 +82,7 @@ class View:
 
     def select_functionality(self,habits):
         self.__selected_habit = habits[self.__current_index]
+        Shelf.preserve_habit(self.__selected_habit)
 
     def up(self,min_len):
         self.__current_index -= 1
