@@ -66,7 +66,7 @@ def main_program():
                 pass
             case 'delete habit':
                 pass
-            case 'clear screen':
+            case 'clear':
                 clear_screen()
             case 'esc':
                 break

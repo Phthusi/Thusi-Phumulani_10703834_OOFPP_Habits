@@ -3,6 +3,7 @@ from ..ui.terminal_utils import ran_common_functions, retry_until_success, find_
 from ..habit_input import Habit_Inputs
 from .update_habit_validator import UpdateHabitValidator
 from ..shelf import Shelf
+from ..view import View
 from colorama import Fore
 from ...data.db_manager import CompleteHabit
 
@@ -17,9 +18,11 @@ class UpdateHabitInputs(Habit_Inputs):
         self.__is_habit_found_in_shelf = False
         self.__main_form = Form({field: False for field in ['id','number_of_habit_fields']})
         self.__fields_to_update_form = None
+        self.__selected_habit_tuple = None
         self.__current_fields = dict()
         super().__init__(BASE_DIR)
         self.__habit = None
+        self.__view = View()
         self.__shelf = Shelf()
         self.__grabbed_habit_status = "No habit has been grabbed from the shelf, please grab a habit first"
 
@@ -41,8 +44,14 @@ Habit ID      : {Fore.LIGHTBLUE_EX}N/A''')
 Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
 
     def collect_grabbed_habit(self):
-        habit = Shelf.take_last_place_habit()
-        habit = {'id':int(habit[0]),'name':habit[1],'start_date':habit[2],'session_duration':habit[3],'status':habit[4]}
+        self.__selected_habit_tuple = Shelf.copy_last_place_habit()
+        habit = {
+            'id':int(self.__selected_habit_tuple[0]),
+            'name':self.__selected_habit_tuple[1],
+            'start_date':self.__selected_habit_tuple[2],
+            'session_duration':self.__selected_habit_tuple[3],
+            'status':self.__selected_habit_tuple[4]
+            } if self.__selected_habit_tuple is not None else None
         habit = CompleteHabit(**habit) if not habit is None else None
         if habit is None:
             self.__grabbed_habit_status = 'No habit was found in the shelf, please grab a habit first'
@@ -117,12 +126,22 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
                 break
         self.__fields_to_update_form = Form({field: False for field in self.__field_names})
 
+    def view_habit_to_update(self):
+        if self.__selected_habit_tuple is None:
+            print('No selected habit')
+            return
+        self.__view.draw_plain_table(self.__selected_habit_tuple)
+        input('press enter to stop viewing this')
+
     def set_fields_to_update(self):
         commands = {
             'name':[
                     self.set_habit_name,
                     "Enter the habit name you want this to be updated to: "
                     ],
+            'view habit to update':[
+                self.set_session_duration,
+            ],
             'start_datetime':[
                     self.set_start_datetime,
                     "Enter the habit datetime you want this to be updated to: "

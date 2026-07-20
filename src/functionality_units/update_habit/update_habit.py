@@ -47,6 +47,9 @@ class UpdateHabit:
             ],
             'collect grabbed habit':[
                 self.__update_habit_inputs.collect_grabbed_habit,
+            ],
+            'view habit to update':[
+                self.__update_habit_inputs.view_habit_to_update
             ]
         }
 
@@ -80,7 +83,11 @@ class UpdateHabit:
             elif user_input=='collect grabbed habit':
                 funct = command_functions[user_input][0]
                 funct()
-                
+            
+            elif user_input=='view habit to update':
+                funct = command_functions[user_input][0]
+                funct()
+
             if user_input not in commands:
                 print(f"'{user_input}' is not in the given options,please press space to see you options")
 
