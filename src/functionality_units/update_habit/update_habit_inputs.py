@@ -41,7 +41,9 @@ Habit ID      : {Fore.LIGHTBLUE_EX}N/A''')
 Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
 
     def collect_grabbed_habit(self):
-        habit = CompleteHabit('running','00:00:15','date','UPCOMING',10)
+        habit = Shelf.take_last_place_habit()
+        habit = {'id':int(habit[0]),'name':habit[1],'start_date':habit[2],'session_duration':habit[3],'status':habit[4]}
+        habit = CompleteHabit(**habit) if not habit is None else None
         if habit is None:
             self.__grabbed_habit_status = 'No habit was found in the shelf, please grab a habit first'
             return self.__grabbed_habit_status

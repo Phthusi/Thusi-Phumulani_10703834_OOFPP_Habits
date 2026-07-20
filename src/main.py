@@ -5,8 +5,13 @@ from .functionality_units.update_habit.update_habit_inputs import UpdateHabitInp
 from .functionality_units.update_habit.update_habit import UpdateHabit
 from .functionality_units.search_unit.search_habit_inputs import SearchHabitInputs
 from .functionality_units.search_unit.search_habit import SearchHabit
+from .functionality_units.ui.command_autocomplete import AutoCompleter
+from .functionality_units.ui.terminal_utils import clear_screen
+from pathlib import Path
 import threading
 import time
+
+BASE_DIR = Path(__file__).resolve().parent
 
 running = True
 def background_task():
@@ -22,6 +27,12 @@ def background_task():
             if new_status!=status:
                 db_interface.update_habit(id,**{'status':new_status}) 
 
+def my_input(message,history_file_name,commands,field_pair=None,base='Home/'):
+    auto_completer = AutoCompleter(BASE_DIR / f"main_history/{history_file_name}",commands)
+    auto_completer.set_has_status(True)
+    modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
+    return auto_completer.prompt_input(message,location=f"{base}{modified_history_file_name}",field_pair=field_pair).lower()
+
 
 def main_program():
     # x = DeleteHabit()
@@ -36,8 +47,31 @@ def main_program():
     # x.run()
     # x = SearchHabitInputs()
     # x.find_habits('Enter habit: ')
-    x = SearchHabit()
-    x.run()
+    # x = SearchHabit()
+    # x.run()
+
+    search_habits = SearchHabit()
+    update_habits = UpdateHabit()
+
+    while True:
+        commands = ['update habit','search habit(s)','add habit','esc']
+        history_file_name = 'main'
+        user_input = my_input('',history_file_name,commands)
+        match user_input:
+            case 'update habit':
+                update_habits.run()
+            case 'search habit(s)':
+                search_habits.run()
+            case 'add habit':
+                pass
+            case 'delete habit':
+                pass
+            case 'clear screen':
+                clear_screen()
+            case 'esc':
+                break
+            case default:
+                print(f'\'{user_input}\' invalid')
 
 def main():
     main_program()
