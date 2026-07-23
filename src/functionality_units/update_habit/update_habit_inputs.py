@@ -57,7 +57,13 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
             self.__grabbed_habit_status = 'No habit was found in the shelf, please grab a habit first'
             return self.__grabbed_habit_status
         
-        self.__current_fields = habit
+        self.__current_fields = {
+            'id':int(self.__selected_habit_tuple[0]),
+            'name':self.__selected_habit_tuple[1],
+            'start_datetime':self.__selected_habit_tuple[2],
+            'duration':self.__selected_habit_tuple[3],
+            'status':self.__selected_habit_tuple[4]
+        }
         self.__habit = habit
         self.__grabbed_habit_status = "Habit has been grabbed from the shelf successfully"
         self.__is_habit_found_in_shelf = True
