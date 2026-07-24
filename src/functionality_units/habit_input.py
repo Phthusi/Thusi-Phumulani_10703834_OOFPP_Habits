@@ -3,6 +3,7 @@ from .ui.command_autocomplete import AutoCompleter
 from .time_project.time_manager import HabitDateTimeManager
 from .time_project.time_manager_validator import HabitDateTimeManagerValidator
 from .ui.terminal_utils import ran_common_functions, retry_until_success
+from .view import View
 
 class Habit_Inputs:
     def __init__(self, base_directory):
@@ -10,6 +11,7 @@ class Habit_Inputs:
         self.__datetime_manager = HabitDateTimeManager()
         self.__datetime_validator = HabitDateTimeManagerValidator()
         self.__BASE_DIR = base_directory
+        self.__view = View()
 
     def __set_habit_name(self,message):
         history_file_name='habit_name'
@@ -37,6 +39,8 @@ class Habit_Inputs:
         autocompleter = AutoCompleter(self.__BASE_DIR / f"history/{history_file_name}",commands)
         return autocompleter.prompt_input(message,[],'format: yyyy-mm-dd, HH:MM e.g 2026-06-08, 08:53')
 
+    def get_habit(self):
+        return self.__habit
 
     @retry_until_success
     def set_start_datetime(self,message):
@@ -96,7 +100,7 @@ class Habit_Inputs:
         return True, 'valid start datetime'
 
     def is_clashing_with_any_habit(self):
-        habits = [Habits().get_habit_by_status_excluding_some_statuses(['MISSED','UNKNOWN'])] 
+        habits = Habits().get_habit_by_status_excluding_some_statuses(['MISSED','UNKNOWN'])
         datetime1 = self.__habit.get_start_date()
         duration1 = self.__datetime_manager.convert_duration(self.__habit.get_session_duration())
         for habit in habits: 
@@ -109,5 +113,8 @@ class Habit_Inputs:
                 return False, f'{habit_to_be_added} cannot be saved beacuse it clashes with {habit_from_db}'
 
     def save(self):
-        return self.__habit.save_habit()
+        is_valid, message = self._Habit_Inputs__habit._CompleteHabit__validator.validate()
+        print(message)
+        if is_valid and not self.is_clashing_with_any_habit():
+            return self.__habit.save_habit()
 

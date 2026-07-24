@@ -147,7 +147,7 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
                     "Enter the habit name you want this to be updated to: "
                     ],
             'view habit to update':[
-                self.set_session_duration,
+                self.view_habit_to_update,
             ],
             'start_datetime':[
                     self.set_start_datetime,

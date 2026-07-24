@@ -1,4 +1,5 @@
 from .data.db_manager import DB_Interface,Habits
+from .functionality_units.add_unit.add_habit import Add_Habit
 from .functionality_units.delete_unit.delete_habit import DeleteHabit
 from .functionality_units.time_project.time_manager import HabitDateTimeManager
 from .functionality_units.update_habit.update_habit_inputs import UpdateHabitInputs
@@ -52,6 +53,7 @@ def main_program():
 
     search_habits = SearchHabit()
     update_habits = UpdateHabit()
+    add_habits = Add_Habit()
 
     while True:
         commands = ['update habit','search habit(s)','add habit','esc']
@@ -63,7 +65,7 @@ def main_program():
             case 'search habit(s)':
                 search_habits.run()
             case 'add habit':
-                pass
+                add_habits.run()
             case 'delete habit':
                 pass
             case 'clear':
