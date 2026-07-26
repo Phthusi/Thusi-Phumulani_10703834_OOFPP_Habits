@@ -3,12 +3,16 @@ from pathlib import Path
 from ...data.db_manager import CompleteHabit, Habits
 from ..ui.terminal_utils import clear_screen
 from ..ui.command_autocomplete import AutoCompleter,Form
+from ..ui.command_autocomplete import ProgressBar
 
 BASE_DIR = Path(__file__).resolve().parent
 
 class Add_Habit:
     def __init__(self):
         self.__habit_inputs = Habit_Inputs(BASE_DIR)
+        self.progress_bar = ProgressBar(4)
+        self.__form = self.__habit_inputs.get_main_form()
+        self.__current_filled_fields = self.__form.number_of_filled_fields()
 
     def is_clashing_with_any_habit(self):
         habits = [Habits().get_habit_by_status_excluding_some_statuses(['MISSED','UNKNOWN'])] 
@@ -25,6 +29,11 @@ class Add_Habit:
 
     def __my_input(self,message,history_file_name,commands,field_pair=None):
         self.__main_auto_completer = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
+        if self.__current_filled_fields != self.__form.number_of_filled_fields():
+            self.progress_bar.increase_progress_percentage(self.__form.number_of_filled_fields())
+            self.__current_filled_fields = self.__form.number_of_filled_fields()
+
+        self.progress_bar.display_progress_bar()
         self.__main_auto_completer.set_has_status(True)
         modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
         return self.__main_auto_completer.prompt_input(message,location=f"Home/AddHabit/{modified_history_file_name}",field_pair=field_pair).lower()
@@ -72,3 +81,5 @@ class Add_Habit:
                 display_message = func()
             else:
                 display_message = func(message)
+
+            clear_screen()

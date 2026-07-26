@@ -14,6 +14,8 @@ class Habit_Inputs:
         self.__view = View()
         self.__main_form = Form({field: False for field in ['name','start_datetime','duration']})
 
+    def get_main_form(self):
+        return self.__main_form
 
     def __set_habit_name(self,message,field_pair=None):
         history_file_name='habit_name'
