@@ -1,5 +1,5 @@
 from ..data.db_manager import CompleteHabit, Habits
-from .ui.command_autocomplete import AutoCompleter
+from .ui.command_autocomplete import AutoCompleter,Form
 from .time_project.time_manager import HabitDateTimeManager
 from .time_project.time_manager_validator import HabitDateTimeManagerValidator
 from .ui.terminal_utils import ran_common_functions, retry_until_success
@@ -12,16 +12,20 @@ class Habit_Inputs:
         self.__datetime_validator = HabitDateTimeManagerValidator()
         self.__BASE_DIR = base_directory
         self.__view = View()
+        self.__main_form = Form({field: False for field in ['name','start_datetime','duration']})
 
-    def __set_habit_name(self,message):
+
+    def __set_habit_name(self,message,field_pair=None):
         history_file_name='habit_name'
         commands = []
-        autocompleter = AutoCompleter(self.__BASE_DIR / f"history/{history_file_name}",commands)
-        return autocompleter.prompt_input(message)
+        self.__main_autocompleter = AutoCompleter(self.__BASE_DIR / f"history/{history_file_name}",commands)
+        self.__main_autocompleter.set_has_status(True)
+        modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
+        return self.__main_autocompleter.prompt_input(message,location=f"Home/AddHabit/{modified_history_file_name}",field_pair=field_pair).lower()
     
     @retry_until_success
     def set_habit_name(self,message):
-        habit_name = self.__set_habit_name(message)
+        habit_name = self.__set_habit_name(message,(self.__main_form.get_field_status('name'),self.__habit.get_name()))
 
         # ********* start of common functions ************
         did_run_common_func = ran_common_functions(habit_name)
@@ -31,20 +35,26 @@ class Habit_Inputs:
             return False, 'switching'
         # ********** end of common functions ************
         
-        return self.__habit.set_name(habit_name)
+        is_name_valid, message = self.__habit.set_name(habit_name)
+        if is_name_valid:
+            self.__main_form.set_field_status('name',True)
+        return is_name_valid, message
 
-    def __set_habit_start_datetime(self,message):
+
+    def __set_habit_start_datetime(self,message,field_pair=None):
         history_file_name='start_datetime'
         commands = []
-        autocompleter = AutoCompleter(self.__BASE_DIR / f"history/{history_file_name}",commands)
-        return autocompleter.prompt_input(message,[],'format: yyyy-mm-dd, HH:MM e.g 2026-06-08, 08:53')
+        self.__main_autocompleter = AutoCompleter(self.__BASE_DIR / f"history/{history_file_name}",commands)
+        self.__main_autocompleter.set_has_status(True)
+        modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
+        return self.__main_autocompleter.prompt_input(message,location=f"Home/AddHabit/{modified_history_file_name}",field_pair=field_pair).lower()
 
     def get_habit(self):
         return self.__habit
 
     @retry_until_success
     def set_start_datetime(self,message):
-        habit_start_datetime = self.__set_habit_start_datetime(message).replace(',','')
+        habit_start_datetime = self.__set_habit_start_datetime(message,(self.__main_form.get_field_status('start_datetime'),self.__habit.get_start_date())).replace(',','')
 
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(habit_start_datetime)
@@ -70,20 +80,23 @@ class Habit_Inputs:
             return False, 'You cannot schedule for the time that has passed'
 
         self.__habit.set_start_date(self.__datetime_manager.string_to_datetime(habit_start_datetime))
+        self.__main_form.set_field_status('start_datetime',True)
         return True, 'valid start datetime'
 
-    def __set_habit_session_duration(self,message,example=None):
+    def __set_habit_session_duration(self,message,example=None,field_pair=False):
         history_file_name='session_duration'
         commands = []
-        autocompleter = AutoCompleter(self.__BASE_DIR / f"history/{history_file_name}",commands)
-        return autocompleter.prompt_input(message,example)
+        self.__main_autocompleter = AutoCompleter(self.__BASE_DIR / f"history/{history_file_name}",commands)
+        self.__main_autocompleter.set_has_status(True)
+        modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
+        return self.__main_autocompleter.prompt_input(message,location=f"Home/AddHabit/{modified_history_file_name}",field_pair=field_pair).lower()
     
     def __set_habit(self,habit):
         self.__habit = habit
 
     @retry_until_success
     def set_session_duration(self,message):
-        habit_session_duration = self.__set_habit_session_duration(message)
+        habit_session_duration = self.__set_habit_session_duration(message,field_pair=(self.__main_form.get_field_status('duration'),self.__habit.get_session_duration()))
 
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(habit_session_duration)
@@ -96,6 +109,7 @@ class Habit_Inputs:
         if not self.__datetime_validator.is_time_format_valid(habit_session_duration):
             return False, 'Invalid format'
         
+        self.__main_form.set_field_status('duration',True)
         self.__habit.set_session_duration(habit_session_duration)
         return True, 'valid start datetime'
 

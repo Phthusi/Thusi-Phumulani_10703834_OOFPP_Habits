@@ -2,7 +2,7 @@ from ..habit_input import Habit_Inputs
 from pathlib import Path
 from ...data.db_manager import CompleteHabit, Habits
 from ..ui.terminal_utils import clear_screen
-from ..ui.command_autocomplete import AutoCompleter
+from ..ui.command_autocomplete import AutoCompleter,Form
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -23,11 +23,11 @@ class Add_Habit:
                 habit_to_be_added = f'Habit(id={self.__habit.get_id()}, name={self.__habit.get_name()}, start_datetime={datetime1}, session_duration={self.__habit.get_session_duration()})'
                 return False, f'{habit_to_be_added} cannot be saved beacuse it clashes with {habit_from_db}'
 
-    def __my_input(self,message,history_file_name,commands):
-        autocompleter = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
-        print('Shelf Status   : ❌ Empty')
-        return autocompleter.prompt_input(message,location=f"Home/UpdateHabit").lower()
-
+    def __my_input(self,message,history_file_name,commands,field_pair=None):
+        self.__main_auto_completer = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
+        self.__main_auto_completer.set_has_status(True)
+        modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
+        return self.__main_auto_completer.prompt_input(message,location=f"Home/AddHabit/{modified_history_file_name}",field_pair=field_pair).lower()
 
     def run(self):
         command_functions = {
