@@ -8,6 +8,7 @@ from .functionality_units.search_unit.search_habit_inputs import SearchHabitInpu
 from .functionality_units.search_unit.search_habit import SearchHabit
 from .functionality_units.ui.command_autocomplete import AutoCompleter
 from .functionality_units.ui.terminal_utils import clear_screen
+from .functionality_units.habit_repeats_unit.habit_repeats import HabitRepeats
 from pathlib import Path
 import threading
 import time
@@ -54,9 +55,10 @@ def main_program():
     search_habits = SearchHabit()
     update_habits = UpdateHabit()
     add_habits = Add_Habit()
+    habit_repeats = HabitRepeats()
 
     while True:
-        commands = ['update habit','search habit(s)','add habit','esc']
+        commands = ['update habit','search habit(s)','add habit','esc','repeat habits']
         history_file_name = 'main'
         user_input = my_input('',history_file_name,commands)
         match user_input:
@@ -66,6 +68,8 @@ def main_program():
                 search_habits.run()
             case 'add habit':
                 add_habits.run()
+            case 'repeat habits':
+                habit_repeats.run()
             case 'delete habit':
                 pass
             case 'clear':

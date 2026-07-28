@@ -3,6 +3,7 @@
 
 # History folders
 **/history/
+**/history/.gitkeep
 
 # Optional: compiled Python files
 *.py[cod]

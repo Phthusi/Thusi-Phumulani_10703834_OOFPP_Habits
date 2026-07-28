@@ -132,5 +132,6 @@ class Habit_Inputs:
         is_valid, message = self._Habit_Inputs__habit._CompleteHabit__validator.validate()
         print(message)
         if is_valid and not self.is_clashing_with_any_habit():
+            input('Press Enter')
             return self.__habit.save_habit()
-
+        input('Press Enter')

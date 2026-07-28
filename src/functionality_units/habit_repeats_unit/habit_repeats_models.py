@@ -54,6 +54,8 @@ class WeekPatternManager:
     def save_week_pattern(self,name,week_pattern):
         if name not in WeekPattern.week_patterns:
             WeekPattern.week_patterns[name] = week_pattern
+            return True,'week pattern saved successfully'
+        return False, f'Sorry new week pattern with name \'{name}\' already exists'
 
 class MonthPattern:
     '''
@@ -108,3 +110,30 @@ class MonthPatternManager:
         if name not in MonthPattern.monthPatterns:
             MonthPattern.monthPatterns[name] = month_pattern
 
+class MonthPatterns:
+    '''
+
+    '''
+    monthPatterns = dict()
+    def __init__(self,name):
+        self.__name = name
+        self.__month_pattern = []
+        self.__week_patterns = []
+
+    def set_month_pattern(self,month_pattern):
+        self.__month_pattern = month_pattern
+    
+    def set_week_patterns(self,week_patterns):
+        self.__week_patterns = week_patterns
+
+    def get_week_patterns(self):
+        return self.__week_patterns
+
+    def get_month_pattern(self):
+        return self.__month_pattern
+    
+    def get_name(self):
+        return self.__name
+    
+    def set_name(self,name):
+        self.__name = name
