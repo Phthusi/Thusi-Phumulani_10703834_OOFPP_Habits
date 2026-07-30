@@ -1,8 +1,8 @@
 # Python cache
 **/__pycache__/
 
-# History folders
-**/history/
+# Ignore any folder named 'history' anywhere in the repository
+**/history/*.txt
 **/history/.gitkeep
 
 # Optional: compiled Python files

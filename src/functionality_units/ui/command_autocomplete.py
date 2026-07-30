@@ -1,10 +1,13 @@
+from rich.console import Group
+from rich.live import Live
+from rich.panel import Panel
+from rich.progress import BarColumn, Progress, TextColumn
 from prompt_toolkit import PromptSession
 from prompt_toolkit.formatted_text import ANSI
 from prompt_toolkit.completion import WordCompleter, FuzzyCompleter
 from prompt_toolkit.history import FileHistory
 from .read_json import read_json_files
 from colorama import Fore, Style
-from rich.progress import Progress, BarColumn, TextColumn
 
 class ProgressBar:
     def __init__(self, number_of_fields):
@@ -12,17 +15,34 @@ class ProgressBar:
         self.__progress_percentage = 0
 
     def display_progress_bar(self):
-        with Progress(
-        TextColumn("[bold magenta]Complete        :[/]"),
-        BarColumn(
-            complete_style="blue",
-            finished_style="bright_white",
-            style="on rgb(40,40,40)",
-        ),
-        TextColumn("[white]{task.percentage:>3.0f}%"),
-        ) as progress:
-            task = progress.add_task("Completing: ", total=100)
-            progress.update(task, advance=self.__progress_percentage)
+        progress = Progress(
+            TextColumn("[bold magenta]Complete        :[/]"),
+            BarColumn(
+                complete_style="blue",
+                finished_style="bright_white",
+                style="on rgb(40,40,40)",
+            ),
+            TextColumn("[white]{task.percentage:>3.0f}%"),
+        )
+        task = progress.add_task("", total=100)
+        progress.update(task, completed=self.__progress_percentage)
+        menu_text = """
+[bold cyan]📌 LEVEL 1: PARAMETERS[/] [green]✅[/] Name [green] ✅[/] Duration [bold blue] ❌[/] Start Datetime |  [bold cyan]📌 leve 2: [/]ACTIONS save
+
+[dim]NB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc] Exit[/]"""
+
+        ui_content = Group(progress, menu_text)
+        ui_panel = Panel(
+            ui_content,
+            title="[bold]🧭 QUERY BUILDER[/]",
+            title_align="center",
+            border_style="bright_white",
+            padding=(1, 2),
+            expand=True,
+        )
+
+        with Live(ui_panel, refresh_per_second=4):
+            pass
 
     def increase_progress_percentage(self,increase_by=0):
         if increase_by==0:
@@ -34,12 +54,23 @@ class ProgressBar:
         self.__progress_percentage = 100
 
 class Form:
-    def __init__(self, fields: dict[str, bool]):
+    def __init__(self, fields: dict[str, bool],map_string=None):
         self.fields = fields
+        self.__map_string = None
 
     def get_fields(self):
         return self.fields
     
+    def set_map(self,map_string):
+        self.__map_string = map_string
+
+    def display_map(self):
+        ''' fill from level 1(in any order)
+        level 1: ---- [filled ✅ name] --- [ filled ✅ duration ] ---- [ empty ❌ start datetime ] ---
+        level 2: ---- [not allowed ❌ save] ----
+        '''
+        pass
+
     def set_fields(self, fields):
         self.fields = fields
 
