@@ -33,7 +33,7 @@ class Add_Habit:
             self.progress_bar.increase_progress_percentage(self.__form.number_of_filled_fields())
             self.__current_filled_fields = self.__form.number_of_filled_fields()
 
-        self.progress_bar.display_progress_bar()
+        self.progress_bar.display_progress_bar(self.__form.get_display_map())
         self.__main_auto_completer.set_has_status(True)
         modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
         return self.__main_auto_completer.prompt_input(message,location=f"Home/AddHabit/{modified_history_file_name}",field_pair=field_pair).lower()

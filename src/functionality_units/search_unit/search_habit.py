@@ -26,8 +26,7 @@ class SearchHabit:
         if self.__current_filled_fields != self.__form.number_of_filled_fields():
             self.progress_bar.increase_progress_percentage(self.__form.number_of_filled_fields())
             self.__current_filled_fields = self.__form.number_of_filled_fields()
-        # print("Flow          : ✅ Find ID --→ ✅ Num Fields --→ ❌ Choose Fields --→ ❌ Complete")
-        self.progress_bar.display_progress_bar()
+        # self.progress_bar.display_progress_bar()
         print('Shelf Status    : ❌ Empty')
         print('Results Status  : ❌ Empty')
         print('Last Search     : time before 15:00')

@@ -4,6 +4,9 @@ from .time_project.time_manager import HabitDateTimeManager
 from .time_project.time_manager_validator import HabitDateTimeManagerValidator
 from .ui.terminal_utils import ran_common_functions, retry_until_success
 from .view import View
+'''
+"{name} is {age}".format(**my_dict)
+'''
 
 class Habit_Inputs:
     def __init__(self, base_directory):
@@ -12,7 +15,11 @@ class Habit_Inputs:
         self.__datetime_validator = HabitDateTimeManagerValidator()
         self.__BASE_DIR = base_directory
         self.__view = View()
-        self.__main_form = Form({field: False for field in ['name','start_datetime','duration']})
+        display_map = """
+[bold cyan]📌 LEVEL 1: PARAMETERS[/] [green]{name}[/] Name [green] {duration}[/] Duration [bold blue] {start_datetime}[/] Start Datetime |  [bold cyan]📌 leve 2: [/]ACTIONS save
+
+[dim]NB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  • Exit • [dim](Press [Space] to view available commands...)[/]"""
+        self.__main_form = Form({field: False for field in ['name','start_datetime','duration']},display_map)
 
     def get_main_form(self):
         return self.__main_form

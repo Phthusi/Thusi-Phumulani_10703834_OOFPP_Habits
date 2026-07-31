@@ -112,22 +112,23 @@ class View:
             self.__current_index = new_max_len-1
 
     def display_habits(self,habits,location_base):
+        clear_screen()
         max_len = len(habits)
         if max_len==0:
             print('search results : 0')
             return
-        print(f'\nsearch results : {max_len}')
+        print(f'search results : {max_len}')
         initial_index = 0
         final_index = 10
         habits_to_display = habits[initial_index:final_index]
         while(True):
-            print(f'\n\npages : {self.__page_number} of {max_len//10 + 1 if max_len%10!=0 else max_len//10 + 0}')
+            print(f'pages : {self.__page_number} of {max_len//10 + 1 if max_len%10!=0 else max_len//10 + 0}')
             list_of_indices = list(range(initial_index,final_index))
             self.add_to_table(habits_to_display,list_of_indices)
             self.display_habit()
             commands =  ['up','down','select','next page','prev page','esc']
             history_file_name = 'view'
-            x = self.__my_input('Enter : ',history_file_name,commands,base=location_base)
+            x = self.__my_input('Enter Action : ',history_file_name,commands,base=location_base)
             match x:
                 case 'next page':
                     initial_index,final_index = self.__next(initial_index,final_index,max_len)

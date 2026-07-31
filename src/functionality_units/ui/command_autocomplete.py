@@ -9,12 +9,13 @@ from prompt_toolkit.history import FileHistory
 from .read_json import read_json_files
 from colorama import Fore, Style
 
+
 class ProgressBar:
     def __init__(self, number_of_fields):
         self.__advance = 1/number_of_fields *100
         self.__progress_percentage = 0
 
-    def display_progress_bar(self):
+    def display_progress_bar(self,menu_text="to be"):
         progress = Progress(
             TextColumn("[bold magenta]Complete        :[/]"),
             BarColumn(
@@ -26,10 +27,6 @@ class ProgressBar:
         )
         task = progress.add_task("", total=100)
         progress.update(task, completed=self.__progress_percentage)
-        menu_text = """
-[bold cyan]📌 LEVEL 1: PARAMETERS[/] [green]✅[/] Name [green] ✅[/] Duration [bold blue] ❌[/] Start Datetime |  [bold cyan]📌 leve 2: [/]ACTIONS save
-
-[dim]NB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc] Exit[/]"""
 
         ui_content = Group(progress, menu_text)
         ui_panel = Panel(
@@ -54,22 +51,21 @@ class ProgressBar:
         self.__progress_percentage = 100
 
 class Form:
-    def __init__(self, fields: dict[str, bool],map_string=None):
+    def __init__(self, fields: dict[str, bool],display_map=None):
         self.fields = fields
-        self.__map_string = None
-
+        self.__display_map = display_map
+ 
     def get_fields(self):
         return self.fields
     
     def set_map(self,map_string):
         self.__map_string = map_string
 
-    def display_map(self):
-        ''' fill from level 1(in any order)
-        level 1: ---- [filled ✅ name] --- [ filled ✅ duration ] ---- [ empty ❌ start datetime ] ---
-        level 2: ---- [not allowed ❌ save] ----
-        '''
-        pass
+    def set_display_map(self,display_map):
+        self.__display_map = display_map
+
+    def get_display_map(self):
+        return self.__display_map.format(**self.fields).replace('True','✅').replace('False','❌')
 
     def set_fields(self, fields):
         self.fields = fields
