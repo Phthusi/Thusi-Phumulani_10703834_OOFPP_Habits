@@ -4,9 +4,8 @@ from .time_project.time_manager import HabitDateTimeManager
 from .time_project.time_manager_validator import HabitDateTimeManagerValidator
 from .ui.terminal_utils import ran_common_functions, retry_until_success
 from .view import View
-'''
-"{name} is {age}".format(**my_dict)
-'''
+from .ui.terminal_utils import clear_screen
+from colorama import Fore, Style, Back
 
 class Habit_Inputs:
     def __init__(self, base_directory):
@@ -16,9 +15,7 @@ class Habit_Inputs:
         self.__BASE_DIR = base_directory
         self.__view = View()
         display_map = """
-[bold cyan]📌 LEVEL 1: PARAMETERS[/] [green]{name}[/] Name [green] {duration}[/] Duration [bold blue] {start_datetime}[/] Start Datetime |  [bold cyan]📌 leve 2: [/]ACTIONS save
-
-[dim]NB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  • Exit • [dim](Press [Space] to view available commands...)[/]"""
+[bold cyan]📌 LEVEL 1: PARAMETERS[/] [green]{name}[/] Name [bold blue] {start_datetime}[/] Start Datetime [green] {duration}[/] Duration  |  [bold cyan]🔒 leve 2: ACTION(S) [/] save"""
         self.__main_form = Form({field: False for field in ['name','start_datetime','duration']},display_map)
 
     def get_main_form(self):
@@ -34,6 +31,7 @@ class Habit_Inputs:
     
     @retry_until_success
     def set_habit_name(self,message):
+        clear_screen()
         habit_name = self.__set_habit_name(message,(self.__main_form.get_field_status('name'),self.__habit.get_name()))
 
         # ********* start of common functions ************
@@ -63,6 +61,7 @@ class Habit_Inputs:
 
     @retry_until_success
     def set_start_datetime(self,message):
+        clear_screen()
         habit_start_datetime = self.__set_habit_start_datetime(message,(self.__main_form.get_field_status('start_datetime'),self.__habit.get_start_date())).replace(',','')
 
         # ********* start of common functions ************        
@@ -105,6 +104,7 @@ class Habit_Inputs:
 
     @retry_until_success
     def set_session_duration(self,message):
+        clear_screen()
         habit_session_duration = self.__set_habit_session_duration(message,field_pair=(self.__main_form.get_field_status('duration'),self.__habit.get_session_duration()))
 
         # ********* start of common functions ************        
@@ -131,14 +131,36 @@ class Habit_Inputs:
             datetime2 = self.__datetime_manager.string_to_datetime(start_datetime)
             duration2 = self.__datetime_manager.convert_duration(duration)
             if self.__datetime_manager.is_clashing(datetime1,duration1,datetime2,duration2):
-                habit_from_db = f'Habit(id={id},name={name}, start_datetime={datetime2}, session_duration={duration}, status={status})'
-                habit_to_be_added = f'Habit(id={self.__habit.get_id()}, name={self.__habit.get_name()}, start_datetime={datetime1}, session_duration={self.__habit.get_session_duration()})'
-                return False, f'{habit_to_be_added} cannot be saved beacuse it clashes with {habit_from_db}'
+                clear_screen()
+                habit_from_db = f'''
+
+{Back.BLUE}{Fore.WHITE}       Saved Habit                      {Back.RESET}
+ id               : {id}
+ name             :{name} 
+ start_datetime   :{datetime2}
+ session_duration :{duration}
+ status           :{status}
+-----------------------------------------
+'''
+                
+                habit_to_be_added = f'''{Fore.WHITE}
+{Back.BLUE}{Fore.WHITE}       Habit to be added                 {Back.RESET}
+ id               :{self.__habit.get_id()}
+ name             :{self.__habit.get_name()}
+ start_datetime   :{datetime1}
+ session_duration :{self.__habit.get_session_duration()}
+ status           :N/A
+-----------------------------------------
+'''
+                return False, f'❌ Sorry Habit not saved, The following Habits are Clashing: \n{habit_to_be_added} \nAND {habit_from_db}'
+        return True, '✅ Habit saved successfully....'
 
     def save(self):
         is_valid, message = self._Habit_Inputs__habit._CompleteHabit__validator.validate()
+        if not is_valid: return False, message
+        success, message = self.is_clashing_with_any_habit()
         print(message)
-        if is_valid and not self.is_clashing_with_any_habit():
-            input('Press Enter')
+        if is_valid and success:
+            input('       [Press Enter to continue]     ')
             return self.__habit.save_habit()
-        input('Press Enter')
+        input('        [Press Enter to continue]       ')

@@ -38,6 +38,7 @@ class SearchHabitInputs(Habit_Inputs):
 
     def display_grabbed_habit(self):
         self.__habit = Shelf.copy_last_place_habit() 
+        print(f'{Fore.LIGHTBLACK_EX}Shelf Status    : ❌ Empty')
         if self.__habit==None:
             print(f'''{Fore.LIGHTBLACK_EX}Status          : ❌ {self.__searched_habits_status}
 Shared Habit ID : {Fore.LIGHTBLUE_EX}N/A''')

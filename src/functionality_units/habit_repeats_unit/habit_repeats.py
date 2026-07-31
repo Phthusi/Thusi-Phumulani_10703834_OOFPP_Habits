@@ -30,7 +30,7 @@ class HabitRepeats:
     def set_name(self):
         history_file_name = 'set_name'
         commands = []
-        user_input = self.__my_input('Enter the week pattern name: ',history_file_name,example='e.g week1',commands=commands)
+        user_input = self.__my_input('Enter the week pattern name: ',history_file_name,example='Input example: week1',commands=commands)
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(user_input)
         message_to_display = find_message(user_input)
@@ -48,7 +48,7 @@ class HabitRepeats:
     def set_week_pattern(self):
         history_file_name = 'week_pattern'
         commands = ['mon','tue','wed','thurs','fri','sat','sun']
-        user_input = self.__my_input('Enter the week pattern: ',history_file_name,example='e.g mon tue sun',commands=commands)
+        user_input = self.__my_input('Enter the week pattern: ',history_file_name,example='Input Example: mon tue sun',commands=commands)
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(user_input)
         message_to_display = find_message(user_input)

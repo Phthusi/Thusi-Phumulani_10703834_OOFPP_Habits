@@ -27,7 +27,7 @@ class Add_Habit:
                 habit_to_be_added = f'Habit(id={self.__habit.get_id()}, name={self.__habit.get_name()}, start_datetime={datetime1}, session_duration={self.__habit.get_session_duration()})'
                 return False, f'{habit_to_be_added} cannot be saved beacuse it clashes with {habit_from_db}'
 
-    def __my_input(self,message,history_file_name,commands,field_pair=None):
+    def __my_input(self,message,history_file_name,commands,field_pair=None,example=None):
         self.__main_auto_completer = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
         if self.__current_filled_fields != self.__form.number_of_filled_fields():
             self.progress_bar.increase_progress_percentage(self.__form.number_of_filled_fields())
@@ -36,7 +36,8 @@ class Add_Habit:
         self.progress_bar.display_progress_bar(self.__form.get_display_map())
         self.__main_auto_completer.set_has_status(True)
         modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
-        return self.__main_auto_completer.prompt_input(message,location=f"Home/AddHabit/{modified_history_file_name}",field_pair=field_pair).lower()
+        return self.__main_auto_completer.prompt_input(message,location=f"Home/AddHabit/{modified_history_file_name}",field_pair=field_pair,example=example).lower()
+
 
     def run(self):
         command_functions = {
@@ -44,10 +45,6 @@ class Add_Habit:
                     self.__habit_inputs.set_habit_name,
                     "Enter the habit name: "
                     ],
-            'view habit to update':[
-                self.__habit_inputs.set_session_duration,
-                ''
-            ],
             'start_datetime':[
                     self.__habit_inputs.set_start_datetime,
                     "Enter the habit datetime: "
@@ -62,9 +59,12 @@ class Add_Habit:
             ]
         }
         while True:
+            clear_screen()
+            if all(self.__form.fields.values()):
+                self.__form.set_display_map(self.__form.get_display_map().replace('🔒','🔓'))
             commands = list(command_functions.keys())
             history_file_name = 'add_habit'
-            user_input = self.__my_input("Enter command: ",history_file_name,commands)
+            user_input = self.__my_input("Enter command: ",history_file_name,commands,example='NB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands')
             
             match user_input:
                 case 'esc':

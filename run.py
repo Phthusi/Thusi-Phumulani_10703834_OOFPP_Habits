@@ -16,7 +16,7 @@ if __name__ == "__main__":
     ===========================================================================================================
     """
     )
-
+    input('Welcome! Please Press Enter to start')
     main()
     # background_task()
     print(r"""
@@ -30,7 +30,6 @@ if __name__ == "__main__":
                                     [ Exit complete. Stay disciplined. ]
     ===========================================================================================================
     """)
-
 '''
 priorities
 1. progress bar functionality

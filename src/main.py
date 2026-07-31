@@ -10,6 +10,8 @@ from .functionality_units.ui.command_autocomplete import AutoCompleter
 from .functionality_units.ui.terminal_utils import clear_screen
 from .functionality_units.habit_repeats_unit.habit_repeats import HabitRepeats
 from pathlib import Path
+from .functionality_units.ui.terminal_utils import clear_screen
+
 import threading
 import time
 
@@ -29,11 +31,11 @@ def background_task():
             if new_status!=status:
                 db_interface.update_habit(id,**{'status':new_status}) 
 
-def my_input(message,history_file_name,commands,field_pair=None,base='Home/'):
+def my_input(message,history_file_name,commands,field_pair=None,base='Home/',example=None):
     auto_completer = AutoCompleter(BASE_DIR / f"main_history/{history_file_name}",commands)
     auto_completer.set_has_status(True)
     modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
-    return auto_completer.prompt_input(message,location=f"{base}{modified_history_file_name}",field_pair=field_pair).lower()
+    return auto_completer.prompt_input(message,location=f"{base}{modified_history_file_name}",field_pair=field_pair,example=example).lower()
 
 
 def main_program():
@@ -60,7 +62,8 @@ def main_program():
     while True:
         commands = ['update habit','search habit(s)','add habit','esc','repeat habits']
         history_file_name = 'main'
-        user_input = my_input('',history_file_name,commands)
+        clear_screen()
+        user_input = my_input('Enter command: ',history_file_name,commands,example=' NB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands')
         match user_input:
             case 'update habit':
                 update_habits.run()
@@ -78,6 +81,7 @@ def main_program():
                 break
             case default:
                 print(f'\'{user_input}\' invalid')
+    clear_screen()
 
 def main():
     main_program()

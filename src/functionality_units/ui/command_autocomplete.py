@@ -147,7 +147,7 @@ class AutoCompleter:
             field_value = None if field_value=='default' else field_value
         prompt_string = f"[📍location] {location} "+Style.BRIGHT + f"> {Fore.MAGENTA + message}"
         if example!=None:
-            prompt_string = f"{Fore.LIGHTBLACK_EX+ example}\n"+prompt_string
+            prompt_string = f"{Fore.LIGHTBLACK_EX+ example}\n{Fore.WHITE}"+prompt_string
         
         if self.__has_status:
             status = field_status
