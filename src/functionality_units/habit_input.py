@@ -3,6 +3,7 @@ from .ui.command_autocomplete import AutoCompleter,Form
 from .time_project.time_manager import HabitDateTimeManager
 from .time_project.time_manager_validator import HabitDateTimeManagerValidator
 from .ui.terminal_utils import ran_common_functions, retry_until_success
+from .shelf import Shelf
 from .view import View
 from .ui.terminal_utils import clear_screen
 from colorama import Fore, Style, Back
@@ -14,8 +15,9 @@ class Habit_Inputs:
         self.__datetime_validator = HabitDateTimeManagerValidator()
         self.__BASE_DIR = base_directory
         self.__view = View()
+        self.__shelf = Shelf()
         display_map = """
-[bold cyan]📌 LEVEL 1: PARAMETERS[/] [green]{name}[/] Name [bold blue] {start_datetime}[/] Start Datetime [green] {duration}[/] Duration  |  [bold cyan]🔒 leve 2: ACTION(S) [/] save"""
+[bold cyan]📌 LEVEL 1: PARAMETERS[/] [green]{name}[/] Name [bold blue] {start_datetime}[/] Start Datetime [green] {duration}[/] Duration  |  [bold cyan]🔒 LEVEL 2: ACTION(S) [/] Save"""
         self.__main_form = Form({field: False for field in ['name','start_datetime','duration']},display_map)
 
     def get_main_form(self):
@@ -27,7 +29,7 @@ class Habit_Inputs:
         self.__main_autocompleter = AutoCompleter(self.__BASE_DIR / f"history/{history_file_name}",commands)
         self.__main_autocompleter.set_has_status(True)
         modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
-        return self.__main_autocompleter.prompt_input(message,location=f"Home/AddHabit/{modified_history_file_name}",field_pair=field_pair).lower()
+        return self.__main_autocompleter.prompt_input(message,location=f"Home/AddHabit/{modified_history_file_name}",field_pair=field_pair,example=f'{'-'*95}\n[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands').lower()
     
     @retry_until_success
     def set_habit_name(self,message):
@@ -54,7 +56,7 @@ class Habit_Inputs:
         self.__main_autocompleter = AutoCompleter(self.__BASE_DIR / f"history/{history_file_name}",commands)
         self.__main_autocompleter.set_has_status(True)
         modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
-        return self.__main_autocompleter.prompt_input(message,location=f"Home/AddHabit/{modified_history_file_name}",field_pair=field_pair).lower()
+        return self.__main_autocompleter.prompt_input(message,location=f"Home/AddHabit/{modified_history_file_name}",field_pair=field_pair,example=f'{'-'*95}\n[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands').lower()
 
     def get_habit(self):
         return self.__habit
@@ -97,7 +99,7 @@ class Habit_Inputs:
         self.__main_autocompleter = AutoCompleter(self.__BASE_DIR / f"history/{history_file_name}",commands)
         self.__main_autocompleter.set_has_status(True)
         modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
-        return self.__main_autocompleter.prompt_input(message,location=f"Home/AddHabit/{modified_history_file_name}",field_pair=field_pair).lower()
+        return self.__main_autocompleter.prompt_input(message,location=f"Home/AddHabit/{modified_history_file_name}",field_pair=field_pair,example=f'{'-'*95}\n[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands').lower()
     
     def __set_habit(self,habit):
         self.__habit = habit
@@ -126,6 +128,15 @@ class Habit_Inputs:
         habits = Habits().get_habit_by_status_excluding_some_statuses(['MISSED','UNKNOWN'])
         datetime1 = self.__habit.get_start_date()
         duration1 = self.__datetime_manager.convert_duration(self.__habit.get_session_duration())
+        habit_to_be_added = f'''{Fore.WHITE}
+{Back.BLUE}{Fore.WHITE}       Habit to be added                 {Back.RESET}
+ id               :{self.__habit.get_id()}
+ name             :{self.__habit.get_name()}
+ start_datetime   :{datetime1}
+ session_duration :{self.__habit.get_session_duration()}
+ status           :N/A
+-----------------------------------------
+'''
         for habit in habits: 
             id, name, start_datetime, duration, status = habit
             datetime2 = self.__datetime_manager.string_to_datetime(start_datetime)
@@ -142,18 +153,10 @@ class Habit_Inputs:
  status           :{status}
 -----------------------------------------
 '''
-                
-                habit_to_be_added = f'''{Fore.WHITE}
-{Back.BLUE}{Fore.WHITE}       Habit to be added                 {Back.RESET}
- id               :{self.__habit.get_id()}
- name             :{self.__habit.get_name()}
- start_datetime   :{datetime1}
- session_duration :{self.__habit.get_session_duration()}
- status           :N/A
------------------------------------------
-'''
                 return False, f'❌ Sorry Habit not saved, The following Habits are Clashing: \n{habit_to_be_added} \nAND {habit_from_db}'
-        return True, '✅ Habit saved successfully....'
+        clear_screen()
+        self.__shelf.preserve_habit((id+1,self.__habit.get_name(),self.__habit.get_start_date(),self.__habit.get_session_duration(),'UPCOMING'))
+        return True, f'✅ Habit saved successfully....\n{habit_to_be_added.replace("Habit to be added","Habit added")}'
 
     def save(self):
         is_valid, message = self._Habit_Inputs__habit._CompleteHabit__validator.validate()
@@ -161,6 +164,6 @@ class Habit_Inputs:
         success, message = self.is_clashing_with_any_habit()
         print(message)
         if is_valid and success:
-            input('       [Press Enter to continue]     ')
+            input(f'#[{Fore.LIGHTCYAN_EX}Please note that the habit is shared so that you can go straight to editing/repeating(if you want to) it without searching{Fore.RESET}]\n       [Press Enter to continue]     ')
             return self.__habit.save_habit()
         input('        [Press Enter to continue]       ')

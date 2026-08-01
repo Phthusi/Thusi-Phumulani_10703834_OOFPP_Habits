@@ -64,7 +64,7 @@ class Add_Habit:
                 self.__form.set_display_map(self.__form.get_display_map().replace('🔒','🔓'))
             commands = list(command_functions.keys())
             history_file_name = 'add_habit'
-            user_input = self.__my_input("Enter command: ",history_file_name,commands,example='NB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands')
+            user_input = self.__my_input("Enter command: ",history_file_name,commands,example='┌💁  Please note that you must start filling the level one parameters before you do the actions in level 2 ⸣\n⸤💡  [↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands         ⸥')
             
             match user_input:
                 case 'esc':

@@ -16,7 +16,7 @@ if __name__ == "__main__":
     ===========================================================================================================
     """
     )
-    input('Welcome! Please Press Enter to start')
+    input('👋 Welcome! Please Press Enter to start...')
     main()
     # background_task()
     print(r"""
