@@ -11,7 +11,7 @@ from .functionality_units.ui.terminal_utils import clear_screen
 from .functionality_units.habit_repeats_unit.habit_repeats import HabitRepeats
 from pathlib import Path
 from .functionality_units.ui.terminal_utils import clear_screen
-
+from .functionality_units.shelf import Shelf
 import threading
 import time
 
@@ -58,12 +58,13 @@ def main_program():
     update_habits = UpdateHabit()
     add_habits = Add_Habit()
     habit_repeats = HabitRepeats()
+    shelf = Shelf()
 
     while True:
         commands = ['update habit','search habit(s)','add habit','esc','repeat habits']
         history_file_name = 'main'
         clear_screen()
-        user_input = my_input('Enter command: ',history_file_name,commands,example=' NB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands')
+        user_input = my_input('Enter command: ',history_file_name,commands,example=f' {shelf.display_state().replace('\n','\n ')}\n NB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands')
         match user_input:
             case 'update habit':
                 update_habits.run()

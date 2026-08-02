@@ -24,7 +24,7 @@ class UpdateHabitInputs(Habit_Inputs):
         self.__habit = None
         self.__view = View()
         self.__shelf = Shelf()
-        self.__grabbed_habit_status = "No habit has been grabbed from the shelf, please grab a habit first"
+        self.__copied_habit_status = "No habit has been copied from the shelf, please copy the habit from the shelf"
 
     def __my_input(self,message,history_file_name,commands,field_pair=None):
         self.__main_auto_completer = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
@@ -35,15 +35,15 @@ class UpdateHabitInputs(Habit_Inputs):
     def get_main_form(self):
         return self.__main_form
 
-    def display_grabbed_habit(self):
+    def display_copied_habit(self):
         if self.__habit is None:
-            print(f'''{Fore.LIGHTBLACK_EX}Status        : ❌ {self.__grabbed_habit_status}
+            print(f'''{Fore.LIGHTBLACK_EX}Status        : ❌ {self.__copied_habit_status}
 Habit ID      : {Fore.LIGHTBLUE_EX}N/A''')
             return
-        print(f'''{Fore.LIGHTBLACK_EX}Status        : ✅ {self.__grabbed_habit_status}
+        print(f'''{Fore.LIGHTBLACK_EX}Status        : ✅ {self.__copied_habit_status}
 Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
 
-    def collect_grabbed_habit(self):
+    def collect_copied_habit(self):
         self.__selected_habit_tuple = Shelf.copy_last_place_habit()
         habit = {
             'id':int(self.__selected_habit_tuple[0]),
@@ -54,8 +54,8 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
             } if self.__selected_habit_tuple is not None else None
         habit = CompleteHabit(**habit) if not habit is None else None
         if habit is None:
-            self.__grabbed_habit_status = 'No habit was found in the shelf, please grab a habit first'
-            return self.__grabbed_habit_status
+            self.__copied_habit_status = 'No habit was found in the shelf, please copy the habit from the shelf'
+            return self.__copied_habit_status
         
         self.__current_fields = {
             'id':int(self.__selected_habit_tuple[0]),
@@ -65,7 +65,7 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
             'status':self.__selected_habit_tuple[4]
         }
         self.__habit = habit
-        self.__grabbed_habit_status = "Habit has been grabbed from the shelf successfully"
+        self.__copied_habit_status = "Habit has been successfully copied from the shelf"
         self.__is_habit_found_in_shelf = True
         self.__main_form.set_field_status('id',True)
         return 'success...'

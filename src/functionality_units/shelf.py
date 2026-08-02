@@ -1,3 +1,4 @@
+from colorama import Back, Fore
 class Shelf:
     __habits_shelf = set()
 
@@ -5,13 +6,28 @@ class Shelf:
     def preserve_habit(cls,habit):
         cls.__habits_shelf = set()
         cls.__habits_shelf.add(habit)
+        if len(cls.__habits_shelf)!=1:
+            cls.__habits_shelf.pop(0)
+    
+    @classmethod
+    def display_state(cls):
+        return 'Shelf Status    : ❌ Empty' if len(cls.__habits_shelf)!=1 else f'Shelf Status    : ✅ Shelf has the follwing habit\n{cls.display_habit()}'
 
     @classmethod
-    def take_last_place_habit(cls):
-        if len(cls.__habits_shelf)==0:
-            return None
-        return cls.__habits_shelf.pop()
-    
+    def display_habit(cls):
+        id,name,start_datetime,duration,status = list(cls.__habits_shelf)[0]
+        return f'''
+{Back.BLUE} Habit                                             {Back.RESET}
+ id             :{id}
+ name           :{name}
+ start datetime :{start_datetime}
+ duration       :{duration}
+ status         :{status}
+
+ {Fore.RED}Note: You cannot modify a missed/completed habit,
+ you can only view it.{Fore.RESET}
+'''
+
     @classmethod
     def copy_last_place_habit(cls):
         if len(cls.__habits_shelf)!=0:

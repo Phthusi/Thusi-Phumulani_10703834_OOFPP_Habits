@@ -26,7 +26,7 @@ class SearchHabit:
         if self.__current_filled_fields != self.__form.number_of_filled_fields():
             self.progress_bar.increase_progress_percentage(self.__form.number_of_filled_fields())
             self.__current_filled_fields = self.__form.number_of_filled_fields()
-        self.__search_habit_inputs.display_grabbed_habit()
+        self.__search_habit_inputs.display_copied_habit()
         return autocompleter.prompt_input(message,location=f"Home/SearchHabit",example=example).lower()
 
     def run(self):
@@ -51,7 +51,7 @@ class SearchHabit:
                     break
                 continue
             # ********** end of common functions ************  
-            if user_input not in command_functions.keys():
+            if user_input not in command_functions.keys() or user_input=='':
                 continue
             x= command_functions[user_input][0]
             x()

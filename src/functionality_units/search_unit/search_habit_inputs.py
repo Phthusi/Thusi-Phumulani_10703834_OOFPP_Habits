@@ -36,15 +36,9 @@ class SearchHabitInputs(Habit_Inputs):
     def get_main_form(self):
         return self.__main_form
 
-    def display_grabbed_habit(self):
+    def display_copied_habit(self):
         self.__habit = Shelf.copy_last_place_habit() 
-        print(f'{Fore.LIGHTBLACK_EX}Shelf Status    : ❌ Empty')
-        if self.__habit==None:
-            print(f'''{Fore.LIGHTBLACK_EX}Status          : ❌ {self.__searched_habits_status}
-Shared Habit ID : {Fore.LIGHTBLUE_EX}N/A''')
-            return
-        print(f'''{Fore.LIGHTBLACK_EX}Status          : ✅ Habit Selected successfully!
-Shared Habit ID : {Fore.LIGHTGREEN_EX}{self.__habit[0]}''')
+        print(f'{Fore.LIGHTBLACK_EX}{self.__shelf.display_state()}')
 
     @retry_until_success
     def handle_get_status(self):
@@ -67,22 +61,6 @@ Shared Habit ID : {Fore.LIGHTGREEN_EX}{self.__habit[0]}''')
         results = self.__habit_search.get_habit_by_status(user_input)
         self.__view.display_habits(results,'Home/SearchHabit/Filter/Status/')
         return True,'success...'
-    
-    @retry_until_success
-    def handle_get_id(self):
-        commands = []
-        history_file_name = 'id'
-        habit_field_number = self.__my_input('Enter habit ID: ',history_file_name,commands,base='Home/SearchHabit/Filter/')
-        # ********* start of common functions ************        
-        did_run_common_func = ran_common_functions(habit_field_number)
-        message_to_display = find_message(habit_field_number)
-        if did_run_common_func==False:
-            return True, message_to_display
-        elif did_run_common_func==True:
-            return False, message_to_display
-        # ********** end of common functions ************
-
-        return True,'hello'
     
     @retry_until_success
     def __get_habits_before(self):
@@ -159,6 +137,7 @@ Shared Habit ID : {Fore.LIGHTGREEN_EX}{self.__habit[0]}''')
                 self.__get_habits_after()
             case 'on':
                 self.__get_habits_at()
+
         return True,'hello'
 
     @retry_until_success
@@ -174,6 +153,8 @@ Shared Habit ID : {Fore.LIGHTGREEN_EX}{self.__habit[0]}''')
         elif did_run_common_func==True:
             return False, message_to_display
         # ********** end of common functions ************
+        
+        # self.__view.display_habits(results,'Home/SearchHabit/Filter/Before/')
 
         return True,'hello'
     
@@ -226,8 +207,7 @@ Shared Habit ID : {Fore.LIGHTGREEN_EX}{self.__habit[0]}''')
             'time':self.handle_get_time,
             'duration':self.handle_get_duration,
             'name':self.handle_get_name,
-            'status':self.handle_get_status,
-            'id':self.handle_get_id
+            'status':self.handle_get_status
         }
         command_functions[habit_field_number]()
         

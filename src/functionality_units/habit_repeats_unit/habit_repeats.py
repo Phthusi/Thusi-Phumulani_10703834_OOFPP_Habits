@@ -23,7 +23,7 @@ class HabitRepeats:
         #     self.__current_filled_fields = self.__form.number_of_filled_fields()
 
         self.progress_bar.display_progress_bar()
-        # self.__update_habit_inputs.display_grabbed_habit()
+        # self.__update_habit_inputs.display_copied_habit()
         return autocompleter.prompt_input(message,location=f"Home/UpdateHabit",example=example).lower()
 
     @retry_until_success
