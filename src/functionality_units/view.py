@@ -111,9 +111,11 @@ class View:
         if new_max_len==max_len and self.__current_index >= new_max_len:
             self.__current_index = new_max_len-1
 
-    def display_habits(self,habits,location_base):
+    def display_habits(self,habits,location_base,search_input=None):
         clear_screen()
         max_len = len(habits)
+        if search_input is not None:
+            print(f'search input: {search_input}')
         if max_len==0:
             print('search results : 0')
             return

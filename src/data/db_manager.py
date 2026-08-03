@@ -108,7 +108,6 @@ class Habits:
             habit_date,habit_time = datetime.split(' ')
             if habit_time>time:
                 results.append(habit)
-        print(results)
         return results
 
     def get_habit_exactly_at(self,time):
@@ -119,7 +118,16 @@ class Habits:
             habit_date,habit_time = datetime.split(' ')
             if habit_time==time:
                 results.append(habit)
-        print(results)
+        return results
+
+    def get_habit_exactly_at_date(self,date):
+        habits = self.__cached_data
+        results = []
+        for habit in habits:
+            id,name,datetime,duration,status = habit
+            habit_date,habit_time = datetime.split(' ')
+            if habit_date==date:
+                results.append(habit)
         return results
 
 
@@ -130,6 +138,9 @@ class Habits:
     def get_habit_by_name(self,name):
         return list(filter(lambda  habit:name==habit[1],self.__cached_data))
     
+    def get_habit_by_has_name(self,name):
+        return list(filter(lambda  habit:name in habit[1],self.__cached_data)) 
+
     def get_habit_by_status(self,status):
         return list(filter(lambda  habit:status==habit[4],self.__cached_data))
     

@@ -186,6 +186,7 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
         if self.__number_of_habit_fields==None:
             return True, 'Choose the number of fields first'
         success,message = self._Habit_Inputs__habit.update_habit(**self.update_field_dict())
+        
         self.__main_form.reset_fields()
         return True,message
     

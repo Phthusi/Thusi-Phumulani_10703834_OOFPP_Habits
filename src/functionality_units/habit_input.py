@@ -164,6 +164,6 @@ class Habit_Inputs:
         success, message = self.is_clashing_with_any_habit()
         print(message)
         if is_valid and success:
-            input(f'#[{Fore.LIGHTCYAN_EX}Please note that the habit is shared so that you can go straight to editing/repeating(if you want to) it without searching{Fore.RESET}]\n       [Press Enter to continue]     ')
+            input(f'[{Fore.YELLOW}Please note that the habit is shared so that you can go straight to editing/repeating(if you want to) it without searching{Fore.RESET}]\n       [Press Enter to continue]     ')
             return self.__habit.save_habit()
         input('        [Press Enter to continue]       ')
