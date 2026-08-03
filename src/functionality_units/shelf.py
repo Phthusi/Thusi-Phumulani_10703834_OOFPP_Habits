@@ -34,3 +34,6 @@ class Shelf:
             return list(cls.__habits_shelf)[0]
         return None
     
+    @classmethod
+    def empty_shelf(cls):
+        cls.__habits_shelf.pop(0)

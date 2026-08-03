@@ -58,10 +58,11 @@ def main_program():
     update_habits = UpdateHabit()
     add_habits = Add_Habit()
     habit_repeats = HabitRepeats()
+    delete_habit = DeleteHabit()
     shelf = Shelf()
 
     while True:
-        commands = ['update habit','search habit(s)','add habit','esc','repeat habits']
+        commands = ['update habit','search habit(s)','add habit','esc','repeat habits','delete habit']
         history_file_name = 'main'
         clear_screen()
         user_input = my_input('Enter command: ',history_file_name,commands,example=f' {shelf.display_state().replace('\n','\n ')}\n NB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands')
@@ -75,13 +76,14 @@ def main_program():
             case 'repeat habits':
                 habit_repeats.run()
             case 'delete habit':
-                pass
+                delete_habit.run()
             case 'clear':
                 clear_screen()
             case 'esc':
                 break
             case default:
                 print(f'\'{user_input}\' invalid')
+                input('press enter to continue')
     clear_screen()
 
 def main():
