@@ -13,7 +13,8 @@ class Database:
                 name TEXT,
                 start_datetime TEXT, 
                 duration TEXT,
-                status TEXT
+                status TEXT,
+                periodicity TEXT
             );
             """
         )
@@ -27,11 +28,11 @@ class Database:
             return "error", e
 
 
-    def add_habit(self, name, start_datetime, duration, status) -> tuple:
+    def add_habit(self, name, start_datetime, duration,status, periodicity) -> tuple:
         try:
             self.__cursor.execute(
-                "INSERT INTO habit (name, start_datetime, duration, status) VALUES (?, ?, ?, ?)",
-                [name, start_datetime, duration, status]
+                "INSERT INTO habit (name, start_datetime, duration, status, periodicity) VALUES (?, ?, ?, ?, ?)",
+                [name, start_datetime, duration, status,periodicity]
             )
 
         except Exception as e:
@@ -60,7 +61,7 @@ class Database:
     
     def update_habit(self, id, **kwargs):
         try:
-            valid_fields = {"name", "start_datetime", "duration", "status"}
+            valid_fields = {"name", "start_datetime", "duration", "status","periodicity"}
             if not all([field in valid_fields for field in kwargs.keys()]):
                 return "error", f"Invalid fields for habit table. Valid fields are: {valid_fields}"
             

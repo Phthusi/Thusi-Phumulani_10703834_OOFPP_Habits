@@ -6,6 +6,13 @@ class Habit:
         self.__start_date = start_date
         self.__status = status
         self.__id = id
+        self.__periodicity = None
+
+    def set_periodicity(self,perioditicy):
+        self.__periodicity = perioditicy
+
+    def get_periodicity(self):
+        return self.__periodicity
 
     def get_name(self):
         return self.__name

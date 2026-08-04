@@ -15,14 +15,15 @@ class Shelf:
 
     @classmethod
     def display_habit(cls):
-        id,name,start_datetime,duration,status = list(cls.__habits_shelf)[0]
+        id,name,start_datetime,duration,status,periodicity = list(cls.__habits_shelf)[0]
         return f'''
 {Back.BLUE} Habit                                             {Back.RESET}
  id             :{id}
  name           :{name}
  start datetime :{start_datetime}
  duration       :{duration}
- status         :{status}
+ status         :{status} 
+ periodicity    :{periodicity}
 
  {Fore.RED}Note: You cannot modify a missed/completed habit,
  you can only view it.{Fore.RESET}

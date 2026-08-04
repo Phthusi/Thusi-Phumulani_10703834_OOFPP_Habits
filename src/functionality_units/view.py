@@ -23,6 +23,7 @@ class View:
         self.table.add_column("start_datetime")
         self.table.add_column("duration")
         self.table.add_column("status")
+        self.table.add_column("periodicity")
 
     def __my_input(self,message,history_file_name,commands,field_pair=None,base='Home/SearchHabit/'):
         self.__main_auto_completer = AutoCompleter(BASE_DIR / f"view_history/{history_file_name}",commands)
@@ -37,17 +38,17 @@ class View:
         table.add_column("start_datetime")
         table.add_column("duration")
         table.add_column("status")
-        id,name,datetime,duration,status = list(map(str,habit))
-        table.add_row(id,name,datetime,duration,status)
+        id,name,datetime,duration,status,periodicity = list(map(str,habit))
+        table.add_row(id,name,datetime,duration,status,periodicity)
         self.console.print(table)
 
     def add_to_table(self,habits,indices):
         for index,habit in zip(indices,habits):
-            id,name,datetime,duration,status = list(map(str,habit))
+            id,name,datetime,duration,status,periodicity = list(map(str,habit))
             if index==self.__current_index:
-                self.table.add_row('→',id,name,datetime,duration,status)
+                self.table.add_row('→',id,name,datetime,duration,status,periodicity)
                 continue
-            self.table.add_row(' ',id,name,datetime,duration,status)
+            self.table.add_row(' ',id,name,datetime,duration,status,periodicity)
 
     def display_habit(self):
         self.console.print(self.table)

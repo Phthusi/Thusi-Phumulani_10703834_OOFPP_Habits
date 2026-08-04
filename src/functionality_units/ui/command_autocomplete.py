@@ -19,7 +19,7 @@ def update_habit_statuses():
     saved_habits = habits.get_habit_by_status_excluding_some_statuses(['MISSED','UNKNOWN'])
     habit_datetime_manager = HabitDateTimeManager()
     for habit in saved_habits:
-        id, name, start_datetime, duration, status = habit
+        id, name, start_datetime, duration, status, periodicity = habit
         new_status = habit_datetime_manager.determine_habit_status(start_datetime,duration)
         if new_status!=status:
             db_interface.update_habit(id,**{'status':new_status}) 

@@ -20,10 +20,10 @@ class DB_Interface:
             return self.__db.update_habit(id, **kwargs)
         return "error", f"habit with id={id} does not exist"
 
-    def add_habit(self, name, start_datetime, duration, status):
-        success, id = self.__db.add_habit(name, start_datetime, duration, status)
+    def add_habit(self, name, start_datetime, duration, status, periodicity=None):
+        success, id = self.__db.add_habit(name, start_datetime, duration, status, periodicity)
         if success == "success":
-            self.__cached_data.append((id, name, start_datetime, duration, status))
+            self.__cached_data.append((id, name, start_datetime, duration, status, periodicity))
         return success, id
 
     def delete_habit(self,id):

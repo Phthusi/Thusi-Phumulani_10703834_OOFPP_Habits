@@ -138,7 +138,7 @@ class Habit_Inputs:
 -----------------------------------------
 '''
         for habit in habits: 
-            id, name, start_datetime, duration, status = habit
+            id, name, start_datetime, duration, status, periodicity = habit
             datetime2 = self.__datetime_manager.string_to_datetime(start_datetime)
             duration2 = self.__datetime_manager.convert_duration(duration)
             if self.__datetime_manager.is_clashing(datetime1,duration1,datetime2,duration2):
@@ -151,11 +151,12 @@ class Habit_Inputs:
  start_datetime   :{datetime2}
  session_duration :{duration}
  status           :{status}
+ periodicity      :{periodicty}
 -----------------------------------------
 '''
                 return False, f'❌ Sorry Habit not saved, The following Habits are Clashing: \n{habit_to_be_added} \nAND {habit_from_db}'
         clear_screen()
-        self.__shelf.preserve_habit((id+1,self.__habit.get_name(),self.__habit.get_start_date(),self.__habit.get_session_duration(),'UPCOMING'))
+        self.__shelf.preserve_habit((id+1,self.__habit.get_name(),self.__habit.get_start_date(),self.__habit.get_session_duration(),'UPCOMING',self.__habit.get_periodicity()))
         return True, f'✅ Habit saved successfully....\n{habit_to_be_added.replace("Habit to be added","Habit added")}'
 
     def save(self):

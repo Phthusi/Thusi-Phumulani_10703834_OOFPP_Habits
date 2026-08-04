@@ -17,8 +17,9 @@ class CompleteHabit(Habit):
         start_datetime = self.get_start_date()
         duration = self.get_session_duration()
         status = self.get_status()
+        periodicity = self.get_periodicity()
 
-        return self.__db_interface.add_habit(name,start_datetime,duration,status)
+        return self.__db_interface.add_habit(name,start_datetime,duration,status,periodicity)
 
     def update_habit(self,**kwargs):
         if self.get_id() == None:
@@ -94,7 +95,7 @@ class Habits:
         habits = self.__cached_data
         results = []
         for habit in habits:
-            id,name,datetime,duration,status = habit
+            id,name,datetime,duration,status,periodicity = habit
             habit_date,habit_time = datetime.split(' ')
             if habit_time<time:
                 results.append(habit)
@@ -104,7 +105,7 @@ class Habits:
         habits = self.__cached_data
         results = []
         for habit in habits:
-            id,name,datetime,duration,status = habit
+            id,name,datetime,duration,status,periodicity = habit
             habit_date,habit_time = datetime.split(' ')
             if habit_time>time:
                 results.append(habit)
@@ -114,7 +115,7 @@ class Habits:
         habits = self.__cached_data
         results = []
         for habit in habits:
-            id,name,datetime,duration,status = habit
+            id,name,datetime,duration,status,periodicity = habit
             habit_date,habit_time = datetime.split(' ')
             if habit_time==time:
                 results.append(habit)
@@ -124,7 +125,7 @@ class Habits:
         habits = self.__cached_data
         results = []
         for habit in habits:
-            id,name,datetime,duration,status = habit
+            id,name,datetime,duration,status,periodicity = habit
             habit_date,habit_time = datetime.split(' ')
             if habit_date==date:
                 results.append(habit)

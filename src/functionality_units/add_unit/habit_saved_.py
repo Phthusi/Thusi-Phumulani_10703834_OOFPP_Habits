@@ -90,7 +90,7 @@ class AddHabit:
         datetime1 = self.__habit.get_start_date()
         duration1 = self.__datetime_manager.convert_duration(self.__habit.get_session_duration())
         for habit in habits: 
-            id, name, start_datetime, duration, status = habit
+            id, name, start_datetime, duration, status, periodicity = habit
             datetime2 = self.__datetime_manager.string_to_datetime(start_datetime)
             duration2 = self.__datetime_manager.convert_duration(duration)
             if self.__datetime_manager.is_clashing(datetime1,duration1,datetime2,duration2):
