@@ -85,7 +85,7 @@ class UpdateHabit:
                 funct = command_functions[user_input][0]
                 funct()
             
-            elif user_input=='view habit to update':
+            elif user_input=='view habit to update':  
                 funct = command_functions[user_input][0]
                 funct()
 

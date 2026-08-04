@@ -6,10 +6,23 @@ from prompt_toolkit import PromptSession
 from prompt_toolkit.formatted_text import ANSI
 from prompt_toolkit.completion import WordCompleter, FuzzyCompleter
 from prompt_toolkit.history import FileHistory
+from src.data.db_functionality.db_interface import DB_Interface
+from src.data.db_manager import Habits
+from src.functionality_units.time_project.time_manager import HabitDateTimeManager
 from .read_json import read_json_files
 from colorama import Fore, Style
 
 
+def update_habit_statuses():
+    db_interface = DB_Interface()
+    habits = Habits()
+    saved_habits = habits.get_habit_by_status_excluding_some_statuses(['MISSED','UNKNOWN'])
+    habit_datetime_manager = HabitDateTimeManager()
+    for habit in saved_habits:
+        id, name, start_datetime, duration, status = habit
+        new_status = habit_datetime_manager.determine_habit_status(start_datetime,duration)
+        if new_status!=status:
+            db_interface.update_habit(id,**{'status':new_status}) 
 class ProgressBar:
     def __init__(self, number_of_fields):
         self.__advance = 1/number_of_fields *100
@@ -139,6 +152,7 @@ class AutoCompleter:
         return self.__session
 
     def prompt_input(self, message, commands=None,example=None,location='Home',field_pair=None):
+        update_habit_statuses()
         if field_pair is None:
             field_status=None
             field_value=None

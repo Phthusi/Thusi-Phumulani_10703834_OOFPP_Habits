@@ -1,4 +1,4 @@
-from src.main import main,background_task
+from src.main import main
 
 if __name__ == "__main__":
     
