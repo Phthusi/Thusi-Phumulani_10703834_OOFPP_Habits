@@ -36,4 +36,7 @@ class Shelf:
     
     @classmethod
     def empty_shelf(cls):
-        cls.__habits_shelf.pop(0)
+        try:
+            cls.__habits_shelf.pop(0)
+        except Exception as e:
+            pass

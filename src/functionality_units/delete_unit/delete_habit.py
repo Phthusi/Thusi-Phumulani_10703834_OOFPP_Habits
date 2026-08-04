@@ -56,6 +56,11 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit.get_id()}''')
             input('Press any key to continue')
             return
         
+        if self.__habit.get_status() == 'COMPLETED' or self.__habit.get_status() == 'MISSED':
+            print('You cannot delete a habit that has been completed/missed, please copy a habit from the shelf that is not completed/missed')
+            input('Press any key to continue')
+            return
+        
         self.__delete_habit()
         self.__shelf.empty_shelf()
         input('Habit deleted successfully\nPress any key to continue')
