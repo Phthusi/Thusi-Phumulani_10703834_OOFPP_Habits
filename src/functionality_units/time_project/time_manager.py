@@ -43,7 +43,7 @@ class HabitDateTimeManager:
             if start_dt > now:
                 return "UPCOMING"
 
-            if now > end_dt:
+            if now > end_dt + timedelta(days=1):
                 return "MISSED"
 
             return "TO_BE_CONFIRMED"

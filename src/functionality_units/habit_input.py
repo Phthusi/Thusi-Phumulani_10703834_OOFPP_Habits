@@ -135,6 +135,7 @@ class Habit_Inputs:
  start_datetime   :{datetime1}
  session_duration :{self.__habit.get_session_duration()}
  status           :N/A
+ periodicity      :{self.__habit.get_periodicity()}
 -----------------------------------------
 '''
         for habit in habits: 
@@ -151,7 +152,7 @@ class Habit_Inputs:
  start_datetime   :{datetime2}
  session_duration :{duration}
  status           :{status}
- periodicity      :{periodicty}
+ periodicity      :{self.__habit.get_periodicity()}
 -----------------------------------------
 '''
                 return False, f'❌ Sorry Habit not saved, The following Habits are Clashing: \n{habit_to_be_added} \nAND {habit_from_db}'

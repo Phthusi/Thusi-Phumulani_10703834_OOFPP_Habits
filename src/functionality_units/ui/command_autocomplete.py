@@ -23,6 +23,7 @@ def update_habit_statuses():
         new_status = habit_datetime_manager.determine_habit_status(start_datetime,duration)
         if new_status!=status:
             db_interface.update_habit(id,**{'status':new_status}) 
+
 class ProgressBar:
     def __init__(self, number_of_fields):
         self.__advance = 1/number_of_fields *100
