@@ -174,5 +174,6 @@ class Habit_Inputs:
             is_valid_habit,id = self.__habit.save_habit()
             self.__shelf.preserve_habit((id,self.__habit.get_name(),self.__habit.get_start_date(),self.__habit.get_session_duration(),self.__habit.get_status(),self.__habit.get_periodicity()))
             self.__start_setup(self.__BASE_DIR)
+            self.__habit = CompleteHabit()
             return is_valid_habit, 'successfully saved'
         input('        [Press Enter to continue]       ')

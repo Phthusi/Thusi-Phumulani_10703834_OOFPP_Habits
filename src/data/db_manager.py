@@ -18,8 +18,8 @@ class CompleteHabit(Habit):
         duration = self.get_session_duration()
         status = self.get_status()
         periodicity = self.get_periodicity()
-
-        return self.__db_interface.add_habit(name,start_datetime,duration,status,periodicity)
+        success, id = self.__db_interface.add_habit(name,start_datetime,duration,status,periodicity)
+        return  success, id
 
     def update_habit(self,**kwargs):
         if self.get_id() == None:
