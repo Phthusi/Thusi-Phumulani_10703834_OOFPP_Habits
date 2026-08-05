@@ -186,11 +186,9 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
             return True, 'Find the habit first'
         if self.__number_of_habit_fields==None:
             return True, 'Choose the number of fields first'
-        print(self.update_field_dict(),input('Press any key to continue'))
         success,message = self._Habit_Inputs__habit.update_habit(**self.update_field_dict())
         habit = self.__habits.get_habit_by_id(self.__habit.get_id())[0]
         self.__shelf.preserve_habit(tuple(habit))
-        print(self.__shelf.display_habit())
         self.__is_habit_found_in_shelf = False
         self.__number_of_habit_fields = None
         self.__field_names = []

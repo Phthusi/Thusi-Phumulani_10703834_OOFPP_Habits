@@ -25,8 +25,6 @@ class DB_Interface:
         success, id = self.__db.add_habit(name, start_datetime, duration, status, periodicity)
         if success == "success":
             self.__cached_data.append((id, name, start_datetime, duration, status, periodicity))
-            print(self.__cached_data)
-            input('Habit added successfully\nPress any key to continue')
         return success, id
 
     def delete_habit(self,id):
