@@ -38,6 +38,6 @@ class Shelf:
     @classmethod
     def empty_shelf(cls):
         try:
-            cls.__habits_shelf.pop(0)
+            cls.__habits_shelf.clear()
         except Exception as e:
             pass

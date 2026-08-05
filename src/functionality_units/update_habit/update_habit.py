@@ -14,15 +14,6 @@ class UpdateHabit:
         self.__current_filled_fields = self.__form.number_of_filled_fields()
         self.__shelf = Shelf()
 
-    def stages(self):
-        stages = [
-            "[_______find habit ID_____] ---→",
-            "[___number of fields to update___] ---→",
-            "[___choose fields to update___] ---→",
-            "[__complete update__]"
-        ]
-        # [✅ find habit ID] ---→ [✅ number of fields to update] ---→ [🔄 choose fields to update] ---→ [⬜ complete update]
-
     def __my_input(self,message,history_file_name,commands):
         autocompleter = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
         if self.__current_filled_fields != self.__form.number_of_filled_fields():

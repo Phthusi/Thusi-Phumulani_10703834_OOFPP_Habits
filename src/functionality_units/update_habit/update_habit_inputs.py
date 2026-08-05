@@ -5,7 +5,7 @@ from .update_habit_validator import UpdateHabitValidator
 from ..shelf import Shelf
 from ..view import View
 from colorama import Fore
-from ...data.db_manager import CompleteHabit
+from ...data.db_manager import CompleteHabit,Habits
 
 from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent
@@ -24,6 +24,7 @@ class UpdateHabitInputs(Habit_Inputs):
         self.__habit = None
         self.__view = View()
         self.__shelf = Shelf()
+        self.__habits = Habits()
         self.__copied_habit_status = "No habit has been copied from the shelf, please copy the habit from the shelf"
 
     def __my_input(self,message,history_file_name,commands,field_pair=None):
@@ -185,8 +186,18 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
             return True, 'Find the habit first'
         if self.__number_of_habit_fields==None:
             return True, 'Choose the number of fields first'
+        print(self.update_field_dict(),input('Press any key to continue'))
         success,message = self._Habit_Inputs__habit.update_habit(**self.update_field_dict())
-        
+        habit = self.__habits.get_habit_by_id(self.__habit.get_id())[0]
+        self.__shelf.preserve_habit(tuple(habit))
+        print(self.__shelf.display_habit())
+        self.__is_habit_found_in_shelf = False
+        self.__number_of_habit_fields = None
+        self.__field_names = []
+        self.__selected_habit_tuple = None
+        self.__current_fields = dict()
+        self.__habit = None
+        self.__copied_habit_status = "No habit has been copied from the shelf, please copy the habit from the shelf"
         self.__main_form.reset_fields()
         return True,message
     

@@ -10,6 +10,12 @@ from colorama import Fore, Style, Back
 
 class Habit_Inputs:
     def __init__(self, base_directory):
+        self.__start_setup(base_directory)
+
+    def get_main_form(self):
+        return self.__main_form
+    
+    def __start_setup(self,base_directory):
         self.__habit = CompleteHabit()
         self.__datetime_manager = HabitDateTimeManager()
         self.__datetime_validator = HabitDateTimeManagerValidator()
@@ -20,8 +26,6 @@ class Habit_Inputs:
 [bold cyan]📌 LEVEL 1: PARAMETERS[/] [green]{name}[/] Name [bold blue] {start_datetime}[/] Start Datetime [green] {duration}[/] Duration  |  [bold cyan]🔒 LEVEL 2: ACTION(S) [/] Save"""
         self.__main_form = Form({field: False for field in ['name','start_datetime','duration']},display_map)
 
-    def get_main_form(self):
-        return self.__main_form
 
     def __set_habit_name(self,message,field_pair=None):
         history_file_name='habit_name'
@@ -167,5 +171,8 @@ class Habit_Inputs:
         print(message)
         if is_valid and success:
             input(f'[{Fore.YELLOW}Please note that the habit is shared so that you can go straight to editing/repeating(if you want to) it without searching{Fore.RESET}]\n       [Press Enter to continue]     ')
-            return self.__habit.save_habit()
+            is_valid_habit,id = self.__habit.save_habit()
+            self.__shelf.preserve_habit((id,self.__habit.get_name(),self.__habit.get_start_date(),self.__habit.get_session_duration(),self.__habit.get_status(),self.__habit.get_periodicity()))
+            self.__start_setup(self.__BASE_DIR)
+            return is_valid_habit, 'successfully saved'
         input('        [Press Enter to continue]       ')

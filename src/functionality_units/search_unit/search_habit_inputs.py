@@ -61,7 +61,14 @@ class SearchHabitInputs(Habit_Inputs):
         results = self.__habit_search.get_habit_by_status(user_input)
         self.__view.display_habits(results,'Home/SearchHabit/Filter/Status/',search_input=f'status is {user_input}')
         return True,'success...'
-    
+
+    @retry_until_success
+    def handle_get_habits_to_complete(self):
+        results = self.__habit_search.get_habit_by_status('TO_BE_CONFIRMED')
+        self.__view.display_habits(results,'Home/SearchHabit/Filter/Status/HabitsToUpdate/',search_input=f'habits to complete')
+        input('press any key to continue')
+        return True,'success...'
+
     @retry_until_success
     def __get_habits_before(self):
         commands =  []
@@ -355,7 +362,7 @@ class SearchHabitInputs(Habit_Inputs):
 
     @retry_until_success
     def find_habits(self):
-        commands = ['date','time','duration','name','status']
+        commands = ['date','time','duration','name','status','habit to complete']
         history_file_name = 'filter'
         user_input = self.__my_input('How would you like to search for habits: ',history_file_name,commands)
         # ********* start of common functions ************        
@@ -372,7 +379,8 @@ class SearchHabitInputs(Habit_Inputs):
             'time':self.handle_get_time,
             'duration':self.handle_get_duration,
             'name':self.handle_get_name,
-            'status':self.handle_get_status
+            'status':self.handle_get_status,
+            'habit to complete': self.handle_get_habits_to_complete
         }
         if user_input in command_functions.keys():
             command_functions[user_input]()
