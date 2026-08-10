@@ -48,12 +48,13 @@ class CompleteHabitSession:
             
             if self.__update_habit_inputs.get_habit() is None:
                 print('Copy the habit sesssion from the shelf before completing it')
-                input('Press any Enter to continue')
+                input('Press Enter to continue')
                 continue
 
             if user_input=='complete update':
-                self.__update_habit_inputs.get_habit().complete_habit()
-                input()
+                success,message = self.__update_habit_inputs.get_habit().complete_habit()
+                
+                input(f'{message}\nPress Enter to continue')
 
             elif user_input=='view habit to update':  
                 funct = command_functions[user_input][0]

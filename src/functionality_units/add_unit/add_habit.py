@@ -80,8 +80,8 @@ class Add_Habit:
             
             func,message = command_functions[user_input]
             if message =='':
-                display_message = func()
-                if user_input == 'save':
+                success, message = func()
+                if user_input == 'save' and message=='successfully saved':
                     self.__form.reset_fields()
                     self.progress_bar = ProgressBar(4)
             else:
