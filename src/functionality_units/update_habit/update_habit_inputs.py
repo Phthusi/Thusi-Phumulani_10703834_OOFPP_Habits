@@ -33,6 +33,9 @@ class UpdateHabitInputs(Habit_Inputs):
         modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
         return self.__main_auto_completer.prompt_input(message,location=f"Home/UpdateHabit/{modified_history_file_name}",field_pair=field_pair).lower()
 
+    def get_habit(self):
+        return self.__habit
+
     def get_main_form(self):
         return self.__main_form
 

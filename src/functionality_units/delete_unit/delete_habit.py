@@ -53,19 +53,19 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit.get_id()}''')
     def delete(self):
         if self.__habit is None:
             print('There\'s no habit to delete, please copy from a habit from the shelf first')
-            input('Press any key to continue')
+            input('Press enter to continue')
             return
         
         if self.__habit.get_status() in ['COMPLETED','MISSED','TO_BE_CONFIRMED']:
             print('You cannot delete a habit that has been completed/missed, please copy a habit from the shelf that is not completed/missed')
-            input('Press any key to continue')
+            input('Press enter to continue')
             return
         
         self.__delete_habit()
         self.__shelf.empty_shelf()
         self.__habit = None
         self.__copied_habit_status = "No habit has been copied from the shelf, please copy the habit from the shelf"
-        input('Habit deleted successfully\nPress any key to continue')
+        input('Habit deleted successfully\nPress enter to continue')
 
     def run(self):
         command_functions = {
@@ -92,4 +92,4 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit.get_id()}''')
             
             if user_input not in commands:
                 print(f"'{user_input}' is not in the given options,please press space to see you options")
-                input('Press any key to continue')
+                input('Press enter to continue')

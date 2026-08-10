@@ -12,14 +12,14 @@ from .functionality_units.habit_repeats_unit.habit_repeats import HabitRepeats
 from pathlib import Path
 from .functionality_units.ui.terminal_utils import clear_screen
 from .functionality_units.shelf import Shelf
+from .functionality_units.update_habit.complete_habit_session import CompleteHabitSession
 
 BASE_DIR = Path(__file__).resolve().parent
 
-def my_input(message,history_file_name,commands,field_pair=None,base='Home/',example=None):
+def my_input(message,history_file_name,commands,field_pair=None,base='Home',example=None):
     auto_completer = AutoCompleter(BASE_DIR / f"main_history/{history_file_name}",commands)
     auto_completer.set_has_status(True)
-    modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
-    return auto_completer.prompt_input(message,location=f"{base}{modified_history_file_name}",field_pair=field_pair,example=example).lower()
+    return auto_completer.prompt_input(message,location=f"{base}",field_pair=field_pair,example=example).lower()
 
 def main_program():
     search_habits = SearchHabit()
@@ -27,10 +27,11 @@ def main_program():
     add_habits = Add_Habit()
     habit_repeats = HabitRepeats()
     delete_habit = DeleteHabit()
+    complete_habit_session = CompleteHabitSession()
     shelf = Shelf()
 
     while True:
-        commands = ['update habit','search habit(s)','add habit','esc','repeat habits','delete habit']
+        commands = ['update habit','search habit(s)','add habit','esc','repeat habits','delete habit','complete session']
         history_file_name = 'main'
         clear_screen()
         user_input = my_input('Enter command: ',history_file_name,commands,example=f' {shelf.display_state().replace('\n','\n ')}\n NB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands')
@@ -45,6 +46,9 @@ def main_program():
                 habit_repeats.run()
             case 'delete habit':
                 delete_habit.run()
+            case 'complete session':
+                complete_habit_session.run()
+                continue
             case 'clear':
                 clear_screen()
             case 'esc':

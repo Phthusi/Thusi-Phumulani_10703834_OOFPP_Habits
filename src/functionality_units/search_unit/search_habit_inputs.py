@@ -66,7 +66,7 @@ class SearchHabitInputs(Habit_Inputs):
     def handle_get_habits_to_complete(self):
         results = self.__habit_search.get_habit_by_status('TO_BE_CONFIRMED')
         self.__view.display_habits(results,'Home/SearchHabit/Filter/Status/HabitsToUpdate/',search_input=f'habits to complete')
-        input('press any key to continue')
+        input('Press enter to continue')
         return True,'success...'
 
     @retry_until_success

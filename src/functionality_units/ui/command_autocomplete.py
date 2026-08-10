@@ -16,7 +16,7 @@ from colorama import Fore, Style
 def update_habit_statuses():
     db_interface = DB_Interface()
     habits = Habits()
-    saved_habits = habits.get_habit_by_status_excluding_some_statuses(['MISSED','UNKNOWN'])
+    saved_habits = habits.get_habit_by_status_excluding_some_statuses(['MISSED','UNKNOWN','COMPLETED'])
     habit_datetime_manager = HabitDateTimeManager()
     for habit in saved_habits:
         id, name, start_datetime, duration, status, periodicity = habit

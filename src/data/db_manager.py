@@ -34,6 +34,16 @@ class CompleteHabit(Habit):
             return can_habit_be_updated,message
         
         return self.__db_interface.update_habit(self.get_id(),**kwargs)
+    
+    def complete_habit(self,**kwargs):
+        if self.get_id() == None:
+            return False, "Habit has no id"
+
+        is_id_valid,message = self.__validator.valid_id()
+        if not is_id_valid:
+            return is_id_valid,message
+        
+        return self.__db_interface.update_habit(**{'id':self.get_id(),'status':'COMPLETED'})
 
     def copy_habit(self):
         return CompleteHabit(self.get_name(), self.get_session_duration(), self.get_start_date(), self.get_status())
