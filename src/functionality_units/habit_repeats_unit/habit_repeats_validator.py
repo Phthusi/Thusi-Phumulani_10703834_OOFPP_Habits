@@ -9,7 +9,10 @@ class WeekPatternValidator:
         min_length = 3
         if not isinstance(name,str):
             return False,"name must be a string"
-        
+
+        if ' ' in name:
+            return False,"name must not have a space"
+ 
         if len(name) < min_length:
             return False,"name must be at least 3 characters long" 
 
@@ -74,6 +77,9 @@ class MonthPatternValidator:
         if not isinstance(name,str):
             return False,"name must be a string"
         
+        if ' ' in name:
+            return False,"name must not have a space"
+
         if len(name) < min_length:
             return False,"name must be at least 3 characters long" 
 
