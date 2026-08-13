@@ -53,9 +53,16 @@ class CompleteHabitSession:
 
             if user_input=='complete update':
                 success,message = self.__update_habit_inputs.get_habit().complete_habit()
-                
                 input(f'{message}\nPress Enter to continue')
-
+                if success=='success':
+                    habit = self.__update_habit_inputs.get_habit()
+                    id = habit.get_id()
+                    name = habit.get_name()
+                    datetime = habit.get_start_date()
+                    duration = habit.get_session_duration()
+                    status = 'COMPLETED'
+                    periodicity = habit.get_periodicity()
+                    self.__shelf.preserve_habit((id,name,datetime,duration,status,periodicity))
             elif user_input=='view habit to update':  
                 funct = command_functions[user_input][0]
                 funct()

@@ -11,18 +11,30 @@ from src.data.db_manager import Habits
 from src.functionality_units.time_project.time_manager import HabitDateTimeManager
 from .read_json import read_json_files
 from colorama import Fore, Style
+from ..shelf import Shelf
 
+shelf = Shelf()
 
 def update_habit_statuses():
     db_interface = DB_Interface()
     habits = Habits()
     saved_habits = habits.get_habit_by_status_excluding_some_statuses(['MISSED','UNKNOWN','COMPLETED'])
     habit_datetime_manager = HabitDateTimeManager()
+    update_cache = False
     for habit in saved_habits:
         id, name, start_datetime, duration, status, periodicity = habit
         new_status = habit_datetime_manager.determine_habit_status(start_datetime,duration)
         if new_status!=status:
             db_interface.update_habit(id,**{'status':new_status}) 
+            update_cache = True
+            copied_habit = shelf.copy_last_place_habit()
+            copied_habit_id = -1 if copied_habit is None else copied_habit[0]
+            if  copied_habit_id == id: 
+                shelf.preserve_habit((id,name,start_datetime,duration,new_status,periodicity))
+                
+    if update_cache:
+        db_interface.get_all_habits()
+        update_cache = False
 
 class ProgressBar:
     def __init__(self, number_of_fields):
