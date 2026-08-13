@@ -53,7 +53,6 @@ class ProgressBar:
         )
         task = progress.add_task("", total=100)
         progress.update(task, completed=self.__progress_percentage)
-
         ui_content = Group(progress, menu_text)
         ui_panel = Panel(
             ui_content,
@@ -126,7 +125,7 @@ class Form:
     def reset_fields(self):
         for field in self.fields:
             self.fields[field] = False
-    
+
     def get_filled_fields(self):
         return [field for field, filled in self.fields.items() if filled]
     

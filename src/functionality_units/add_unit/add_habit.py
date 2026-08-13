@@ -83,8 +83,11 @@ class Add_Habit:
             if message =='':
                 success, message = func()
                 if user_input == 'save' and message=='successfully saved':
-                    self.__form.reset_fields()
                     self.progress_bar = ProgressBar(4)
+                    self.__habit_inputs.start_setup(BASE_DIR)
+                    self.__form = self.__habit_inputs.get_main_form()
+                    self.__current_filled_fields = self.__form.number_of_filled_fields()
+                    self.__form.set_display_map(self.__form.get_raw_map().replace('🔓','🔒'))
             else:
                 display_message = func(message)
 

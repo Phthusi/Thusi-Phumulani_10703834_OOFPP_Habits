@@ -26,6 +26,9 @@ class Habit_Inputs:
 [bold cyan]📌 LEVEL 1: PARAMETERS[/] [green]{name}[/] Name [bold blue] {start_datetime}[/] Start Datetime [green] {duration}[/] Duration  |  [bold cyan]🔒 LEVEL 2: ACTION(S) [/] Save"""
         self.__main_form = Form({field: False for field in ['name','start_datetime','duration']},display_map)
 
+    def start_setup(self,base_directory):
+        self.__start_setup(base_directory)
+
     def __set_habit_name(self,message,field_pair=None):
         history_file_name='habit_name'
         commands = []
@@ -38,7 +41,6 @@ class Habit_Inputs:
     def set_habit_name(self,message):
         clear_screen()
         habit_name = self.__set_habit_name(message,(self.__main_form.get_field_status('name'),self.__habit.get_name()))
-
         # ********* start of common functions ************
         did_run_common_func = ran_common_functions(habit_name)
         if did_run_common_func==False:
@@ -46,12 +48,10 @@ class Habit_Inputs:
         elif did_run_common_func==True:
             return False, 'switching'
         # ********** end of common functions ************
-        
         is_name_valid, message = self.__habit.set_name(habit_name)
         if is_name_valid:
             self.__main_form.set_field_status('name',True)
         return is_name_valid, message
-
 
     def __set_habit_start_datetime(self,message,field_pair=None):
         history_file_name='start_datetime'
@@ -173,6 +173,6 @@ class Habit_Inputs:
             is_valid_habit,id = self.__habit.save_habit()
             self.__shelf.preserve_habit((id,self.__habit.get_name(),self.__habit.get_start_date(),self.__habit.get_session_duration(),self.__habit.get_status(),self.__habit.get_periodicity()))
             self.__start_setup(self.__BASE_DIR)
-            self.__habit = CompleteHabit()
             return is_valid_habit, 'successfully saved'
         input('        [Press Enter to continue]       ')
+        return False, 'Unsuccessful'
