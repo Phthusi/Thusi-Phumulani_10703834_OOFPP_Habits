@@ -33,6 +33,7 @@ class Add_Habit:
             self.progress_bar.increase_progress_percentage(self.__form.number_of_filled_fields())
             self.__current_filled_fields = self.__form.number_of_filled_fields()
 
+    
         self.progress_bar.display_progress_bar(self.__form.get_display_map())
         self.__main_auto_completer.set_has_status(True)
         modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
@@ -61,9 +62,9 @@ class Add_Habit:
         while True:
             clear_screen()
             if all(self.__form.fields.values()):
-                self.__form.set_display_map(self.__form.get_display_map().replace('🔒','🔓'))
+                self.__form.set_display_map(self.__form.get_raw_map().replace('🔒','🔓'))
             if not all(self.__form.fields.values()):
-                self.__form.set_display_map(self.__form.get_display_map().replace('🔓','🔒'))
+                self.__form.set_display_map(self.__form.get_raw_map().replace('🔓','🔒'))
             commands = list(command_functions.keys())
             history_file_name = 'add_habit'
             user_input = self.__my_input("Enter command: ",history_file_name,commands,example='┌💁  Please note that you must start filling the level one parameters before you do the actions in level 2 ⸣\n⸤💡  [↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands         ⸥')

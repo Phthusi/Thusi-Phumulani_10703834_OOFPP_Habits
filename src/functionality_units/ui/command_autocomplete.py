@@ -90,6 +90,9 @@ class Form:
     def set_display_map(self,display_map):
         self.__display_map = display_map
 
+    def get_raw_map(self):
+        return self.__display_map
+
     def get_display_map(self):
         return self.__display_map.format(**self.fields).replace('True','✅').replace('False','❌')
 

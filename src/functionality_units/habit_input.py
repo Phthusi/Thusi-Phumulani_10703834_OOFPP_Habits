@@ -26,7 +26,6 @@ class Habit_Inputs:
 [bold cyan]📌 LEVEL 1: PARAMETERS[/] [green]{name}[/] Name [bold blue] {start_datetime}[/] Start Datetime [green] {duration}[/] Duration  |  [bold cyan]🔒 LEVEL 2: ACTION(S) [/] Save"""
         self.__main_form = Form({field: False for field in ['name','start_datetime','duration']},display_map)
 
-
     def __set_habit_name(self,message,field_pair=None):
         history_file_name='habit_name'
         commands = []
