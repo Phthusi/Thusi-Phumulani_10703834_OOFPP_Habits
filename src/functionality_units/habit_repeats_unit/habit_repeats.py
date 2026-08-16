@@ -5,11 +5,11 @@ from ...data.db_manager import CompleteHabit
 from ..ui.command_autocomplete import AutoCompleter, Form, ProgressBar
 from ..ui.terminal_utils import ran_common_functions, retry_until_success, find_message, clear_screen
 from ..shelf import Shelf
-from .habit_repeats_models import (
-    WeekPatternManager, 
-    MonthPatternManager, 
-    MonthsPatternManager
-)
+# from .habit_repeats_models import (
+#     WeekPatternManager, 
+#     MonthPatternManager, 
+#     MonthsPatternManager
+# )
 from .habit_repeats_validator import WeekPatternValidator, MonthPatternValidator
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -39,11 +39,11 @@ class HabitRepeatsManager:
         self.__current_filled_fields = 0
 
         # Managers & Validators
-        self.__week_pattern_manager = WeekPatternManager()
+        # self.__week_pattern_manager = WeekPatternManager()
         self.__week_pattern_validator = WeekPatternValidator()
-        self.__month_pattern_manager = MonthPatternManager()
+        # self.__month_pattern_manager = MonthPatternManager()
         self.__month_pattern_validator = MonthPatternValidator()
-        self.__months_pattern_manager = MonthsPatternManager()
+        # self.__months_pattern_manager = MonthsPatternManager()
 
         # State storage
         self.__week_pattern_name = None

@@ -31,6 +31,8 @@ def update_habit_statuses():
             copied_habit_id = -1 if copied_habit is None else copied_habit[0]
             if  copied_habit_id == id: 
                 shelf.preserve_habit((id,name,start_datetime,duration,new_status,periodicity))
+                db_interface.set_is_db_updated(True)
+                print('here fam')
                 
     if update_cache:
         db_interface.get_all_habits()

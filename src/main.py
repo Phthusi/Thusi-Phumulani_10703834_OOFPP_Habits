@@ -8,7 +8,7 @@ from .functionality_units.search_unit.search_habit_inputs import SearchHabitInpu
 from .functionality_units.search_unit.search_habit import SearchHabit
 from .functionality_units.ui.command_autocomplete import AutoCompleter,update_habit_statuses
 from .functionality_units.ui.terminal_utils import clear_screen
-from .functionality_units.habit_repeats_unit.habit_repeats import HabitRepeats
+# from .functionality_units.habit_repeats_unit.habit_repeats import HabitRepeats
 from pathlib import Path
 from .functionality_units.ui.terminal_utils import clear_screen
 from .functionality_units.shelf import Shelf
@@ -25,7 +25,7 @@ def main_program():
     search_habits = SearchHabit()
     update_habits = UpdateHabit()
     add_habits = Add_Habit()
-    habit_repeats = HabitRepeats()
+    # habit_repeats = HabitRepeats()
     delete_habit = DeleteHabit()
     complete_habit_session = CompleteHabitSession()
     shelf = Shelf()
@@ -42,8 +42,8 @@ def main_program():
                 search_habits.run()
             case 'add habit':
                 add_habits.run()
-            case 'repeat habits':
-                habit_repeats.run()
+            # case 'repeat habits':
+            #     habit_repeats.run()
             case 'delete habit':
                 delete_habit.run()
             case 'complete session':

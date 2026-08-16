@@ -33,6 +33,7 @@ class CompleteHabit(Habit):
         if not can_habit_be_updated:
             return can_habit_be_updated,message
         
+        self.__db_interface.set_is_db_updated(True)
         return self.__db_interface.update_habit(self.get_id(),**kwargs)
     
     def complete_habit(self,**kwargs):
@@ -45,6 +46,7 @@ class CompleteHabit(Habit):
         
         if self.get_status()!='TO_BE_CONFIRMED':
             return False, f'This habit\'s status does not allow for it to be completed'
+        self.__db_interface.set_is_db_updated(True)
         return self.__db_interface.update_habit(**{'id':self.get_id(),'status':'COMPLETED'})
 
     def copy_habit(self):
@@ -94,18 +96,22 @@ class CompleteHabit(Habit):
 
 
 class Habits:
+    __cached_data = []
+
     def __init__(self):
-        self.__cached_data = DB_Interface().get_cached_data()
+        self.__db_interface = DB_Interface()
+        self.__cached_data = self.__db_interface.get_cached_data()
     
     def get_habits(self):
-        self.__cached_data = DB_Interface().get_cached_data()
+        self.__cached_data = self.__db_interface.get_cached_data()
         return self.__cached_data
 
     def id_is_available(self,id):
-        self.__cached_data = DB_Interface().get_cached_data()
+        self.__cached_data = self.__db_interface.get_cached_data()
         return len([entry for entry in self.__cached_data if entry[0]==id])==1
 
     def get_habit_before_time(self,time):
+        self.__cached_data = self.__db_interface.get_cached_data()
         habits = self.__cached_data
         results = []
         for habit in habits:
@@ -116,6 +122,7 @@ class Habits:
         return results
     
     def get_habit_after_time(self,time):
+        self.__cached_data = self.__db_interface.get_cached_data()
         habits = self.__cached_data
         results = []
         for habit in habits:
@@ -126,6 +133,7 @@ class Habits:
         return results
 
     def get_habit_exactly_at(self,time):
+        self.__cached_data = self.__db_interface.get_cached_data()
         habits = self.__cached_data
         results = []
         for habit in habits:
@@ -136,6 +144,7 @@ class Habits:
         return results
 
     def get_habit_exactly_at_date(self,date):
+        self.__cached_data = self.__db_interface.get_cached_data()
         habits = self.__cached_data
         results = []
         for habit in habits:
@@ -146,50 +155,64 @@ class Habits:
         return results
 
     def get_habit_by_date(self, date):
+        self.__cached_data = self.__db_interface.get_cached_data()
         habits = self.__cached_data
         return [target_habit for target_habit in habits if date in target_habit[2]]
     
     def get_habit_by_name(self,name):
+        self.__cached_data = self.__db_interface.get_cached_data()
         return list(filter(lambda  habit:name==habit[1],self.__cached_data))
     
     def get_habit_by_has_name(self,name):
+        self.__cached_data = self.__db_interface.get_cached_data()
         return list(filter(lambda  habit:name in habit[1],self.__cached_data)) 
 
     def get_habit_by_status(self,status):
+        self.__cached_data = self.__db_interface.get_cached_data()
         return list(filter(lambda  habit:status==habit[4],self.__cached_data))
     
     def get_habit_by_status_excluding_some_statuses(self,statuses):
+        self.__cached_data = self.__db_interface.get_cached_data()
         return list(filter(lambda  habit:habit[4] not in statuses,self.__cached_data))
 
     def get_habit_by_id(self,id):
+        self.__cached_data = self.__db_interface.get_cached_data()
         return list(filter(lambda  habit:id==habit[0],self.__cached_data))
     
     def get_habit_before_date(self,date):
+        self.__cached_data = self.__db_interface.get_cached_data()
         return list(filter(lambda  habit:habit[2]<date,self.__cached_data))
     
     def get_habit_after_date(self,date):
-        self.__cached_data = DB_Interface().get_cached_data() 
+        self.__cached_data = self.__db_interface.get_cached_data() 
         return list(filter(lambda  habit:habit[2]>date,self.__cached_data))
     
     def get_habits_on_and_after_date(self,date,habits=[]):
+        self.__cached_data = self.__db_interface.get_cached_data()
         habits = self.__cached_data if habits == [] else habits
         return list(filter(lambda  habit:habit[2]>=date,habits))
 
     def get_habit_between_dates(self,start_date,end_date):
+        self.__cached_data = self.__db_interface.get_cached_data()
         return list(filter(lambda  habit:habit[2]>start_date and habit[2]<end_date,self.__cached_data))
     
     def get_by_duration(self,duration):
+        self.__cached_data = self.__db_interface.get_cached_data()
         return list(filter(lambda  habit:habit[3]==duration,self.__cached_data))
 
     def get_by_duration_between(self,start_duration,end_duration):
+        self.__cached_data = self.__db_interface.get_cached_data()
         return list(filter(lambda  habit:habit[3]>start_duration and habit[1]<end_duration,self.__cached_data))
 
     def get_by_duration_greater_than(self,duration):
+        self.__cached_data = self.__db_interface.get_cached_data()
         return list(filter(lambda  habit:habit[3]>duration,self.__cached_data))
 
     def get_by_duration_less_than(self,duration):
+        self.__cached_data = self.__db_interface.get_cached_data()
         return list(filter(lambda  habit:habit[3]<duration,self.__cached_data))
     
     def get_upcoming_and_date_before(self,date):
+        self.__cached_data = self.__db_interface.get_cached_data()
         habits = self.get_habit_by_status('UPCOMING')
         return self.get_habits_on_and_after_date(date,habits)
