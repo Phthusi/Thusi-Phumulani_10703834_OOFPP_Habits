@@ -13,4 +13,11 @@ they were done
 use a curve if possible
 
 do this for missed
+
+
+completion rate
+current streak
+longest streak
+total completed
+
 '''

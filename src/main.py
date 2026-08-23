@@ -8,6 +8,7 @@ from .functionality_units.search_unit.search_habit_inputs import SearchHabitInpu
 from .functionality_units.search_unit.search_habit import SearchHabit
 from .functionality_units.ui.command_autocomplete import AutoCompleter,update_habit_statuses
 from .functionality_units.ui.terminal_utils import clear_screen
+from .functionality_units.analytics_unit.habits_analytics import Analytics
 # from .functionality_units.habit_repeats_unit.habit_repeats import HabitRepeats
 from pathlib import Path
 from .functionality_units.ui.terminal_utils import clear_screen
@@ -29,12 +30,14 @@ def main_program():
     delete_habit = DeleteHabit()
     complete_habit_session = CompleteHabitSession()
     shelf = Shelf()
+    analytics = Analytics()
+    analytics.find_statuses()
 
     while True:
         commands = ['update habit','search habit(s)','add habit','esc','repeat habits','delete habit','complete session']
         history_file_name = 'main'
         clear_screen()
-        user_input = my_input('Enter command: ',history_file_name,commands,example=f' {shelf.display_state().replace('\n','\n ')}\n{'-'*105}\n NB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands\n{'-'*105}')
+        user_input = my_input('Enter command: ',history_file_name,commands,example=f'Longest Streak  : {analytics.longest_streak()}\nCurrent Streak  : {analytics.current_streak()}\nCompletion Rate : {analytics.completion_rate()}\n{shelf.display_state().replace('\n','\n ')}\n{'-'*105}\n NB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands\n{'-'*105}')
         match user_input:
             case 'update habit':
                 update_habits.run()
