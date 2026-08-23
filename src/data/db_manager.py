@@ -47,7 +47,7 @@ class CompleteHabit(Habit):
         if self.get_status()!='TO_BE_CONFIRMED':
             return False, f'This habit\'s status does not allow for it to be completed'
         self.__db_interface.set_is_db_updated(True)
-        return self.__db_interface.update_habit(**{'id':self.get_id(),'status':'COMPLETED'})
+        return self.__db_interface.update_habit(habit_id=self.get_id(),**{'status':'COMPLETED'})
 
     def copy_habit(self):
         return CompleteHabit(self.get_name(), self.get_session_duration(), self.get_start_date(), self.get_status())
