@@ -45,9 +45,9 @@ def ran_common_functions(user_input,function=None):
 def find_message(message):
     match message:
         case 'esc':
-            return 'escaping'
+            return 'escaping...'
         case 'clear':
-            return 'clearing screen'
+            return 'clearing screen...'
         case 'help':
             return 'help function'
     return None
