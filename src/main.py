@@ -34,7 +34,7 @@ def main_program():
         commands = ['update habit','search habit(s)','add habit','esc','repeat habits','delete habit','complete session']
         history_file_name = 'main'
         clear_screen()
-        user_input = my_input('Enter command: ',history_file_name,commands,example=f' {shelf.display_state().replace('\n','\n ')}\n NB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands')
+        user_input = my_input('Enter command: ',history_file_name,commands,example=f' {shelf.display_state().replace('\n','\n ')}\n{'-'*105}\n NB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands\n{'-'*105}')
         match user_input:
             case 'update habit':
                 update_habits.run()

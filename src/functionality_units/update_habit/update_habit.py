@@ -14,14 +14,14 @@ class UpdateHabit:
         self.__current_filled_fields = self.__form.number_of_filled_fields()
         self.__shelf = Shelf()
 
-    def __my_input(self,message,history_file_name,commands):
+    def __my_input(self,message,history_file_name,commands,example=None):
         autocompleter = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
         if self.__current_filled_fields != self.__form.number_of_filled_fields():
             self.progress_bar.increase_progress_percentage(self.__form.number_of_filled_fields())
             self.__current_filled_fields = self.__form.number_of_filled_fields()
         print(f'{Fore.LIGHTBLACK_EX}{self.__shelf.display_state().replace('  :',':')}')
         self.__update_habit_inputs.display_copied_habit()
-        return autocompleter.prompt_input(message,location=f"Home/UpdateHabit").lower()
+        return autocompleter.prompt_input(message,location=f"Home/UpdateHabit",example=example).lower()
 
     def run(self):
         command_functions = {
@@ -49,7 +49,7 @@ class UpdateHabit:
             clear_screen()
             commands = list(command_functions.keys())
             history_file_name = 'update_habit'
-            user_input = self.__my_input("Enter command: ",history_file_name,commands)
+            user_input = self.__my_input("Enter command: ",history_file_name,commands,example=f'{'-'*105}\nNB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands\n{'-'*105}')
             # ********* start of common functions ************        
             did_run_common_func = ran_common_functions(user_input)
             if did_run_common_func==False or did_run_common_func==True:
@@ -82,5 +82,3 @@ class UpdateHabit:
 
             if user_input not in commands:
                 print(f"'{user_input}' is not in the given options,please press space to see you options")
-
-            # update the progress thingy

@@ -15,11 +15,11 @@ class DeleteHabit:
         self.__copied_habit_status = "No habit has been copied from the shelf, please copy the habit from the shelf"
         self.__shelf = Shelf()
 
-    def __my_input(self,message,history_file_name,commands):
+    def __my_input(self,message,history_file_name,commands,example=None):
         autocompleter = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
         print(f'{Fore.LIGHTBLACK_EX}{self.__shelf.display_state().replace('  :',':')}')
         self.__display_copied_habit()
-        return autocompleter.prompt_input(message,location=f"Home/DeleteHabit").lower()
+        return autocompleter.prompt_input(message,location=f"Home/DeleteHabit",example=example).lower()
 
     def __display_copied_habit(self):
         if self.__habit is None:
@@ -78,7 +78,7 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit.get_id()}''')
             clear_screen()
             commands = list(command_functions.keys())
             history_file_name = 'delete_habit'
-            user_input = self.__my_input("Enter command: ",history_file_name,commands)
+            user_input = self.__my_input("Enter command: ",history_file_name,commands,example=f'{'-'*105}\nNB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands\n{'-'*105}')
             # ********* start of common functions ************        
             did_run_common_func = ran_common_functions(user_input)
             if did_run_common_func==False or did_run_common_func==True:
