@@ -7,7 +7,6 @@ from .shelf import Shelf
 
 BASE_DIR = Path(__file__).resolve().parent
 class View:
-
     def __init__(self):
         self.console = Console()
         self.__create_table()
@@ -115,16 +114,16 @@ class View:
     def display_habits(self,habits,location_base,search_input=None):
         clear_screen()
         max_len = len(habits)
-        if search_input is not None:
-            print(f'search input: {search_input}')
-        if max_len==0:
-            print('search results : 0')
-            return
-        print(f'search results : {max_len}')
         initial_index = 0
         final_index = 10
         habits_to_display = habits[initial_index:final_index]
         while(True):
+            if search_input is not None:
+                print(f'search input: {search_input}')
+            if max_len==0:
+                print('search results : 0')
+                return
+            print(f'search results : {max_len}')
             print(f'pages : {self.__page_number} of {max_len//10 + 1 if max_len%10!=0 else max_len//10 + 0}')
             list_of_indices = list(range(initial_index,final_index))
             self.add_to_table(habits_to_display,list_of_indices)
