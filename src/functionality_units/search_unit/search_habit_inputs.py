@@ -1,5 +1,5 @@
 from ..ui.command_autocomplete import AutoCompleter,Form
-from ..ui.terminal_utils import ran_common_functions, retry_until_success, find_message
+from ..ui.terminal_utils import ran_common_functions, retry_until_success, find_message,clear_screen
 from ...data.db_manager import CompleteHabit, Habits
 from ..habit_input import Habit_Inputs 
 from colorama import Fore
@@ -44,6 +44,7 @@ class SearchHabitInputs(Habit_Inputs):
     def handle_get_status(self):
         commands = ['MISSED','ONGOING','UPCOMING']
         history_file_name = 'status'
+        clear_screen()
         user_input = self.__my_input('Enter habit status: ',history_file_name,commands,base='Home/SearchHabit/Filter/')
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(user_input)
@@ -73,6 +74,7 @@ class SearchHabitInputs(Habit_Inputs):
     def __get_habits_before(self):
         commands =  []
         history_file_name = 'before'
+        clear_screen()
         user_input = self.__my_input('Enter time: ',history_file_name,commands,base='Home/SearchHabit/Filter/Time/',example='Input Example: 15:00:00')
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(user_input)
@@ -90,6 +92,7 @@ class SearchHabitInputs(Habit_Inputs):
     def __get_habits_name_has(self):
         commands =  []
         history_file_name = 'has'
+        clear_screen()
         user_input = self.__my_input('Enter name: ',history_file_name,commands,base='Home/SearchHabit/Filter/Name/')
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(user_input)
@@ -107,6 +110,7 @@ class SearchHabitInputs(Habit_Inputs):
     def __get_by_duration_less_than(self):
         commands =  []
         history_file_name = 'less_than'
+        clear_screen()
         user_input = self.__my_input('Enter duration: ',history_file_name,commands,base='Home/SearchHabit/Filter/Duration/')
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(user_input)
@@ -124,6 +128,7 @@ class SearchHabitInputs(Habit_Inputs):
     def __get_by_duration_greater_than(self):
         commands =  []
         history_file_name = 'greater_than'
+        clear_screen()
         user_input = self.__my_input('Enter duration: ',history_file_name,commands,base='Home/SearchHabit/Filter/Duration/')
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(user_input)
@@ -141,6 +146,7 @@ class SearchHabitInputs(Habit_Inputs):
     def __get_by_duration(self):
         commands =  []
         history_file_name = 'at'
+        clear_screen()
         user_input = self.__my_input('Enter duration: ',history_file_name,commands,base='Home/SearchHabit/Filter/Duration/')
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(user_input)
@@ -158,6 +164,7 @@ class SearchHabitInputs(Habit_Inputs):
     def __get_habits_before_date(self):
         commands =  []
         history_file_name = 'before'
+        clear_screen()
         user_input = self.__my_input('Enter Date: ',history_file_name,commands,base='Home/SearchHabit/Filter/Date/',example='Input Example: 2026-06-30')
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(user_input)
@@ -175,6 +182,7 @@ class SearchHabitInputs(Habit_Inputs):
     def __get_habits_after(self):
         commands =  []
         history_file_name = 'after'
+        clear_screen()
         user_input = self.__my_input('Enter time: ',history_file_name,commands,base='Home/SearchHabit/Filter/Time/',example='Input Example: 20:00:00')
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(user_input)
@@ -192,6 +200,7 @@ class SearchHabitInputs(Habit_Inputs):
     def __get_habits_name_is(self):
         commands =  []
         history_file_name = 'is'
+        clear_screen()
         user_input = self.__my_input('Enter Name: ',history_file_name,commands,base='Home/SearchHabit/Filter/Name/')
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(user_input)
@@ -209,6 +218,7 @@ class SearchHabitInputs(Habit_Inputs):
     def __get_habits_at(self):
         commands =  []
         history_file_name = 'on'
+        clear_screen()
         user_input = self.__my_input('Select a time filter: ',history_file_name,commands,base='Home/SearchHabit/Filter/Time/',example='14:00:00')
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(user_input)
@@ -226,6 +236,7 @@ class SearchHabitInputs(Habit_Inputs):
     def __get_habits_at_date(self):
         commands =  []
         history_file_name = 'on'
+        clear_screen()
         user_input = self.__my_input('Select a Date filter: ',history_file_name,commands,base='Home/SearchHabit/Filter/Date/',example='Input Example: 2026-06-30')
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(user_input)
@@ -243,6 +254,7 @@ class SearchHabitInputs(Habit_Inputs):
     def __get_habits_after_date(self):
         commands =  []
         history_file_name = 'after'
+        clear_screen()
         user_input = self.__my_input('Select a Date filter: ',history_file_name,commands,base='Home/SearchHabit/Filter/Date/',example='Input Example: 2026-06-30')
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(user_input)
@@ -256,124 +268,114 @@ class SearchHabitInputs(Habit_Inputs):
         self.__view.display_habits(results,'Home/SearchHabit/Filter/Date/After/',search_input=f'Date After {user_input}')
         return True,'success...'
 
-    @retry_until_success
     def handle_get_time(self):
-        commands =  ['before','after','on']
         history_file_name = 'time'
-        user_input = self.__my_input('Select a time filter: ',history_file_name,commands,base='Home/SearchHabit/Filter/')
-        # ********* start of common functions ************        
-        did_run_common_func = ran_common_functions(user_input)
-        message_to_display = find_message(user_input)
-        if did_run_common_func==False:
-            return True, message_to_display
-        elif did_run_common_func==True:
-            return False, message_to_display
-        # ********** end of common functions ************
-        if user_input not in commands:
-            return False, f'\'{user_input}\' is not a valid input'
-        
-        match user_input:
-            case 'before':
-                self.__get_habits_before()
-            case 'after':
-                self.__get_habits_after()
-            case 'on':
-                self.__get_habits_at()
-            case default:
-                return False,f'\'{user_input}\' is an valid input'
+        command_functions = {
+            'before':self.__get_habits_before,
+            'after':self.__get_habits_after,
+            'on':self.__get_habits_at,
+        }
 
-        return True,'hello'
+        while True:        
+            clear_screen()
+            commands = list(command_functions.keys())
+            user_input = self.__my_input('Select a time filter: ',history_file_name,commands,base='Home/SearchHabit/Filter/')
+            # ********* start of common functions ************        
+            did_run_common_func = ran_common_functions(user_input)
+            if did_run_common_func==False or did_run_common_func==True:
+                if user_input == 'esc':
+                    break
+                continue
+            # ********** end of common functions ************            
+            elif user_input in commands:
+                funct = command_functions[user_input]
+                funct()
 
-    @retry_until_success
+            if user_input not in commands:
+                print(f"'{user_input}' is not in the given options,please press space to see you options")
+                input('Press enter to continue')
+
     def handle_get_duration(self):
-        commands = ['less than','greater than','on']
         history_file_name = 'duration'
-        user_input = self.__my_input('Choose how you choose to find the habit(s): ',history_file_name,commands,base='Home/SearchHabit/Filter/')
-        # ********* start of common functions ************        
-        did_run_common_func = ran_common_functions(user_input)
-        message_to_display = find_message(user_input)
-        if did_run_common_func==False:
-            return True, message_to_display
-        elif did_run_common_func==True:
-            return False, message_to_display
-        # ********** end of common functions ************
-        match user_input:
-            case 'less than':
-                self.__get_by_duration_less_than()
-            case 'greater than':
-                self.__get_by_duration_greater_than()
-            case 'on':
-                self.__get_by_duration()
-            case default:
-                return False,f'\'{user_input}\' is an valid input'
+        command_functions = {
+            'less than':self.__get_by_duration_less_than,
+            'greater than':self.__get_by_duration_greater_than,
+            'on':self.__get_by_duration,
+        }
+        while True:        
+            clear_screen()
+            commands = list(command_functions.keys())
+            user_input = self.__my_input('Choose how you choose to find the habit(s): ',history_file_name,commands,base='Home/SearchHabit/Filter/')
+            # ********* start of common functions ************        
+            did_run_common_func = ran_common_functions(user_input)
+            if did_run_common_func==False or did_run_common_func==True:
+                if user_input == 'esc':
+                    break
+                continue
+            # ********** end of common functions ************            
+            elif user_input in commands:
+                funct = command_functions[user_input]
+                funct()
+            
+            if user_input not in commands:
+                print(f"'{user_input}' is not in the given options,please press space to see you options")
+                input('Press enter to continue')
 
-        return True,'hello'
-    
-    @retry_until_success
     def handle_get_date(self):
-        commands = ['before','after','on']
         history_file_name = 'date'
-        user_input = self.__my_input('Choose how you choose to find the habit(s): ',history_file_name,commands,base='Home/SearchHabit/Filter/')
-        # ********* start of common functions ************        
-        did_run_common_func = ran_common_functions(user_input)
-        message_to_display = find_message(user_input)
-        if did_run_common_func==False:
-            return True, message_to_display
-        elif did_run_common_func==True:
-            return False, message_to_display
-        # ********** end of common functions ************
-        if user_input not in commands:
-            return False, f'\'{user_input}\' is not a valid input'
-        
-        match user_input:
-            case 'before':
-                self.__get_habits_before_date()
-            case 'after':
-                self.__get_habits_after_date()
-            case 'on':
-                self.__get_habits_at_date()
-            case default:
-                return False,f'\'{user_input}\' is an valid input'
+        command_functions = {
+            'before':self.__get_habits_before_date,
+            'after':self.__get_habits_after_date,
+            'on':self.__get_habits_at_date,
+        }
 
-        return True,'hello'
-    
-    @retry_until_success
+        while True:        
+            clear_screen()
+            commands = list(command_functions.keys())
+            user_input = self.__my_input('Choose how you choose to find the habit(s): ',history_file_name,commands,base='Home/SearchHabit/Filter/')
+            # ********* start of common functions ************        
+            did_run_common_func = ran_common_functions(user_input)
+            if did_run_common_func==False or did_run_common_func==True:
+                if user_input == 'esc':
+                    break
+                continue
+            # ********** end of common functions ************            
+            elif user_input in commands:
+                funct = command_functions[user_input]
+                funct()
+            
+            if user_input not in commands:
+                print(f"'{user_input}' is not in the given options,please press space to see you options")
+                input('Press enter to continue')
+
     def handle_get_name(self):
-        commands = ['is','has']
         history_file_name = 'name'
-        user_input = self.__my_input('Choose how you choose to find the habit(s): ',history_file_name,commands,base='Home/SearchHabit/Filter/')
-        # ********* start of common functions ************        
-        did_run_common_func = ran_common_functions(user_input)
-        message_to_display = find_message(user_input)
-        if did_run_common_func==False:
-            return True, message_to_display
-        elif did_run_common_func==True:
-            return False, message_to_display
-        # ********** end of common functions ************
-        match user_input:
-            case 'is':
-                self.__get_habits_name_is()
-            case 'has':
-                self.__get_habits_name_has()
-            case default:
-                return False,f'\'{user_input}\' is an valid input'
+        command_functions = {
+            'is':self.__get_habits_name_is,
+            'has':self.__get_habits_name_has
+        }
 
-        return True,'hello'
+        while True:        
+            clear_screen()
+            commands = list(command_functions.keys())
+            user_input = self.__my_input('Choose how you choose to find the habit(s): ',history_file_name,commands,base='Home/SearchHabit/Filter/')
+            # ********* start of common functions ************        
+            did_run_common_func = ran_common_functions(user_input)
+            if did_run_common_func==False or did_run_common_func==True:
+                if user_input == 'esc':
+                    break
+                continue
+            # ********** end of common functions ************            
+            elif user_input in commands:
+                funct = command_functions[user_input]
+                funct()
+            
+            if user_input not in commands:
+                print(f"'{user_input}' is not in the given options,please press space to see you options")
+                input('Press enter to continue')
 
-    @retry_until_success
     def find_habits(self):
-        commands = ['date','time','duration','name','status','habit to complete']
         history_file_name = 'filter'
-        user_input = self.__my_input('How would you like to search for habits: ',history_file_name,commands)
-        # ********* start of common functions ************        
-        did_run_common_func = ran_common_functions(user_input)
-        message_to_display = find_message(user_input)
-        if did_run_common_func==False:
-            return True, message_to_display
-        elif did_run_common_func==True:
-            return False, message_to_display
-        # ********** end of common functions ************
-
         command_functions = {
             'date':self.handle_get_date,
             'time':self.handle_get_time,
@@ -382,18 +384,32 @@ class SearchHabitInputs(Habit_Inputs):
             'status':self.handle_get_status,
             'habit to complete': self.handle_get_habits_to_complete
         }
-        if user_input in command_functions.keys():
-            command_functions[user_input]()
-        else:
-            return False, f"'{user_input}' is an invalid input"
-        
-        return False,'hello'
+
+        while True:        
+            clear_screen()
+            commands = list(command_functions.keys())
+            user_input = self.__my_input('How would you like to search for habits: ',history_file_name,commands)
+            # ********* start of common functions ************        
+            did_run_common_func = ran_common_functions(user_input)
+            if did_run_common_func==False or did_run_common_func==True:
+                if user_input == 'esc':
+                    break
+                continue
+            # ********** end of common functions ************            
+            elif user_input in commands:
+                funct = command_functions[user_input]
+                funct()
+            
+            if user_input not in commands:
+                print(f"'{user_input}' is not in the given options,please press space to see you options")
+                input('Press enter to continue')
     
-    @retry_until_success
     def view_selected_habit(self):
         habit = Shelf.copy_last_place_habit()
         if habit is None:
-            return True,'No habit has been selected'
+            print('No habit has been selected')
+            input('Press enter to continue')
 
         self.__view.draw_plain_table(habit)
-        return True,'success...'
+        print('success...')
+        input('Press enter to continue')
