@@ -37,8 +37,22 @@ class Analytics:
         return f'{count} days'
 
     @classmethod
+    def total_completed_sessions(cls):
+        sorted_habits, sorted_statuses = cls.find_statuses()
+        if sorted_statuses==[]:
+            return 'N\A'
+        return f'{sorted_statuses.count('COMPLETED')}'
+
+    @classmethod
     def completion_rate(cls):
         sorted_habits, sorted_statuses = cls.find_statuses()
         if sorted_statuses==[]:
             return 'N\A'
         return f'{round((sorted_statuses.count('COMPLETED')/len(sorted_statuses))*100,2)}%'
+
+    @classmethod
+    def total_missed_sessions(cls):
+        sorted_habits, sorted_statuses = cls.find_statuses()
+        if sorted_statuses==[]:
+            return 'N\A'
+        return f'{sorted_statuses.count('MISSED')}'
