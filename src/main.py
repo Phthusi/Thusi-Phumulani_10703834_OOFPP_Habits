@@ -34,7 +34,7 @@ def main_program():
     analytics.find_statuses()
 
     while True:
-        commands = ['update habit','search habit(s)','add habit','esc','repeat habits','delete habit','complete session']
+        commands = ['update habit','search habit(s)','add habit','esc','repeat habits','delete habit','complete session','analytics']
         history_file_name = 'main'
         clear_screen()
         user_input = my_input('Enter command: ',history_file_name,commands,example=f'Longest Streak  : {analytics.longest_streak()}\nCurrent Streak  : {analytics.current_streak()}\nCompletion Rate : {analytics.completion_rate()}\nTotal Missed Sessions   : {analytics.total_missed_sessions()}\nTotal Completed Sessions: {analytics.total_completed_sessions()}\n{shelf.display_state().replace('\n','\n ')}\n{'-'*105}\n NB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands\n{'-'*105}')
@@ -49,6 +49,8 @@ def main_program():
             #     habit_repeats.run()
             case 'delete habit':
                 delete_habit.run()
+            case 'analytics':
+                analytics.display_detailed_analytics()
             case 'complete session':
                 complete_habit_session.run()
                 continue

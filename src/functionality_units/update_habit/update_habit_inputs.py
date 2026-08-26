@@ -97,6 +97,7 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
 
     @retry_until_success
     def __choose_fields_to_update(self,message):
+        self.__field_names = []
         if not self.__is_habit_found_in_shelf:
             return True, 'Find the habit first'
         
@@ -186,7 +187,7 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
     @retry_until_success
     def update(self):
         if not self.__is_habit_found_in_shelf:
-            return True, 'Find the habit first'
+            return True, 'Find the habit first or copy the habit from the shelf'
         if self.__number_of_habit_fields==None:
             return True, 'Choose the number of fields first'
         success,message = self._Habit_Inputs__habit.update_habit(**self.update_field_dict())
