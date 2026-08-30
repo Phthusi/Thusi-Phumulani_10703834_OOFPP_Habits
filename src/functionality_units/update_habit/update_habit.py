@@ -82,3 +82,4 @@ class UpdateHabit:
 
             if user_input not in commands:
                 print(f"'{user_input}' is not in the given options,please press space to see you options")
+                input('Press Enter to exit')
