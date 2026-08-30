@@ -55,5 +55,5 @@ class SearchHabit:
                 print(f'\'{user_input}\' is not a valid command')
                 input('Press Enter to continue')
                 continue
-            x= command_functions[user_input][0]
-            x()
+            function = command_functions[user_input][0]
+            function()
