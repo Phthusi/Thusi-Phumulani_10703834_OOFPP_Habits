@@ -5,11 +5,11 @@ from ...data.db_manager import CompleteHabit
 from ..ui.command_autocomplete import AutoCompleter, Form, ProgressBar
 from ..ui.terminal_utils import ran_common_functions, retry_until_success, find_message, clear_screen
 from ..shelf import Shelf
-# from .habit_repeats_models import (
-#     WeekPatternManager, 
-#     MonthPatternManager, 
-#     MonthsPatternManager
-# )
+from .habit_repeats_models import (
+    WeekPatternManager, 
+    MonthPatternManager, 
+    MonthsPatternManager
+)
 from .habit_repeats_validator import WeekPatternValidator, MonthPatternValidator
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -244,9 +244,6 @@ class HabitRepeatsManager:
             self.__main_form.set_field_status('months_pattern', True)
         return success, msg
 
-    # -------------------------------------------------------------------------
-    # MAIN LOOP
-    # -------------------------------------------------------------------------
     def run(self):
         command_functions = {
             'copy habit from shelf': self.collect_copied_habit,
@@ -265,14 +262,12 @@ class HabitRepeatsManager:
 
             user_input = self.__my_input("Enter command: ", history_file_name, commands)
 
-            # Common functions execution check
             did_run_common_func = ran_common_functions(user_input)
             if did_run_common_func is not None:
                 if user_input == 'esc':
                     break
                 continue
 
-            # Execute registered command
             if user_input in command_functions:
                 funct = command_functions[user_input]
                 funct()

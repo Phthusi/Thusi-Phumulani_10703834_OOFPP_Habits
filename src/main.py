@@ -9,7 +9,7 @@ from .functionality_units.search_unit.search_habit import SearchHabit
 from .functionality_units.ui.command_autocomplete import AutoCompleter,update_habit_statuses
 from .functionality_units.ui.terminal_utils import clear_screen
 from .functionality_units.analytics_unit.habits_analytics import Analytics
-# from .functionality_units.habit_repeats_unit.habit_repeats import HabitRepeats
+# from .functionality_units.habit_repeats_unit.habit_repeats import HabitRepeatsManager
 from pathlib import Path
 from .functionality_units.ui.terminal_utils import clear_screen
 from .functionality_units.shelf import Shelf

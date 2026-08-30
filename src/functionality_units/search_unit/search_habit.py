@@ -52,6 +52,8 @@ class SearchHabit:
                 continue
             # ********** end of common functions ************  
             if user_input not in command_functions.keys() or user_input=='':
+                print(f'\'{user_input}\' is not a valid command')
+                input('Press Enter to continue')
                 continue
             x= command_functions[user_input][0]
             x()
