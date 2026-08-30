@@ -76,8 +76,11 @@ class Habit_Inputs:
         elif did_run_common_func==True:
             return False, 'switching'
         # ********** end of common functions ************
-
-        date, time = habit_start_datetime.split(' ')
+        try:
+            date, time = habit_start_datetime.split(' ')
+        except Exception:
+            return False, 'Invalid format'
+        
         if not (isinstance(date,str) and isinstance(date,str)):
             return False, 'Invalid format'
 

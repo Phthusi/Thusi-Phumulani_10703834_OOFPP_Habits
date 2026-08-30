@@ -190,6 +190,9 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
             return True, 'Find the habit first or copy the habit from the shelf'
         if self.__number_of_habit_fields==None:
             return True, 'Choose the number of fields first'
+        if len(self.update_field_dict().keys())==0:
+            return True, 'At least have one filled field'
+        
         success,message = self._Habit_Inputs__habit.update_habit(**self.update_field_dict())
         habit = self.__habits.get_habit_by_id(self.__habit.get_id())[0]
         self.__shelf.preserve_habit(tuple(habit))
@@ -202,4 +205,4 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
         self.__copied_habit_status = "No habit has been copied from the shelf, please copy the habit from the shelf"
         self.__main_form.reset_fields()
         return True,message
-    
+# gimp

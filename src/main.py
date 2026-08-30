@@ -49,6 +49,9 @@ def main_program():
             #     habit_repeats.run()
             case 'delete habit':
                 delete_habit.run()
+            case 'help':
+                print('Awesome I will help you')
+                input()
             case 'analytics':
                 analytics.display_detailed_analytics()
             case 'complete session':
