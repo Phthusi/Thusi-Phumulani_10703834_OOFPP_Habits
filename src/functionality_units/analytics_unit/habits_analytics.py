@@ -176,45 +176,50 @@ class Analytics:
         longest_streak_session_vol_distribution.add_row('3 - 4 sessions','23%','2 hrs/day')
         longest_streak_session_vol_distribution.add_row(special_val,'80%','4hrs 40mins/day')
         clear_screen()
-        print(f'''--------------------------------------------------------------------------------
-                        📊  BASIC ANALYTICS
---------------------------------------------------------------------------------
-                            
-I. {Back.BLUE}🌐 OVERALL PERFORMANCE                                                       {Style.RESET_ALL}
-     • Analysis Period    : {cls.count_days()} days
-     • Avg Sessions       : 5 sessions/day
-     • Completion Rate    : {cls.completion_rate()} ({cls.completion_ratio()} sessions)
-     • Avg Committed Time : 1.80 hrs/day
-     • Peak Zone          : Afternoon (75.0% share)
-     • Maximum Daily Commit : 5h
-     • Minimum Daily Commit : 0m
-''')
-        console.print(overall_baseline_session_vol_distribution)
-        print(f'''
-II.  {Back.BLUE}🔥 CURRENT STREAK                                                          {Style.RESET_ALL} 
-     • Streak Length      : {cls.current_streak()}
-     • Avg Committed Time : 2.4 hrs/day
-     • Peak Zone          : Morning (85.0% share)
-     • Maximum Daily Commit : 5h
-     • Minimum Daily Commit : 0m
-''')
-        console.print(current_streak_session_vol_distribution)
-        print(f'''
-III. {Back.BLUE}🏆 LONGEST STREAK                                                          {Style.RESET_ALL}
-     • Streak Length      : {cls.longest_streak()}
-     • Avg Committed Time : {cls.long_streak_duration_ave()}/day
-     • Peak Zone          : Not enough distribution
-     • Maximum Daily Commit : 5h
-     • Minimum Daily Commit : 0m
-''')        
-        console.print(longest_streak_session_vol_distribution)
-        print(f'''
-IV. {Back.BLUE}📅 COMPLETION RATE BY DAY OF WEEK                                           {Style.RESET_ALL}
-''')
-        console.print(day_of_week_completion_table)
-        print(f'''
-V.  {Back.BLUE}🏋️  COMPLETION RATE BY DAILY COMMITTED TIME                                  {Style.RESET_ALL}
-''')
-        console.print(daily_load_vs_completion)
-        print('''----------------------------------------------------------------------------------''')
-        input('                         Press Enter to continue')
+        if False:
+            print(f'''--------------------------------------------------------------------------------
+                            📊  BASIC ANALYTICS
+    --------------------------------------------------------------------------------
+                                
+    I. {Back.BLUE}🌐 OVERALL PERFORMANCE                                                       {Style.RESET_ALL}
+        • Analysis Period    : {cls.count_days()} days
+        • Avg Sessions       : 5 sessions/day
+        • Completion Rate    : {cls.completion_rate()} ({cls.completion_ratio()} sessions)
+        • Avg Committed Time : 1.80 hrs/day
+        • Peak Zone          : Afternoon (75.0% share)
+        • Maximum Daily Commit : 5h
+        • Minimum Daily Commit : 0m
+    ''')
+            console.print(overall_baseline_session_vol_distribution)
+            print(f'''
+    II.  {Back.BLUE}🔥 CURRENT STREAK                                                          {Style.RESET_ALL} 
+        • Streak Length      : {cls.current_streak()}
+        • Avg Committed Time : 2.4 hrs/day
+        • Peak Zone          : Morning (85.0% share)
+        • Maximum Daily Commit : 5h
+        • Minimum Daily Commit : 0m
+    ''')
+            console.print(current_streak_session_vol_distribution)
+            print(f'''
+    III. {Back.BLUE}🏆 LONGEST STREAK                                                          {Style.RESET_ALL}
+        • Streak Length      : {cls.longest_streak()}
+        • Avg Committed Time : {cls.long_streak_duration_ave()}/day
+        • Peak Zone          : Not enough distribution
+        • Maximum Daily Commit : 5h
+        • Minimum Daily Commit : 0m
+    ''')        
+            console.print(longest_streak_session_vol_distribution)
+            print(f'''
+    IV. {Back.BLUE}📅 COMPLETION RATE BY DAY OF WEEK                                           {Style.RESET_ALL}
+    ''')
+            console.print(day_of_week_completion_table)
+            print(f'''
+    V.  {Back.BLUE}🏋️  COMPLETION RATE BY DAILY COMMITTED TIME                                  {Style.RESET_ALL}
+    ''')
+            console.print(daily_load_vs_completion)
+            print('''----------------------------------------------------------------------------------''')
+            input('                         Press Enter to continue')
+        else:
+            print('IMPLEMENTATION IS COMING SOON')
+            input('Press Enter to continue')
+
