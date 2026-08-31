@@ -52,7 +52,7 @@ class AddHabit:
             return False, 'switching'
         # ********** end of common functions ************
 
-        if not self.__datetime_validator.is_date_valid(habit_start_datetime):
+        if not self.__datetime_validator.is_datetime_valid(habit_start_datetime):
             return False, 'Invalid format'
         
         if not self.__datetime_validator.is_passed(habit_start_datetime):

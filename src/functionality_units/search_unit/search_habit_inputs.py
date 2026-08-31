@@ -5,7 +5,7 @@ from ..habit_input import Habit_Inputs
 from colorama import Fore
 from ..shelf import Shelf
 from ..view import View
-
+from ..time_project.time_manager_validator import HabitDateTimeManagerValidator
 
 from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent
@@ -84,6 +84,8 @@ class SearchHabitInputs(Habit_Inputs):
         elif did_run_common_func==True:
             return False, message_to_display
         # ********** end of common functions ************
+        if not self._Habit_Inputs__datetime_validator.is_time_format_valid(user_input):
+            return False,f'\'{user_input}\' does not have a valid time format'
         results = self.__habit_search.get_habit_before_time(user_input)
         self.__view.display_habits(results,'Home/SearchHabit/Filter/Time/Before/',search_input=f'time before, {user_input}')
         return True,'success...'
@@ -120,6 +122,8 @@ class SearchHabitInputs(Habit_Inputs):
         elif did_run_common_func==True:
             return False, message_to_display
         # ********** end of common functions ************
+        if not self._Habit_Inputs__datetime_validator.validate_duration(user_input):
+            return False,f'\'{user_input}\' does not have a valid duration format'
         results = self.__habit_search.get_by_duration_less_than(user_input)
         self.__view.display_habits(results,'Home/SearchHabit/Filter/Duration/LessThan/',search_input=f'duration less than, {user_input}')
         return True,'success...'
@@ -131,6 +135,8 @@ class SearchHabitInputs(Habit_Inputs):
         clear_screen()
         user_input = self.__my_input('Enter duration: ',history_file_name,commands,base='Home/SearchHabit/Filter/Duration/',example='Input Format  : HH:MM:SS\nInput Example : 05:37:48\nHours = 5, Minutes = 37, seconds = 48'+f'\n{'-'*105}\nNB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands\n{'-'*105}')
         # ********* start of common functions ************        
+        if not self._Habit_Inputs__datetime_validator.validate_duration(user_input):
+            return False,f'\'{user_input}\' does not have a valid duration format'
         did_run_common_func = ran_common_functions(user_input)
         message_to_display = find_message(user_input)
         if did_run_common_func==False:
@@ -138,6 +144,8 @@ class SearchHabitInputs(Habit_Inputs):
         elif did_run_common_func==True:
             return False, message_to_display
         # ********** end of common functions ************
+        if not self._Habit_Inputs__datetime_validator.validate_duration(user_input):
+            return False,f'\'{user_input}\' does not have a valid duration format'
         results = self.__habit_search.get_by_duration_greater_than(user_input)
         self.__view.display_habits(results,'Home/SearchHabit/Filter/Duration/GreaterThan/',search_input=f'duration greater than, {user_input}')
         return True,'success...'
@@ -174,6 +182,8 @@ class SearchHabitInputs(Habit_Inputs):
         elif did_run_common_func==True:
             return False, message_to_display
         # ********** end of common functions ************
+        if not self._Habit_Inputs__datetime_validator.is_date_valid(user_input):
+            return False,f'\'{user_input}\' is not a valid date'
         results = self.__habit_search.get_habit_before_date(user_input)
         self.__view.display_habits(results,'Home/SearchHabit/Filter/Date/Before/',search_input=f'Date Before {user_input}')
         return True,'success...'
@@ -192,6 +202,8 @@ class SearchHabitInputs(Habit_Inputs):
         elif did_run_common_func==True:
             return False, message_to_display
         # ********** end of common functions ************
+        if not self._Habit_Inputs__datetime_validator.is_time_format_valid(user_input):
+            return False,f'\'{user_input}\' does not have a valid time format'       
         results = self.__habit_search.get_habit_after_time(user_input)
         self.__view.display_habits(results,'Home/SearchHabit/Filter/Time/After/',search_input=f'time after, {user_input}')
         return True,'success...'
@@ -219,7 +231,7 @@ class SearchHabitInputs(Habit_Inputs):
         commands =  []
         history_file_name = 'on'
         clear_screen()
-        user_input = self.__my_input('Select the time filter: ',history_file_name,commands,base='Home/SearchHabit/Filter/Time/',example='Input Format  : HH:MM:SS\nInput Example : 04:15:09\nHours = 4, Minutes = 15, Seconds=9'+f'\n{'-'*105}\nNB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands\n{'-'*105}')
+        user_input = self.__my_input('Enter time: ',history_file_name,commands,base='Home/SearchHabit/Filter/Time/',example='Input Format  : HH:MM:SS\nInput Example : 04:15:09\nHours = 4, Minutes = 15, Seconds=9'+f'\n{'-'*105}\nNB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands\n{'-'*105}')
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(user_input)
         message_to_display = find_message(user_input)
@@ -228,6 +240,8 @@ class SearchHabitInputs(Habit_Inputs):
         elif did_run_common_func==True:
             return False, message_to_display
         # ********** end of common functions ************
+        if not self._Habit_Inputs__datetime_validator.is_time_format_valid(user_input):
+            return False,f'\'{user_input}\' does not have a valid time format'       
         results = self.__habit_search.get_habit_exactly_at(user_input)
         self.__view.display_habits(results,'Home/SearchHabit/Filter/Time/On/',search_input=f'time exactly at, {user_input}')
         return True,'success...'
@@ -246,6 +260,8 @@ class SearchHabitInputs(Habit_Inputs):
         elif did_run_common_func==True:
             return False, message_to_display
         # ********** end of common functions ************
+        if not self._Habit_Inputs__datetime_validator.is_date_valid(user_input):
+            return False,f'\'{user_input}\' is not a valid date'
         results = self.__habit_search.get_habit_exactly_at_date(user_input)
         self.__view.display_habits(results,'Home/SearchHabit/Filter/Date/On/',search_input=f'date exactly is {user_input}')
         return True,'success...'
@@ -264,6 +280,8 @@ class SearchHabitInputs(Habit_Inputs):
         elif did_run_common_func==True:
             return False, message_to_display
         # ********** end of common functions ************
+        if not self._Habit_Inputs__datetime_validator.is_date_valid(user_input):
+            return False,f'\'{user_input}\' is not a valid date'
         results = self.__habit_search.get_habit_after_date(user_input)
         self.__view.display_habits(results,'Home/SearchHabit/Filter/Date/After/',search_input=f'Date After {user_input}')
         return True,'success...'

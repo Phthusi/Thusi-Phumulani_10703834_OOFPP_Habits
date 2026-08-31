@@ -89,7 +89,7 @@ class Habit_Inputs:
             return False, 'Invalid format: time is not in a valid format'
 
         habit_start_datetime +=":00"
-        if not self.__datetime_validator.is_date_valid(habit_start_datetime):
+        if not self.__datetime_validator.is_datetime_valid(habit_start_datetime):
             return False, 'Invalid format'
         
         if not self.__datetime_validator.is_passed(habit_start_datetime):
