@@ -35,7 +35,7 @@ class Habit_Inputs:
         self.__main_autocompleter = AutoCompleter(self.__BASE_DIR / f"history/{history_file_name}",commands)
         self.__main_autocompleter.set_has_status(True)
         modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
-        return self.__main_autocompleter.prompt_input(message,location=f"Home/AddHabit/{modified_history_file_name}",field_pair=field_pair,example=f'{'-'*95}\n[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands').lower()
+        return self.__main_autocompleter.prompt_input(message,location=f"Home/AddHabit/{modified_history_file_name}",field_pair=field_pair,example=f'Text length minimum : 3 \nExample : Run\n{'-'*95}\n[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands').lower()
     
     @retry_until_success
     def set_habit_name(self,message):
@@ -44,7 +44,7 @@ class Habit_Inputs:
         # ********* start of common functions ************
         did_run_common_func = ran_common_functions(habit_name)
         if did_run_common_func==False:
-            return True, 'ran common functions'
+            return True, 'Escaping...'
         elif did_run_common_func==True:
             return False, 'switching'
         # ********** end of common functions ************
@@ -72,7 +72,7 @@ class Habit_Inputs:
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(habit_start_datetime)
         if did_run_common_func==False:
-            return True, 'ran common functions'
+            return True, 'Escaping...'
         elif did_run_common_func==True:
             return False, 'switching'
         # ********** end of common functions ************
@@ -118,7 +118,7 @@ class Habit_Inputs:
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(habit_session_duration)
         if did_run_common_func==False:
-            return True, 'ran common functions'
+            return True, 'Escaping...'
         elif did_run_common_func==True:
             return False, 'switching'
         # ********** end of common functions ************

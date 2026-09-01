@@ -108,7 +108,7 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
         history_file_name = 'choose_fields_to_update'
         if int(self.__number_of_habit_fields)==3:
             self.__field_names.extend(['name','start_datetime','duration'])
-            return True, 'ran common functions'
+            return True, 'Escaping...'
         
         habit_field = self.__my_input(message,history_file_name,commands)
         # ********* start of common functions ************        

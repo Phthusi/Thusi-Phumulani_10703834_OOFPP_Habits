@@ -26,7 +26,7 @@ class AddHabit:
         # ********* start of common functions ************
         did_run_common_func = ran_common_functions(habit_name)
         if did_run_common_func==False:
-            return True, 'ran common functions'
+            return True, 'Escaping...'
         elif did_run_common_func==True:
             return False, 'switching'
         # ********** end of common functions ************
@@ -47,7 +47,7 @@ class AddHabit:
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(habit_start_datetime)
         if did_run_common_func==False:
-            return True, 'ran common functions'
+            return True, 'Escaping...'
         elif did_run_common_func==True:
             return False, 'switching'
         # ********** end of common functions ************
@@ -74,7 +74,7 @@ class AddHabit:
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(habit_session_duration)
         if did_run_common_func==False:
-            return True, 'ran common functions'
+            return True, 'Escaping...'
         elif did_run_common_func==True:
             return False, 'switching'
         # ********** end of common functions ************
