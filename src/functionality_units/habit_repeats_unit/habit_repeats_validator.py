@@ -41,9 +41,9 @@ class WeekPatternValidator:
         if pattern==[]:
             return False,"week pattern must not be empty"
         
-        invalid_days = [day for day in pattern if day in week_days]
+        invalid_days = [day in week_days for day in pattern]
         if not all(invalid_days):
-            return False,f"{', '.join(invalid_days)} are not valid week days"
+            return False,f"{', '.join([day for day in pattern if day not in week_days])} are not valid week days"
         return True,"week pattern is valid"
     
     def is_week_valid(self):
