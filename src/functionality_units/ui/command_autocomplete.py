@@ -77,10 +77,11 @@ class ProgressBar:
         self.__progress_percentage = 100
 
 class Form:
-    def __init__(self, fields: dict[str, bool],display_map=None):
+    def __init__(self, fields: dict[str, bool],display_map=None,levels=None):
         self.fields = fields
         self.__display_map = display_map
- 
+        self.__levels = levels
+
     def get_fields(self):
         return self.fields
     
@@ -94,6 +95,10 @@ class Form:
         return self.__display_map
 
     def get_display_map(self):
+        if self.__levels:
+            fields = self.fields.copy()
+            fields.update(self.__levels)
+            return self.__display_map.format(**fields).replace('True','✅').replace('False','❌')
         return self.__display_map.format(**self.fields).replace('True','✅').replace('False','❌')
 
     def set_fields(self, fields):

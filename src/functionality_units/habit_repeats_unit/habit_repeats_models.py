@@ -19,6 +19,7 @@ class WeekPattern:
     must not be empty
     e.g mon fri sat
     mon
+    {'week1':['mon','tue','wed','fr']}
     '''
     week_patterns = dict()
     def __init__(self,name):
@@ -43,7 +44,10 @@ class WeekPattern:
 class WeekPatternManager:
     def find_week_pattern(self,name):
         return WeekPattern.week_patterns.get(name,None)
-
+    
+    def get_saved_weeks(self):
+        return WeekPattern.week_patterns
+    
     def delete_week_pattern(self,name):
         WeekPattern.week_patterns.pop(name,None)
 
@@ -56,6 +60,11 @@ class WeekPatternManager:
             WeekPattern.week_patterns[name] = week_pattern
             return True,'week pattern saved successfully'
         return False, f'Sorry new week pattern with name \'{name}\' already exists'
+
+    @classmethod   
+    def clear(cls):
+        WeekPattern.week_patterns = []
+
 
 class MonthPattern:
     '''
@@ -70,12 +79,13 @@ class MonthPattern:
     month
     week1 week2 week3 week4
     week1 skip week2 week3 week4
+    {'month1':['week1','week2','skip','week4']}
     '''
     monthPatterns = dict()
     def __init__(self,name):
         self.__name = name
         self.__month_pattern = []
-        self.__week_patterns = []
+        self.__week_patterns = WeekPattern.week_patterns
 
     def set_month_pattern(self,month_pattern):
         self.__month_pattern = month_pattern
@@ -106,34 +116,40 @@ class MonthPatternManager:
         if name in MonthPattern.monthPatterns:
             MonthPattern.monthPatterns[name] = month_pattern
 
+    def get_saved_months(self):
+        return MonthPattern.monthPatterns
+
     def save_month_pattern(self,name,month_pattern):
         if name not in MonthPattern.monthPatterns:
             MonthPattern.monthPatterns[name] = month_pattern
+    @classmethod   
+    def clear(cls):
+        MonthPattern.monthPatterns = []
 
-class MonthPatterns:
+class MonthsPatterns:
     '''
-
+    months - ['month2','month10','month1']
     '''
-    monthPatterns = dict()
-    def __init__(self,name):
-        self.__name = name
-        self.__month_pattern = []
-        self.__week_patterns = []
+    def __init__(self):
+        self.__months_pattern = []
+        self.__saved = False
 
-    def set_month_pattern(self,month_pattern):
-        self.__month_pattern = month_pattern
+    def set_months_pattern(self,months_pattern):
+        self.__months_pattern = months_pattern
     
-    def set_week_patterns(self,week_patterns):
-        self.__week_patterns = week_patterns
-
-    def get_week_patterns(self):
-        return self.__week_patterns
-
-    def get_month_pattern(self):
-        return self.__month_pattern
+    def get_months_pattern(self):
+        if self.__saved:
+            self.__saved = False
+            months_patterns = self.__months_pattern.copy()
+            self.__months_pattern = []
+            return months_patterns
+        return self.__months_pattern
     
-    def get_name(self):
-        return self.__name
-    
-    def set_name(self,name):
-        self.__name = name
+    def save_months_pattern(self):
+        self.__months_pattern = [
+            {month_pattern:MonthPattern.monthPatterns[month_pattern]}
+            for month_pattern in MonthPattern.monthPatterns 
+        ]
+        self.__saved = True
+        MonthPatternManager.clear()
+        WeekPatternManager.clear()

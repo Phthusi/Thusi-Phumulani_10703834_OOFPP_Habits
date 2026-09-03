@@ -5,8 +5,10 @@ class WeekPatternValidator:
         self.__week_pattern = week_pattern
 
     @classmethod
-    def is_name_pattern_valid(cls,name):
+    def is_name_pattern_valid(cls,name,names):
         min_length = 3
+        alphabet = 'abcdefghijklmnopqrstuvwxyz'
+        numbers = '0123456789'
         if not isinstance(name,str):
             return False,"name must be a string"
 
@@ -16,6 +18,15 @@ class WeekPatternValidator:
         if len(name) < min_length:
             return False,"name must be at least 3 characters long" 
 
+        if not all(list(map(lambda char:char in alphabet or char in numbers,name))):
+            return False,"name must be only be comprised of numbers[0-9] and alphabets[a-z]"
+        
+        if name[0] in numbers:
+            return False,"name must begin with an alphabet[a-z]"
+        
+        if name in names:
+            return False,"name already exists"
+        
         return True,"name is valid"
     
     @classmethod
@@ -27,11 +38,11 @@ class WeekPatternValidator:
         week_days = ["mon","tue","wed","thu","fri","sat","sun"]
         if not isinstance(pattern,list):
             return False,"week pattern must be a list"
-        if not pattern:
+        if pattern==[]:
             return False,"week pattern must not be empty"
         
-        invalid_days = [day for day in pattern if day not in week_days]
-        if invalid_days:
+        invalid_days = [day for day in pattern if day in week_days]
+        if not all(invalid_days):
             return False,f"{', '.join(invalid_days)} are not valid week days"
         return True,"week pattern is valid"
     
@@ -53,8 +64,8 @@ class MonthPatternValidator:
             return False,"month pattern must be a list"
         if not pattern:
             return False,"month pattern must not be empty"
-        invalid_month = [month not in MonthPattern.monthPatterns.keys() for month in pattern]
-        if invalid_month:
+        invalid_month = [month in MonthPattern.monthPatterns.keys() for month in pattern]
+        if not all(invalid_month):
             return False,f"{', '.join(invalid_month)} are not valid month patterns"
         return True,"month pattern is valid"
 
@@ -71,16 +82,3 @@ class MonthPatternValidator:
     def month_pattern_exists(cls,name):
         return name in MonthPattern.monthPatterns.keys()
     
-    @classmethod
-    def is_name_pattern_valid(cls,name):
-        min_length = 3
-        if not isinstance(name,str):
-            return False,"name must be a string"
-        
-        if ' ' in name:
-            return False,"name must not have a space"
-
-        if len(name) < min_length:
-            return False,"name must be at least 3 characters long" 
-
-        return True,"name is valid"
