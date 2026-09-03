@@ -23,7 +23,7 @@ class WeekPattern:
     '''
     week_patterns = dict()
     def __init__(self,name):
-        self.name = name
+        self.__name = name
         self.__week_pattern = []
 
     def set_week_pattern(self,week_pattern):

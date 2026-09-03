@@ -49,6 +49,35 @@ class HabitRepeats:
             case 4:
                 self.__levels = {'level1':' ','level2':' ','level3':'➡️'}
 
+
+    def __set_habit_week_pattern_name(self,message,field_pair=None):
+        history_file_name='week_pattern_name'
+        commands = []
+        self.__main_autocompleter = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
+        self.__main_autocompleter.set_has_status(True)
+        modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
+        return self.__main_autocompleter.prompt_input(message,location=f"Home/RepeatHabit/{modified_history_file_name}",field_pair=field_pair,example=f'Input Format  : YYYY-MM-DD HH:MM\nInput Example : 2026-06-30 16:45\nyear = 2026, month = June, day = 30th, time= 4pm, 45 minutes\n{'-'*95}\n[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands').lower()
+
+    @retry_until_success
+    def set_habit_week_pattern_name(self,message):
+        clear_screen()
+        week_pattern_name = self.__set_habit_week_pattern_name(message,(self.__form.get_field_status('week_pattern_name'),self.__week_pattern.get_name()))
+        # ********* start of common functions ************
+        did_run_common_func = ran_common_functions(week_pattern_name)
+        if did_run_common_func==False:
+            return True, 'Escaping...'
+        elif did_run_common_func==True:
+            return False, 'switching'
+        # ********** end of common functions ************
+        
+        is_week_pattern_valid, message = self.__week_pattern_validator.is_name_pattern_valid(week_pattern_name, self.__week_pattern_manager.get_saved_weeks().keys())
+        if is_week_pattern_valid:
+            self.__form.set_field_status('week_pattern_name',True)
+            self.__level_management(self.__form.number_of_filled_fields())
+            self.__form = Form(self.__form.get_fields(),self.display_map,levels=self.__levels)
+            self.__week_pattern.set_name(week_pattern_name)
+        return is_week_pattern_valid, message
+
     def __set_habit_week_pattern(self,message,field_pair=None):
         history_file_name='week_pattern'
         commands = []
@@ -68,13 +97,13 @@ class HabitRepeats:
         elif did_run_common_func==True:
             return False, 'switching'
         # ********** end of common functions ************
-        # if self.__week_pattern.get_name()=='default':
-        #     return False,'please set the week pattern name first'
+        
+        if self.__week_pattern.get_name()=='default':
+            return False,'please set the week pattern name first'
         
         is_week_pattern_valid, message = self.__week_pattern_validator.is_week_pattern_valid(week_pattern.split(' '))
         if is_week_pattern_valid:
             self.__form.set_field_status('week_pattern',True)
-            self.__form.set_field_status('week_pattern_name',True)
             self.__level_management(self.__form.number_of_filled_fields())
             self.__form = Form(self.__form.get_fields(),self.display_map,levels=self.__levels)
             return self.__week_pattern_manager.save_week_pattern('default',week_pattern.split(' '))
@@ -86,9 +115,9 @@ class HabitRepeats:
                     self.set_habit_week_pattern,
                     "Enter the week pattern: "
                     ],
-            'start_datetime':[
-                    self.__habit_inputs.set_start_datetime,
-                    "Enter the habit datetime: "
+            'week pattern name':[
+                    self.set_habit_week_pattern_name,
+                    "Enter the week pattern name: "
                 ],
             'duration':[
                 self.__habit_inputs.set_session_duration,
