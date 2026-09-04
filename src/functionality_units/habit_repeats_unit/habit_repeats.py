@@ -261,7 +261,15 @@ class HabitRepeats:
                     break
                 case 'clear':
                     clear_screen()
+            if user_input=='copy habit from shelf':
+                funct = command_functions[user_input]
+                funct()
             
+            if self.__update_habit_inputs.get_habit() is None:
+                print('Copy the habit sesssion from the shelf before completing it')
+                input('Press Enter to continue')
+                continue
+
             if user_input not in commands:
                 print('invalid input')
                 continue
