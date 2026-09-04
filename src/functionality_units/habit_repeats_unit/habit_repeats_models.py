@@ -122,6 +122,9 @@ class MonthPatternManager:
     def save_month_pattern(self,name,month_pattern):
         if name not in MonthPattern.monthPatterns:
             MonthPattern.monthPatterns[name] = month_pattern
+            return True,'month pattern saved successfully'
+        return False, f'Sorry new month pattern with name \'{name}\' already exists'
+
     @classmethod   
     def clear(cls):
         MonthPattern.monthPatterns = []

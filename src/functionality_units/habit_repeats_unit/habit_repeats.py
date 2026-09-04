@@ -1,5 +1,5 @@
-from .habit_repeats_models import WeekPatternManager,WeekPattern,MonthPatternManager
-from .habit_repeats_validator import WeekPatternValidator
+from .habit_repeats_models import WeekPatternManager,WeekPattern,MonthPatternManager,MonthPattern
+from .habit_repeats_validator import WeekPatternValidator,MonthPatternValidator
 from ..habit_input import Habit_Inputs
 from pathlib import Path
 from ...data.db_manager import CompleteHabit, Habits
@@ -14,9 +14,12 @@ class HabitRepeats:
     def __init__(self):
         self.__habit_inputs = Habit_Inputs(BASE_DIR)
         self.__week_pattern_manager = WeekPatternManager()
+        self.__month_pattern_manager = MonthPatternManager()
         self.__week_pattern = WeekPattern('default')
-        self.__week_pattern_validator = WeekPatternValidator(self.__week_pattern_manager)
-        self.progress_bar = ProgressBar(6)
+        self.__week_pattern_validator = WeekPatternValidator(self.__week_pattern)
+        self.__month_pattern = MonthPattern('default')
+        self.__month_pattern_validator = MonthPatternValidator(self.__week_pattern)
+        self.progress_bar = ProgressBar(7)
         self.__levels = {'level1':'➡️','level2':' ','level3':' '}
         self.display_map = """
     ----------------------------------------------------------------------------------------------------------------------------
@@ -48,7 +51,6 @@ class HabitRepeats:
                 self.__levels = {'level1':' ','level2':'➡️','level3':' '}
             case 4:
                 self.__levels = {'level1':' ','level2':' ','level3':'➡️'}
-
 
     def __set_habit_week_pattern_name(self,message,field_pair=None):
         history_file_name='week_pattern_name'
@@ -106,27 +108,86 @@ class HabitRepeats:
             self.__form.set_field_status('week_pattern',True)
             self.__level_management(self.__form.number_of_filled_fields())
             self.__form = Form(self.__form.get_fields(),self.display_map,levels=self.__levels)
-            return self.__week_pattern_manager.save_week_pattern('default',week_pattern.split(' '))
+            return self.__week_pattern_manager.save_week_pattern(self.__week_pattern.get_name(),week_pattern.split(' '))
         return is_week_pattern_valid, message
+
+    def __set_habit_month_pattern(self,message,field_pair=None):
+        history_file_name='month_pattern'
+        commands = self.__week_pattern.week_patterns.keys()
+        self.__main_autocompleter = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
+        self.__main_autocompleter.set_has_status(True)
+        modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
+        return self.__main_autocompleter.prompt_input(message,location=f"Home/RepeatHabit/{modified_history_file_name}",field_pair=field_pair,example=f'Input Format  : YYYY-MM-DD HH:MM\nInput Example : 2026-06-30 16:45\nyear = 2026, month = June, day = 30th, time= 4pm, 45 minutes\n{'-'*95}\n[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands').lower()
+
+    @retry_until_success
+    def set_habit_month_pattern(self,message):
+        clear_screen()
+        month_pattern = self.__set_habit_month_pattern(message,(self.__form.get_field_status('month_pattern'),self.__month_pattern_manager.get_saved_months()))
+        # ********* start of common functions ************
+        did_run_common_func = ran_common_functions(month_pattern)
+        if did_run_common_func==False:
+            return True, 'Escaping...'
+        elif did_run_common_func==True:
+            return False, 'switching'
+        # ********** end of common functions ************
+        
+        if self.__month_pattern.get_name()=='default':
+            return False,'please set the month pattern name first'
+        
+        is_month_pattern_valid, message = self.__month_pattern_validator.is_month_pattern_valid(month_pattern.split(' '))
+        if is_month_pattern_valid:
+            self.__form.set_field_status('month_pattern',True)
+            self.__level_management(self.__form.number_of_filled_fields())
+            self.__form = Form(self.__form.get_fields(),self.display_map,levels=self.__levels)
+            return self.__month_pattern_manager.save_month_pattern(self.__week_pattern.get_name(),month_pattern.split(' '))
+        return is_month_pattern_valid, message
+
+    def __set_habit_month_pattern_name(self,message,field_pair=None):
+        history_file_name='month_pattern_name'
+        commands = []
+        self.__main_autocompleter = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
+        self.__main_autocompleter.set_has_status(True)
+        modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
+        return self.__main_autocompleter.prompt_input(message,location=f"Home/RepeatHabit/{modified_history_file_name}",field_pair=field_pair,example=f'Input Format  : YYYY-MM-DD HH:MM\nInput Example : 2026-06-30 16:45\nyear = 2026, month = June, day = 30th, time= 4pm, 45 minutes\n{'-'*95}\n[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands').lower()
+
+    @retry_until_success
+    def set_habit_month_pattern_name(self,message):
+        clear_screen()
+        month_pattern_name = self.__set_habit_month_pattern_name(message,(self.__form.get_field_status('month_pattern_name'),self.__month_pattern.get_name()))
+        # ********* start of common functions ************
+        did_run_common_func = ran_common_functions(month_pattern_name)
+        if did_run_common_func==False:
+            return True, 'Escaping...'
+        elif did_run_common_func==True:
+            return False, 'switching'
+        # ********** end of common functions ************
+        
+        is_month_pattern_valid, message = self.__week_pattern_validator.is_name_pattern_valid(month_pattern_name, self.__month_pattern_manager.get_saved_months().keys())
+        if is_month_pattern_valid:
+            self.__form.set_field_status('month_pattern_name',True)
+            self.__level_management(self.__form.number_of_filled_fields())
+            self.__form = Form(self.__form.get_fields(),self.display_map,levels=self.__levels)
+            self.__month_pattern.set_name(month_pattern_name)
+        return is_month_pattern_valid, message
 
     def run(self):
         command_functions = {
-            'week pattern':[
-                    self.set_habit_week_pattern,
-                    "Enter the week pattern: "
-                    ],
             'week pattern name':[
                     self.set_habit_week_pattern_name,
                     "Enter the week pattern name: "
                 ],
-            'duration':[
-                self.__habit_inputs.set_session_duration,
-                "Enter the habit session duration: "
-            ],
-            'save':[
-                self.__habit_inputs.save,
-                ""
-            ]
+            'week pattern':[
+                self.set_habit_week_pattern,
+                "Enter the week pattern: "
+                ],
+            'month pattern name':[
+                    self.set_habit_month_pattern_name,
+                    "Enter the month pattern name: "
+                ],
+            'month pattern':[
+                    self.set_habit_month_pattern,
+                    "Enter the month pattern: "
+                    ],
         }
         while True:
             clear_screen()

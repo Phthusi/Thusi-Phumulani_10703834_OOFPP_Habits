@@ -58,19 +58,28 @@ class WeekPatternValidator:
         return True,"week pattern is valid"
 
 class MonthPatternValidator:
-    @classmethod
-    def is_month_pattern_valid(cls,pattern):
+    def __init__(self,week_pattern:WeekPattern):
+        self.__week_pattern = week_pattern
+  
+    def is_month_pattern_valid(self,pattern):
         if not isinstance(pattern,list):
             return False,"month pattern must be a list"
         if not pattern:
             return False,"month pattern must not be empty"
-        invalid_month = [month in MonthPattern.monthPatterns.keys() for month in pattern]
+        if len(pattern)!=4:
+            return False, "month must have 4 weeks"
+
+        if all(map(lambda month: month=='skip',pattern)):
+            return False, "month must have 4 skips"
+        
+        valid_weeks = list(self.__week_pattern.week_patterns.keys())
+        valid_weeks.extend(['skip'])
+        invalid_month = [month in valid_weeks for month in pattern]
         if not all(invalid_month):
-            return False,f"{', '.join(invalid_month)} are not valid month patterns"
+            return False,f"{', '.join([month for month in pattern if month not in valid_weeks])} are not valid week days"
         return True,"month pattern is valid"
 
-    @classmethod
-    def is_week_patterns_valid(cls,week_patterns):
+    def is_week_patterns_valid(self,week_patterns):
         week_validator = WeekPatternValidator()
         for week_pattern in week_patterns:
             success,message = week_validator.is_week_valid(week_pattern)
