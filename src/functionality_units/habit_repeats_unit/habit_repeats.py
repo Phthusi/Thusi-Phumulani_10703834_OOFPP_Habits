@@ -7,6 +7,7 @@ from ..ui.terminal_utils import clear_screen
 from ..ui.command_autocomplete import AutoCompleter,Form
 from ..ui.command_autocomplete import ProgressBar
 from ..ui.terminal_utils import ran_common_functions, retry_until_success
+from ..update_habit.update_habit_inputs import UpdateHabitInputs
 from colorama import Fore, Style, Back
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -14,6 +15,7 @@ BASE_DIR = Path(__file__).resolve().parent
 class HabitRepeats:
     def __init__(self):
         self.__habit_inputs = Habit_Inputs(BASE_DIR)
+        self.__update_habit_inputs = UpdateHabitInputs()
         self.__week_pattern_manager = WeekPatternManager()
         self.__month_pattern_manager = MonthPatternManager()
         self.__week_pattern = WeekPattern('default')
@@ -176,7 +178,7 @@ class HabitRepeats:
             self.__month_pattern.set_name(month_pattern_name)
         return is_month_pattern_valid, message
 
-    def run(self):
+    def run_custom_repeats(self):
         command_functions = {
             'week pattern name':[
                     self.set_habit_week_pattern_name,
@@ -202,7 +204,7 @@ class HabitRepeats:
             if not all(self.__form.fields.values()):
                 self.__form.set_display_map(self.__form.get_raw_map().replace('🔓','🔒'))
             commands = list(command_functions.keys())
-            history_file_name = 'repeat_habit'
+            history_file_name = 'custom_repeat_habit'
             user_input = self.__my_input("Enter command: ",history_file_name,commands,example='┌💁  Please note that you must start filling the level one parameters before you do the actions in level 2 ⸣\n⸤💡  [↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands         ⸥')
             
             match user_input:
@@ -227,4 +229,43 @@ class HabitRepeats:
             else:
                 display_message = func(message)
 
+            clear_screen()
+    
+    def run_week_repeats(self):
+        print("This feature is under development. Please check back later.")
+        input("Press Enter to return to the main menu...")
+
+    def run_monthly_repeats(self):
+        print("This feature is under development. Please check back later.")
+        input("Press Enter to return to the main menu...")
+
+    def __basic_input(self,message,commands,history_file_name,example=None):
+        auto_completer = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
+        self.__update_habit_inputs.display_copied_habit()
+        return auto_completer.prompt_input(message,commands,example,location=f"Home/RepeatHabit").lower()
+
+    def run(self):
+        command_functions = {
+            'run custom repeat pattern':self.run_custom_repeats,
+            'run weekly repeat pattern':self.run_week_repeats,
+            'run monthly repeat pattern':self.run_monthly_repeats,  
+            'copy habit from shelf':self.__update_habit_inputs.collect_copied_habit
+        }
+        commands = list(command_functions.keys())
+        while True:
+            clear_screen()
+            history_file_name = 'repeat_habit'
+            user_input = self.__basic_input("Enter command: ",commands,history_file_name,'[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands')
+            match user_input:
+                case 'esc':
+                    break
+                case 'clear':
+                    clear_screen()
+            
+            if user_input not in commands:
+                print('invalid input')
+                continue
+            
+            func = command_functions[user_input]
+            func()
             clear_screen()

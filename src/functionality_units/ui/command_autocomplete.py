@@ -4,7 +4,7 @@ from rich.panel import Panel
 from rich.progress import BarColumn, Progress, TextColumn
 from prompt_toolkit import PromptSession
 from prompt_toolkit.formatted_text import ANSI
-from prompt_toolkit.completion import WordCompleter, FuzzyCompleter
+from prompt_toolkit.completion import WordCompleter, FuzzyCompleter 
 from prompt_toolkit.history import FileHistory
 from src.data.db_functionality.db_interface import DB_Interface
 from src.data.db_manager import Habits
@@ -12,6 +12,11 @@ from src.functionality_units.time_project.time_manager import HabitDateTimeManag
 from .read_json import read_json_files
 from colorama import Fore, Style
 from ..shelf import Shelf
+
+'''
+update functionality FOR WEEKS
+update functionality FOR MONTHS
+'''
 
 shelf = Shelf()
 
