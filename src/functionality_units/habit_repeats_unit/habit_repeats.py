@@ -8,6 +8,7 @@ from ..ui.command_autocomplete import AutoCompleter,Form
 from ..ui.command_autocomplete import ProgressBar
 from ..ui.terminal_utils import ran_common_functions, retry_until_success
 from ..update_habit.update_habit_inputs import UpdateHabitInputs
+from ..shelf import Shelf
 from colorama import Fore, Style, Back
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -22,6 +23,7 @@ class HabitRepeats:
         self.__week_pattern_validator = WeekPatternValidator(self.__week_pattern)
         self.__month_pattern = MonthPattern('default')
         self.__month_pattern_validator = MonthPatternValidator(self.__week_pattern)
+        self.__shelf = Shelf()
         self.progress_bar = ProgressBar(7)
         self.__levels = {'level1':'➡️','level2':' ','level3':' '}
         self.display_map = """
@@ -241,15 +243,16 @@ class HabitRepeats:
 
     def __basic_input(self,message,commands,history_file_name,example=None):
         auto_completer = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
+        print(Fore.LIGHTBLACK_EX+self.__shelf.display_state().replace('  :',':')+Fore.RESET)
         self.__update_habit_inputs.display_copied_habit()
         return auto_completer.prompt_input(message,commands,example,location=f"Home/RepeatHabit").lower()
 
     def run(self):
         command_functions = {
+            'copy habit from shelf':self.__update_habit_inputs.collect_copied_habit,
             'run custom repeat pattern':self.run_custom_repeats,
             'run weekly repeat pattern':self.run_week_repeats,
             'run monthly repeat pattern':self.run_monthly_repeats,  
-            'copy habit from shelf':self.__update_habit_inputs.collect_copied_habit
         }
         commands = list(command_functions.keys())
         while True:
