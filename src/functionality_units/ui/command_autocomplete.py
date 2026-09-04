@@ -172,7 +172,7 @@ class AutoCompleter:
     def get_session(self):
         return self.__session
 
-    def prompt_input(self, message, commands=None,example=None,location='Home',field_pair=None):
+    def prompt_input(self, message, commands=None,example=None,location='Home',field_pair=None,multiple_values=""):
         update_habit_statuses()
         if field_pair is None:
             field_status=None
@@ -188,5 +188,5 @@ class AutoCompleter:
             status = field_status
             if status!=None:
                 print(f"""{Fore.LIGHTBLACK_EX}Status        : {status}
-Current Value : {Fore.LIGHTBLUE_EX if field_value is None else Fore.LIGHTGREEN_EX}{field_value if field_value is not None else 'N/A'}{Fore.RESET}""")
+Current Value : {Fore.LIGHTBLUE_EX if field_value is None else Fore.LIGHTGREEN_EX}{field_value if field_value is not None else 'N/A'}{Fore.LIGHTBLACK_EX + multiple_values}{Fore.RESET}""")
         return self.get_session().prompt(ANSI(prompt_string)).strip()

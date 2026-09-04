@@ -7,6 +7,7 @@ from ..ui.terminal_utils import clear_screen
 from ..ui.command_autocomplete import AutoCompleter,Form
 from ..ui.command_autocomplete import ProgressBar
 from ..ui.terminal_utils import ran_common_functions, retry_until_success
+from colorama import Fore, Style, Back
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -33,7 +34,7 @@ class HabitRepeats:
         self.__form = Form({field: False for field in ['week_pattern_name','week_pattern','month_pattern','month_pattern_name','months_pattern']},self.display_map,levels=self.__levels)
         self.__current_filled_fields = self.__form.number_of_filled_fields()
 
-    def __my_input(self,message,history_file_name,commands,field_pair=None,example=None):
+    def __my_input(self,message,history_file_name,commands,field_pair=None,example=None,multiple_values=''):
         self.__main_auto_completer = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
         if self.__current_filled_fields != self.__form.number_of_filled_fields():
             self.progress_bar.increase_progress_percentage(self.__form.number_of_filled_fields())
@@ -43,7 +44,7 @@ class HabitRepeats:
         self.progress_bar.display_progress_bar(self.__form.get_display_map())
         self.__main_auto_completer.set_has_status(True)
         modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
-        return self.__main_auto_completer.prompt_input(message,location=f"Home/RepeatHabit/{modified_history_file_name}",field_pair=field_pair,example=example).lower()
+        return self.__main_auto_completer.prompt_input(message,location=f"Home/RepeatHabit/{modified_history_file_name}",field_pair=field_pair,example=example,multiple_values=multiple_values).lower()
 
     def __level_management(self,no_of_filled_fields):
         match no_of_filled_fields:
@@ -86,12 +87,13 @@ class HabitRepeats:
         self.__main_autocompleter = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
         self.__main_autocompleter.set_has_status(True)
         modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
-        return self.__main_autocompleter.prompt_input(message,location=f"Home/RepeatHabit/{modified_history_file_name}",field_pair=field_pair,example=f'Input Format  : YYYY-MM-DD HH:MM\nInput Example : 2026-06-30 16:45\nyear = 2026, month = June, day = 30th, time= 4pm, 45 minutes\n{'-'*95}\n[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands').lower()
+        multiple_values = f"\nCurrent Value list : {Fore.LIGHTBLUE_EX if self.__week_pattern.week_patterns is None else Fore.LIGHTGREEN_EX}{self.__week_pattern.week_patterns if self.__week_pattern.week_patterns is not None else 'N/A'}{Fore.RESET}"
+        return self.__main_autocompleter.prompt_input(message,location=f"Home/RepeatHabit/{modified_history_file_name}",field_pair=field_pair,example=f'Input Format  : YYYY-MM-DD HH:MM\nInput Example : 2026-06-30 16:45\nyear = 2026, month = June, day = 30th, time= 4pm, 45 minutes\n{'-'*95}\n[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands',multiple_values=multiple_values).lower()
 
     @retry_until_success
     def set_habit_week_pattern(self,message):
         clear_screen()
-        week_pattern = self.__set_habit_week_pattern(message,(self.__form.get_field_status('week_pattern'),self.__week_pattern_manager.get_saved_weeks()))
+        week_pattern = self.__set_habit_week_pattern(message,(self.__form.get_field_status('week_pattern'),None if self.__week_pattern.get_name()=='default' else self.__week_pattern.get_name()))
         # ********* start of common functions ************
         did_run_common_func = ran_common_functions(week_pattern)
         if did_run_common_func==False:
@@ -117,12 +119,16 @@ class HabitRepeats:
         self.__main_autocompleter = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
         self.__main_autocompleter.set_has_status(True)
         modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
-        return self.__main_autocompleter.prompt_input(message,location=f"Home/RepeatHabit/{modified_history_file_name}",field_pair=field_pair,example=f'Input Format  : YYYY-MM-DD HH:MM\nInput Example : 2026-06-30 16:45\nyear = 2026, month = June, day = 30th, time= 4pm, 45 minutes\n{'-'*95}\n[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands').lower()
+        multiple_values = f"\nCurrent Value list : {Fore.LIGHTBLUE_EX if self.__month_pattern.monthPatterns is None else Fore.LIGHTGREEN_EX}{self.__month_pattern.monthPatterns if self.__month_pattern.monthPatterns is not None else 'N/A'}{Fore.RESET}"
+        return self.__main_autocompleter.prompt_input(message,location=f"Home/RepeatHabit/{modified_history_file_name}",field_pair=field_pair,example=f'Input Format  : YYYY-MM-DD HH:MM\nInput Example : 2026-06-30 16:45\nyear = 2026, month = June, day = 30th, time= 4pm, 45 minutes\n{'-'*95}\n[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands',multiple_values=multiple_values).lower()
 
     @retry_until_success
     def set_habit_month_pattern(self,message):
         clear_screen()
-        month_pattern = self.__set_habit_month_pattern(message,(self.__form.get_field_status('month_pattern'),self.__month_pattern_manager.get_saved_months()))
+        if self.__week_pattern.week_patterns == {}:
+            return True,'please set the week pattern first'
+        
+        month_pattern = self.__set_habit_month_pattern(message,(self.__form.get_field_status('month_pattern'),self.__month_pattern.get_name()))
         # ********* start of common functions ************
         did_run_common_func = ran_common_functions(month_pattern)
         if did_run_common_func==False:
@@ -130,7 +136,7 @@ class HabitRepeats:
         elif did_run_common_func==True:
             return False, 'switching'
         # ********** end of common functions ************
-        
+
         if self.__month_pattern.get_name()=='default':
             return False,'please set the month pattern name first'
         
@@ -139,7 +145,7 @@ class HabitRepeats:
             self.__form.set_field_status('month_pattern',True)
             self.__level_management(self.__form.number_of_filled_fields())
             self.__form = Form(self.__form.get_fields(),self.display_map,levels=self.__levels)
-            return self.__month_pattern_manager.save_month_pattern(self.__week_pattern.get_name(),month_pattern.split(' '))
+            return self.__month_pattern_manager.save_month_pattern(self.__month_pattern.get_name(),month_pattern.split(' '))
         return is_month_pattern_valid, message
 
     def __set_habit_month_pattern_name(self,message,field_pair=None):
