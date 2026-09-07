@@ -129,30 +129,24 @@ class MonthPatternManager:
     def clear(cls):
         MonthPattern.monthPatterns = []
 
-class MonthsPatterns:
+class MonthsPattern:
     '''
     months - ['month2','month10','month1']
     '''
     def __init__(self):
         self.__months_pattern = []
-        self.__saved = False
 
     def set_months_pattern(self,months_pattern):
         self.__months_pattern = months_pattern
     
     def get_months_pattern(self):
-        if self.__saved:
-            self.__saved = False
-            months_patterns = self.__months_pattern.copy()
-            self.__months_pattern = []
-            return months_patterns
         return self.__months_pattern
     
     def save_months_pattern(self):
-        self.__months_pattern = [
+        self.__months_pattern  = [
             {month_pattern:MonthPattern.monthPatterns[month_pattern]}
-            for month_pattern in MonthPattern.monthPatterns 
+            if month_pattern!='skip'
+            else {'skip':''}
+            for month_pattern in self.__months_pattern 
         ]
-        self.__saved = True
-        MonthPatternManager.clear()
-        WeekPatternManager.clear()
+        return True,'success...'

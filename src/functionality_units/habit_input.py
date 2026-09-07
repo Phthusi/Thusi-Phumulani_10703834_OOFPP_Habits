@@ -166,6 +166,19 @@ class Habit_Inputs:
         self.__shelf.preserve_habit((id+1,self.__habit.get_name(),self.__habit.get_start_date(),self.__habit.get_session_duration(),'UPCOMING',self.__habit.get_periodicity()))
         return True, f'✅ Habit saved successfully....\n{habit_to_be_added.replace("Habit to be added","Habit added")}'
 
+    def get_clashing_habits(self,habits_to_be_added):
+        habits = Habits().get_habit_by_status_excluding_some_statuses(['MISSED','UNKNOWN'])
+        clash_pairs = []
+        for habit_to_be_added in habits_to_be_added:
+            id_1, name_1, start_datetime_1, duration_1, status_1, periodicity_1 = habit_to_be_added
+            for habit in habits: 
+                id, name, start_datetime, duration, status, periodicity = habit
+                datetime2 = self.__datetime_manager.string_to_datetime(start_datetime)
+                duration2 = self.__datetime_manager.convert_duration(duration)
+                if self.__datetime_manager.is_clashing(self.__datetime_manager.string_to_datetime(start_datetime_1), self.__datetime_manager.convert_duration(duration_1), datetime2, duration2):
+                    clash_pairs.append((habit_to_be_added, habit))
+        return clash_pairs
+
     def save(self):
         is_valid, message = self._Habit_Inputs__habit._CompleteHabit__validator.validate()
         if not is_valid: return False, message
@@ -179,3 +192,32 @@ class Habit_Inputs:
             return is_valid_habit, 'successfully saved'
         input('        [Press Enter to continue]       ')
         return False, 'Unsuccessful'
+
+    def display_habit_pairs(self,habit_pairs):
+        for count,habit_pair in enumerate(habit_pairs):
+            habit_to_be_added, habit_from_db = habit_pair
+            id_1, name_1, start_datetime_1, duration_1, status_1, periodicity_1 = habit_to_be_added
+            id_2, name_2, start_datetime_2, duration_2, status_2, periodicity_2 = habit_from_db
+            print(f'''CASE No:{count+1}
+{Back.BLUE}{Fore.WHITE}             Habit                      {Back.RESET}
+ id               : {id_2}
+ name             :{name_2} 
+ start_datetime   :{start_datetime_2}
+ session_duration :{duration_2}
+ status           :{status_2}
+ periodicity      :{periodicity_2}
+ weekday          :{self.__datetime_manager.get_weekday(str(start_datetime_2).split(' ')[0])}
+-----------------------------------------
+
+            CLASHES WITH
+            
+{Back.BLUE}{Fore.WHITE}            New Habit                   {Back.RESET}
+ id               : {id_1}
+ name             :{name_1} 
+ start_datetime   :{start_datetime_1}
+ session_duration :{duration_1}
+ status           :{status_1}
+ periodicity      :{periodicity_1}
+ weekday          :{self.__datetime_manager.get_weekday(str(start_datetime_2).split(' ')[0])}
+-----------------------------------------
+''')

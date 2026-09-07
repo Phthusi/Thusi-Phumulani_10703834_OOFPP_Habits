@@ -1,5 +1,5 @@
-from .habit_repeats_models import WeekPatternManager,WeekPattern,MonthPatternManager,MonthPattern
-from .habit_repeats_validator import WeekPatternValidator,MonthPatternValidator
+from .habit_repeats_models import WeekPatternManager,WeekPattern,MonthPatternManager,MonthPattern, MonthsPattern
+from .habit_repeats_validator import WeekPatternValidator,MonthPatternValidator, MonthsPatternValidator
 from ..habit_input import Habit_Inputs
 from pathlib import Path
 from ...data.db_manager import CompleteHabit, Habits
@@ -10,6 +10,7 @@ from ..ui.terminal_utils import ran_common_functions, retry_until_success
 from ..update_habit.update_habit_inputs import UpdateHabitInputs
 from ..shelf import Shelf
 from colorama import Fore, Style, Back
+from ..time_project.time_manager import HabitDateTimeManager
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -18,14 +19,18 @@ class HabitRepeats:
         self.__habit_inputs = Habit_Inputs(BASE_DIR)
         self.__update_habit_inputs = UpdateHabitInputs()
         self.__week_pattern_manager = WeekPatternManager()
-        self.__month_pattern_manager = MonthPatternManager()
+        self.__month_pattern_manager = MonthPatternManager()        
         self.__week_pattern = WeekPattern('default')
         self.__week_pattern_validator = WeekPatternValidator(self.__week_pattern)
         self.__month_pattern = MonthPattern('default')
         self.__month_pattern_validator = MonthPatternValidator(self.__week_pattern)
+        self.__months_pattern = MonthsPattern()
+        self.__months_pattern_validator = MonthsPatternValidator(self.__month_pattern)
         self.__shelf = Shelf()
         self.progress_bar = ProgressBar(7)
-        self.__levels = {'level1':'➡️','level2':' ','level3':' '}
+        self.__habit_date_time_manger = HabitDateTimeManager()
+
+        self.__levels = {'level1':'➡️','level2':' ','level3':' ','level4':' '}
         self.display_map = """
     ----------------------------------------------------------------------------------------------------------------------------
 {level1}   [bold cyan]📌 LEVEL 1: PARAMETERS[/] [green]{week_pattern_name}[/] Week Pattern Name    {week_pattern} Week Pattern
@@ -34,7 +39,7 @@ class HabitRepeats:
     ----------------------------------------------------------------------------------------------------------------------------
 {level3}   [bold cyan]📌 LEVEL 3: PARAMETERS[/] [green]{months_pattern}[/] Months Pattern
     ---------------------------------------------------------------------------------------------------------------------------- 
-    [bold cyan]🔒 LEVEL 4: ACTION(S) [/] Save"""
+{level4}    [bold cyan]🔒 LEVEL 4: ACTION(S) [/] Save"""
         self.__form = Form({field: False for field in ['week_pattern_name','week_pattern','month_pattern','month_pattern_name','months_pattern']},self.display_map,levels=self.__levels)
         self.__current_filled_fields = self.__form.number_of_filled_fields()
 
@@ -53,9 +58,11 @@ class HabitRepeats:
     def __level_management(self,no_of_filled_fields):
         match no_of_filled_fields:
             case 2:
-                self.__levels = {'level1':' ','level2':'➡️','level3':' '}
+                self.__levels = {'level1':' ','level2':'➡️','level3':' ','level4':' '}
             case 4:
-                self.__levels = {'level1':' ','level2':' ','level3':'➡️'}
+                self.__levels = {'level1':' ','level2':' ','level3':'➡️','level4':' '}
+            case 5:
+                self.__levels = {'level1':' ','level2':' ','level3':' ','level4':'➡️'}
 
     def __set_habit_week_pattern_name(self,message,field_pair=None):
         history_file_name='week_pattern_name'
@@ -63,7 +70,7 @@ class HabitRepeats:
         self.__main_autocompleter = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
         self.__main_autocompleter.set_has_status(True)
         modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
-        return self.__main_autocompleter.prompt_input(message,location=f"Home/RepeatHabit/{modified_history_file_name}",field_pair=field_pair,example=f'Input Format  : YYYY-MM-DD HH:MM\nInput Example : 2026-06-30 16:45\nyear = 2026, month = June, day = 30th, time= 4pm, 45 minutes\n{'-'*95}\n[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands').lower()
+        return self.__main_autocompleter.prompt_input(message,location=f"Home/RepeatHabit/{modified_history_file_name}",field_pair=field_pair,example=f'{'-'*95}\nRules\n{'-'*95}\n- Each month must have a unique name\n - Each week must have a unique name\n - The name must have the minimum of 3 characters\n - Name must only be a mixture of alphabet and numbers\n - Name must only start with alphabets\n{'-'*95}\n[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands').lower()
 
     @retry_until_success
     def set_habit_week_pattern_name(self,message):
@@ -92,7 +99,7 @@ class HabitRepeats:
         self.__main_autocompleter.set_has_status(True)
         modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
         multiple_values = f"\nCurrent Value list : {Fore.LIGHTBLUE_EX if self.__week_pattern.week_patterns is None else Fore.LIGHTGREEN_EX}{self.__week_pattern.week_patterns if self.__week_pattern.week_patterns is not None else 'N/A'}{Fore.RESET}"
-        return self.__main_autocompleter.prompt_input(message,location=f"Home/RepeatHabit/{modified_history_file_name}",field_pair=field_pair,example=f'Input Format  : YYYY-MM-DD HH:MM\nInput Example : 2026-06-30 16:45\nyear = 2026, month = June, day = 30th, time= 4pm, 45 minutes\n{'-'*95}\n[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands',multiple_values=multiple_values).lower()
+        return self.__main_autocompleter.prompt_input(message,location=f"Home/RepeatHabit/{modified_history_file_name}",field_pair=field_pair,example=f'Options\nmon, tue, wed, thu, fri, sat and sun\n{'-'*95}\nRules\n{'-'*95}\n - Enter Weekdays and separate them by a single space\n - Week days represent the days you choose per week, you must have at least one day\n - The order of putting the weekdays does not matter e.g mon tue fri wed is valid\n{'-'*95}\n[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands',multiple_values=multiple_values).lower()
 
     @retry_until_success
     def set_habit_week_pattern(self,message):
@@ -124,7 +131,7 @@ class HabitRepeats:
         self.__main_autocompleter.set_has_status(True)
         modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
         multiple_values = f"\nCurrent Value list : {Fore.LIGHTBLUE_EX if self.__month_pattern.monthPatterns is None else Fore.LIGHTGREEN_EX}{self.__month_pattern.monthPatterns if self.__month_pattern.monthPatterns is not None else 'N/A'}{Fore.RESET}"
-        return self.__main_autocompleter.prompt_input(message,location=f"Home/RepeatHabit/{modified_history_file_name}",field_pair=field_pair,example=f'Input Format  : YYYY-MM-DD HH:MM\nInput Example : 2026-06-30 16:45\nyear = 2026, month = June, day = 30th, time= 4pm, 45 minutes\n{'-'*95}\n[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands',multiple_values=multiple_values).lower()
+        return self.__main_autocompleter.prompt_input(message,location=f"Home/RepeatHabit/{modified_history_file_name}",field_pair=field_pair,example=f'{'-'*95}\nTips : Press space to see saved weeks\n{'-'*95}\nRules\n{'-'*95}\n - A month must have four weeks\n - Weeks must be chosen from saved weeks\n - The order of weeks matters\n - For the week you want to skip, just enter skip\n{'-'*95}\n[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands',multiple_values=multiple_values).lower()
 
     @retry_until_success
     def set_habit_month_pattern(self,message):
@@ -158,7 +165,7 @@ class HabitRepeats:
         self.__main_autocompleter = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
         self.__main_autocompleter.set_has_status(True)
         modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
-        return self.__main_autocompleter.prompt_input(message,location=f"Home/RepeatHabit/{modified_history_file_name}",field_pair=field_pair,example=f'Input Format  : YYYY-MM-DD HH:MM\nInput Example : 2026-06-30 16:45\nyear = 2026, month = June, day = 30th, time= 4pm, 45 minutes\n{'-'*95}\n[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands').lower()
+        return self.__main_autocompleter.prompt_input(message,location=f"Home/RepeatHabit/{modified_history_file_name}",field_pair=field_pair,example=f'{'-'*95}\nRules\n{'-'*95}\n - The name must have the minimum of 3 characters\n - Name must only be a mixture of alphabet and numbers\n - Name must only start with alphabets\n{'-'*95}\n[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands').lower()
 
     @retry_until_success
     def set_habit_month_pattern_name(self,message):
@@ -180,6 +187,70 @@ class HabitRepeats:
             self.__month_pattern.set_name(month_pattern_name)
         return is_month_pattern_valid, message
 
+    def __set_habit_months_pattern(self,message,field_pair=None):
+        history_file_name='months_pattern'
+        commands = []
+        self.__main_autocompleter = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
+        self.__main_autocompleter.set_has_status(True)
+        modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
+        multiple_values = f"\nCurrent Value list : {Fore.LIGHTBLUE_EX if self.__week_pattern.week_patterns is None else Fore.LIGHTGREEN_EX}{self.__week_pattern.week_patterns if self.__week_pattern.week_patterns is not None else 'N/A'}{Fore.RESET}"
+        return self.__main_autocompleter.prompt_input(message,location=f"Home/RepeatHabit/{modified_history_file_name}",field_pair=field_pair,example=f'Options\nmon, tue, wed, thu, fri, sat and sun\n{'-'*95}\nRules\n{'-'*95}\n - Enter Weekdays and separate them by a single space\n - Week days represent the days you choose per week, you must have at least one day\n - The order of putting the weekdays does not matter e.g mon tue fri wed is valid\n{'-'*95}\n[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands',multiple_values=multiple_values).lower()
+
+    @retry_until_success
+    def set_habit_months_pattern(self,message):
+        clear_screen()
+        months_pattern = self.__set_habit_months_pattern(message,(self.__form.get_field_status('months_pattern'),None if self.__week_pattern.get_name()=='default' else self.__week_pattern.get_name()))
+        # ********* start of common functions ************
+        did_run_common_func = ran_common_functions(months_pattern)
+        if did_run_common_func==False:
+            return True, 'Escaping...'
+        elif did_run_common_func==True:
+            return False, 'switching'
+        # ********** end of common functions ************
+        
+        if self.__week_pattern.get_name()=='default':
+            return False,'please set the week pattern name first'
+        
+        if self.__month_pattern.get_name()=='default':
+            return False,'please set the month pattern name first'
+        
+        if len(self.__month_pattern.monthPatterns.keys())==0:
+            return False,'please set the month pattern first'
+
+        is_months_pattern_valid, message = self.__months_pattern_validator.is_months_pattern_valid(months_pattern.split(' '))
+        if is_months_pattern_valid:
+            self.__form.set_field_status('months_pattern',True)
+            self.__level_management(self.__form.number_of_filled_fields())
+            self.__form = Form(self.__form.get_fields(),self.display_map,levels=self.__levels)
+            self.__months_pattern.set_months_pattern(months_pattern.split(' '))
+            return self.__months_pattern.save_months_pattern()
+        return is_months_pattern_valid, message
+
+    def save(self):
+        days_to_add = []
+        copied_habit = self.__shelf.copy_last_place_habit()
+        id, name, _ , duration, status, periodicity = copied_habit
+        if status == 'MISSED':
+            return False, 'sorry we cannot perform this operation for MISSED sessions'
+        
+        current_day,time = copied_habit[2].split(' ')
+        for i in self.__months_pattern.get_months_pattern():
+            if list(i.keys())[0] == 'skip':
+                continue
+
+            for j in i[list(i.keys())[0]]:
+                week_days = self.__week_pattern_manager.find_week_pattern(j)
+                current_day = self.__habit_date_time_manger.increase_by_day(current_day)
+                if j == 'skip':continue
+
+                if self.__habit_date_time_manger.get_weekday(current_day) in week_days:
+                    days_to_add.append((id, name, f'{current_day} {time}', duration, status, periodicity)) 
+        clash_pairs = self.__habit_inputs.get_clashing_habits(days_to_add)
+        if len(clash_pairs)!=0:
+            self.__habit_inputs.display_habit_pairs(clash_pairs)
+            input('Press enter to continue')
+        return True,'success...'
+
     def run_custom_repeats(self):
         command_functions = {
             'week pattern name':[
@@ -198,6 +269,14 @@ class HabitRepeats:
                     self.set_habit_month_pattern,
                     "Enter the month pattern: "
                     ],
+            'months pattern':[
+                 self.set_habit_months_pattern,
+                 'Enter the months pattern: '
+            ],
+            'save':[
+                self.save,
+                ''
+            ]
         }
         while True:
             clear_screen()
@@ -231,8 +310,6 @@ class HabitRepeats:
             else:
                 display_message = func(message)
 
-            clear_screen()
-    
     def run_week_repeats(self):
         print("This feature is under development. Please check back later.")
         input("Press Enter to return to the main menu...")

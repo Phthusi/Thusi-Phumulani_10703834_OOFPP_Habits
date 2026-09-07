@@ -1,4 +1,4 @@
-from .habit_repeats_models import WeekPattern,MonthPattern
+from .habit_repeats_models import WeekPattern,MonthPattern, MonthsPattern
 
 class WeekPatternValidator:
     def __init__(self,week_pattern:WeekPattern):
@@ -91,3 +91,22 @@ class MonthPatternValidator:
     def month_pattern_exists(cls,name):
         return name in MonthPattern.monthPatterns.keys()
     
+class MonthsPatternValidator:
+    def __init__(self,pattern:MonthPattern):
+        self.__month_pattern = pattern
+
+    def is_months_pattern_valid(self,pattern):
+        if not isinstance(pattern,list):
+            return False,"months pattern must be a list"
+        if not pattern:
+            return False,"months pattern must not be empty"
+
+        if all(map(lambda month: month=='skip',pattern)):
+            return False, "months patterns must not be entirely be made up of skip patterns"
+        
+        valid_months = list(self.__month_pattern.monthPatterns.keys())
+        valid_months.extend(['skip'])
+        invalid_month = [month in valid_months for month in pattern]
+        if not all(invalid_month):
+            return False,f"{', '.join([month for month in pattern if month not in valid_months])} are not valid months"
+        return True,"months pattern is valid"

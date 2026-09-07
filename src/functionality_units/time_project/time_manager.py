@@ -61,3 +61,11 @@ class HabitDateTimeManager:
     
     def string_to_datetime(self,string_datetime):
         return datetime.strptime(string_datetime, "%Y-%m-%d %H:%M:%S")
+    
+    def get_weekday(self,string_date):
+        week_days = ['mon','tue','wed','thu','fri','sat','sun']
+        return week_days[datetime.weekday(datetime.strptime(string_date, "%Y-%m-%d"))]
+    
+    def increase_by_day(self,string_date):
+        return str(datetime.strptime(string_date, "%Y-%m-%d") + timedelta(days=1)).split(' ')[0]
+    
