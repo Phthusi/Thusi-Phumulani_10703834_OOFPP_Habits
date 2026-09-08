@@ -2,7 +2,7 @@ from .habit_repeats_models import WeekPatternManager,WeekPattern,MonthPatternMan
 from .habit_repeats_validator import WeekPatternValidator,MonthPatternValidator, MonthsPatternValidator
 from ..habit_input import Habit_Inputs
 from pathlib import Path
-from ...data.db_manager import CompleteHabit, Habits
+from ...data.db_manager import CompleteHabit
 from ..ui.terminal_utils import clear_screen
 from ..ui.command_autocomplete import AutoCompleter,Form
 from ..ui.command_autocomplete import ProgressBar
@@ -29,7 +29,6 @@ class HabitRepeats:
         self.__shelf = Shelf()
         self.progress_bar = ProgressBar(7)
         self.__habit_date_time_manger = HabitDateTimeManager()
-
         self.__levels = {'level1':'➡️','level2':' ','level3':' ','level4':' '}
         self.display_map = """
     ----------------------------------------------------------------------------------------------------------------------------
@@ -70,7 +69,7 @@ class HabitRepeats:
         self.__main_autocompleter = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
         self.__main_autocompleter.set_has_status(True)
         modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
-        return self.__main_autocompleter.prompt_input(message,location=f"Home/RepeatHabit/{modified_history_file_name}",field_pair=field_pair,example=f'{'-'*95}\nRules\n{'-'*95}\n- Each month must have a unique name\n - Each week must have a unique name\n - The name must have the minimum of 3 characters\n - Name must only be a mixture of alphabet and numbers\n - Name must only start with alphabets\n{'-'*95}\n[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands').lower()
+        return self.__main_autocompleter.prompt_input(message,location=f"Home/RepeatHabit/{modified_history_file_name}",field_pair=field_pair,example=f'{'-'*95}\nRules\n{'-'*95}\n - Each month must have a unique name\n - Each week must have a unique name\n - The name must have the minimum of 3 characters\n - Name must only be a mixture of alphabet and numbers\n - Name must only start with alphabets\n{'-'*95}\n[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands').lower()
 
     @retry_until_success
     def set_habit_week_pattern_name(self,message):
@@ -227,7 +226,7 @@ class HabitRepeats:
         return is_months_pattern_valid, message
 
     def save(self):
-        days_to_add = []
+        habits_to_add = []
         copied_habit = self.__shelf.copy_last_place_habit()
         id, name, _ , duration, status, periodicity = copied_habit
         if status == 'MISSED':
@@ -236,19 +235,40 @@ class HabitRepeats:
         current_day,time = copied_habit[2].split(' ')
         for i in self.__months_pattern.get_months_pattern():
             if list(i.keys())[0] == 'skip':
+                for _ in range(7*4):
+                    current_day = self.__habit_date_time_manger.increase_by_day(current_day)
                 continue
 
             for j in i[list(i.keys())[0]]:
-                week_days = self.__week_pattern_manager.find_week_pattern(j)
-                current_day = self.__habit_date_time_manger.increase_by_day(current_day)
-                if j == 'skip':continue
+                if j == 'skip':
+                    for _ in range(7):
+                        current_day = self.__habit_date_time_manger.increase_by_day(current_day)
+                    continue
 
-                if self.__habit_date_time_manger.get_weekday(current_day) in week_days:
-                    days_to_add.append((id, name, f'{current_day} {time}', duration, status, periodicity)) 
-        clash_pairs = self.__habit_inputs.get_clashing_habits(days_to_add)
+                week_days = self.__week_pattern_manager.find_week_pattern(j)
+                for _ in range(7):
+                    if self.__habit_date_time_manger.get_weekday(current_day) in week_days:
+                        habits_to_add.append((id, name, f'{current_day} {time}', duration, status, periodicity)) 
+                    current_day = self.__habit_date_time_manger.increase_by_day(current_day)
+        print(current_day)
+        input('Press enter to continue')    
+        
+        clash_pairs = self.__habit_inputs.get_clashing_habits(habits_to_add)
         if len(clash_pairs)!=0:
+            first_part_of_the_pair = list(map(lambda pair:pair[0],clash_pairs))
+            second_part_of_the_pair = list(map(lambda pair:pair[1],clash_pairs))
             self.__habit_inputs.display_habit_pairs(clash_pairs)
+            habits_to_add = [habit for habit in habits_to_add if habit not in first_part_of_the_pair and habit not in second_part_of_the_pair]
             input('Press enter to continue')
+        
+        # remove habits that clash with others
+        # save everything else
+        id = 0
+        for habit in habits_to_add:
+            id, name, start_date, session_duration, status, periodicity = habit
+            success, id =CompleteHabit(name, session_duration, start_date, status).save_habit()
+        
+        self.__shelf.preserve_habit((id,name,start_date,session_duration,status,periodicity))
         return True,'success...'
 
     def run_custom_repeats(self):

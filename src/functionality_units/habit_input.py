@@ -199,25 +199,13 @@ class Habit_Inputs:
             id_1, name_1, start_datetime_1, duration_1, status_1, periodicity_1 = habit_to_be_added
             id_2, name_2, start_datetime_2, duration_2, status_2, periodicity_2 = habit_from_db
             print(f'''CASE No:{count+1}
-{Back.BLUE}{Fore.WHITE}             Habit                      {Back.RESET}
- id               : {id_2}
- name             :{name_2} 
- start_datetime   :{start_datetime_2}
- session_duration :{duration_2}
- status           :{status_2}
- periodicity      :{periodicity_2}
- weekday          :{self.__datetime_manager.get_weekday(str(start_datetime_2).split(' ')[0])}
------------------------------------------
-
-            CLASHES WITH
-            
-{Back.BLUE}{Fore.WHITE}            New Habit                   {Back.RESET}
- id               : {id_1}
- name             :{name_1} 
- start_datetime   :{start_datetime_1}
- session_duration :{duration_1}
- status           :{status_1}
- periodicity      :{periodicity_1}
- weekday          :{self.__datetime_manager.get_weekday(str(start_datetime_2).split(' ')[0])}
------------------------------------------
+{Back.BLUE}{Fore.WHITE}            New Habit                    {Back.RESET}         {Back.BLUE}{Fore.WHITE}             Habit                       {Back.RESET}         
+ id               : {id_2}                             id               : {id_1}
+ name             :{name_2}                 CLASHES  name             :{name_1}
+ start_datetime   :{start_datetime_2}     WITH    start_datetime   :{start_datetime_1}
+ session_duration :{duration_2}                        session_duration :{duration_1}
+ status           :{status_2}                        status           :{status_1}
+ periodicity      :{periodicity_2}                            periodicity      :{periodicity_1}
+ weekday          :{self.__datetime_manager.get_weekday(str(start_datetime_2).split(' ')[0])}                             weekday          :{self.__datetime_manager.get_weekday(str(start_datetime_2).split(' ')[0])}
+-----------------------------------------         -----------------------------------------
 ''')
