@@ -1,5 +1,6 @@
 from .habit_repeats_models import WeekPatternManager,WeekPattern,MonthPatternManager,MonthPattern, MonthsPattern
 from .habit_repeats_validator import WeekPatternValidator,MonthPatternValidator, MonthsPatternValidator
+from secrets import token_urlsafe
 from ..habit_input import Habit_Inputs
 from pathlib import Path
 from ...data.db_manager import CompleteHabit
@@ -28,6 +29,8 @@ class HabitRepeats:
         self.__months_pattern_validator = MonthsPatternValidator(self.__month_pattern)
         self.__shelf = Shelf()
         self.progress_bar = ProgressBar(7)
+        self.__number_of_weeks = 0
+        self.__number_of_months = 0
         self.__habit_date_time_manger = HabitDateTimeManager()
         self.__levels = {'level1':'➡️','level2':' ','level3':' ','level4':' '}
         self.display_map = """
@@ -225,15 +228,15 @@ class HabitRepeats:
             return self.__months_pattern.save_months_pattern()
         return is_months_pattern_valid, message
 
-    def save(self):
-        habits_to_add = []
-        copied_habit = self.__shelf.copy_last_place_habit()
+    def __save_habit_repeats(self,copied_habit,months_pattern=None):
         id, name, _ , duration, status, periodicity = copied_habit
-        if status == 'MISSED':
-            return False, 'sorry we cannot perform this operation for MISSED sessions'
-        
         current_day,time = copied_habit[2].split(' ')
-        for i in self.__months_pattern.get_months_pattern():
+        habits_to_add = []
+        
+        if months_pattern is None:
+            months_pattern = self.__months_pattern.get_months_pattern()
+        
+        for i in months_pattern:
             if list(i.keys())[0] == 'skip':
                 for _ in range(7*4):
                     current_day = self.__habit_date_time_manger.increase_by_day(current_day)
@@ -250,9 +253,7 @@ class HabitRepeats:
                     if self.__habit_date_time_manger.get_weekday(current_day) in week_days:
                         habits_to_add.append((id, name, f'{current_day} {time}', duration, status, periodicity)) 
                     current_day = self.__habit_date_time_manger.increase_by_day(current_day)
-        print(current_day)
-        input('Press enter to continue')    
-        
+       
         clash_pairs = self.__habit_inputs.get_clashing_habits(habits_to_add)
         if len(clash_pairs)!=0:
             first_part_of_the_pair = list(map(lambda pair:pair[0],clash_pairs))
@@ -261,14 +262,20 @@ class HabitRepeats:
             habits_to_add = [habit for habit in habits_to_add if habit not in first_part_of_the_pair and habit not in second_part_of_the_pair]
             input('Press enter to continue')
         
-        # remove habits that clash with others
-        # save everything else
         id = 0
         for habit in habits_to_add:
             id, name, start_date, session_duration, status, periodicity = habit
             success, id =CompleteHabit(name, session_duration, start_date, status).save_habit()
         
-        self.__shelf.preserve_habit((id,name,start_date,session_duration,status,periodicity))
+        if len(habits_to_add) > 0:
+            self.__shelf.preserve_habit((id,name,start_date,session_duration,status,periodicity))
+    
+    def save(self):
+        copied_habit = self.__shelf.copy_last_place_habit()
+        id, name, _ , duration, status, periodicity = copied_habit
+        if status == 'MISSED':
+            return False, 'sorry we cannot perform this operation for MISSED sessions'
+        self.__save_habit_repeats(copied_habit)
         return True,'success...'
 
     def run_custom_repeats(self):
@@ -330,19 +337,141 @@ class HabitRepeats:
             else:
                 display_message = func(message)
 
+    @retry_until_success
+    def set_number_of_pattern_entities(self,message,entity_name):
+        clear_screen()
+        commands = []
+        history_file_name = f'set_number_of_{entity_name}'
+        user_input = self.__basic_input("Enter number of weeks: ",commands,history_file_name,'[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands',f'/WeeklyRepeatHabit/NumberOf{entity_name.title()}')
+        # ********* start of common functions ************
+        did_run_common_func = ran_common_functions(user_input)
+        if did_run_common_func==False:
+            return True, 'Escaping...'
+        elif did_run_common_func==True:
+            return False, 'Switching...'
+        # ********** end of common functions ************
+        is_user_input_valid = user_input.isdigit()
+        # self.save
+        if not is_user_input_valid:
+            return False, 'Invalid input. Please enter a number.'
+        if int(user_input) == 0:
+            return False, f'Invalid input. the number of {entity_name} must be greater than 0.'
+        match entity_name:
+            case 'weeks':
+                self.__number_of_weeks = int(user_input)
+                return True, f'Number of {entity_name} was set successfully...'
+            case 'months':
+                self.__number_of_months = int(user_input)
+                return True, f'Number of {entity_name} was set successfully...'
+            case _:
+                return True, f'Number of {entity_name} does not exist'
+
+    @retry_until_success
+    def save_week(self, *args,**kwargs):
+        if self.__number_of_weeks == 0:
+            return True, 'Set the number of weeks first'
+
+        if self.__week_pattern.get_name()=='default':
+            return True, 'Set the week name first'
+
+        if self.__week_pattern.week_patterns == {}:
+            return True, 'Set the week pattern first'
+
+        history_file_name = 'weekly_repeat_habit_name'
+        user_input = self.__basic_input("Enter week_name: ",list(self.__week_pattern.week_patterns.keys()),history_file_name,'[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands',f'/WeeklyRepeatHabit/WeekPatternName')
+        # ********* start of common functions ************
+        did_run_common_func = ran_common_functions(user_input)
+        if did_run_common_func==False:
+            return True, 'Escaping...'
+        elif did_run_common_func==True:
+            return False, 'Switching...'
+        # ********** end of common functions ************
+
+        if not self.__week_pattern_validator.week_pattern_exists(user_input):
+            return False, f'\'{user_input}\' does not exist'
+       
+        week_pattern_name = user_input
+        added_months = []
+        count = self.__number_of_weeks
+        total_months_with_four_of_given_week = count // 4
+        total_of_given_week_that_will_have_skips = count % 4
+        
+        for _ in range(total_months_with_four_of_given_week):
+            month_name = f'month_id_{token_urlsafe(16)}'
+            self.__month_pattern.set_name(month_name)
+            added_months.append(month_name)
+            self.__month_pattern_manager.save_month_pattern(month_name,[week_pattern_name,week_pattern_name,week_pattern_name,week_pattern_name])
+
+        if total_of_given_week_that_will_have_skips!=0:        
+            last_month_pattern = [week_pattern_name] * total_of_given_week_that_will_have_skips
+            last_month_pattern.extend(['skip'] * (4 - total_of_given_week_that_will_have_skips))
+            month_name = f'month_id_{token_urlsafe(16)}'
+            self.__month_pattern.set_name(month_name)
+            added_months.append(month_name)
+            self.__month_pattern_manager.save_month_pattern(month_name,last_month_pattern)
+        
+        # save months pattern
+        self.__months_pattern.set_months_pattern(added_months)
+        self.__months_pattern.save_months_pattern()
+        copied_habit = self.__shelf.copy_last_place_habit()
+        filtered_months_pattern = [{list(i.keys())[0]: list(i.values())[0]} for i in self.__months_pattern.get_months_pattern()]
+
+        self.__save_habit_repeats(copied_habit,months_pattern=filtered_months_pattern)
+        print(f"Week data saved: {self.__number_of_weeks} weeks")
+        return True, 'Success...'
+
     def run_week_repeats(self):
-        print("This feature is under development. Please check back later.")
-        input("Press Enter to return to the main menu...")
+        command_functions = {
+            'week pattern name':[
+                    self.set_habit_week_pattern_name,
+                    "Enter the week pattern name: "
+                ],
+            'week pattern':[
+                self.set_habit_week_pattern,
+                "Enter the week pattern: "
+                ],
+            'number of weeks':[
+                self.set_number_of_pattern_entities,
+                'Enter the number of weeks: '
+            ],
+            'save':[
+                self.save_week,
+                ''
+            ]
+        }
+        while True:
+            clear_screen()
+            commands = list(command_functions.keys())
+            history_file_name = 'weekly_repeat_habit'
+            user_input = self.__basic_input("Enter command: ",commands,history_file_name,'[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands','/WeeklyRepeatHabit')            
+            match user_input:
+                case 'esc':
+                    break
+                case 'clear':
+                    clear_screen()
+            
+            if user_input not in commands:
+                print('invalid input')
+                input('Press Enter to continue')
+                continue
+            
+            func,message = command_functions[user_input]
+            if message =='':
+                success, message = func()
+            if message == 'Enter the number of weeks: ':
+                display_message = func(message,'weeks')
+            else:
+                display_message = func(message)
 
     def run_monthly_repeats(self):
         print("This feature is under development. Please check back later.")
         input("Press Enter to return to the main menu...")
 
-    def __basic_input(self,message,commands,history_file_name,example=None):
+    def __basic_input(self,message,commands,history_file_name,example=None,current_dir=''):
         auto_completer = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
         print(Fore.LIGHTBLACK_EX+self.__shelf.display_state().replace('  :',':')+Fore.RESET)
         self.__update_habit_inputs.display_copied_habit()
-        return auto_completer.prompt_input(message,commands,example,location=f"Home/RepeatHabit").lower()
+        return auto_completer.prompt_input(message,commands,example,location=f"Home/RepeatHabit"+current_dir).lower()
 
     def run(self):
         command_functions = {
