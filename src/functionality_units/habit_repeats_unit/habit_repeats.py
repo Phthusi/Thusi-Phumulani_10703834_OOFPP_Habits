@@ -342,7 +342,18 @@ class HabitRepeats:
         clear_screen()
         commands = []
         history_file_name = f'set_number_of_{entity_name}'
-        user_input = self.__basic_input("Enter number of weeks: ",commands,history_file_name,'[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands',f'/WeeklyRepeatHabit/NumberOf{entity_name.title()}')
+
+        match entity_name:
+            case 'weeks':
+                state_message = f'✅ Number of {entity_name} filled'if self.__number_of_weeks!=0 else f'❌ Number of {entity_name} not filled'
+                current_value = self.__number_of_weeks if self.__number_of_weeks!=0 else f'{Fore.BLUE}N/A{Fore.RESET}'
+            case 'months':
+                state_message = f'✅ Number of {entity_name} filled'if self.__number_of_months!=0 else f'❌ Number of {entity_name} not filled'
+                current_value = self.__number_of_months if self.__number_of_months!=0 else f'{Fore.BLUE}N/A{Fore.RESET}'
+
+        field_pair = (state_message,current_value) if entity_name=='weeks' else (state_message,current_value)   
+
+        user_input = self.__basic_input("Enter number of weeks: ",commands,history_file_name,'[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands',f'/WeeklyRepeatHabit/NumberOf{entity_name.title()}',field_pair=field_pair)
         # ********* start of common functions ************
         did_run_common_func = ran_common_functions(user_input)
         if did_run_common_func==False:
@@ -467,11 +478,14 @@ class HabitRepeats:
         print("This feature is under development. Please check back later.")
         input("Press Enter to return to the main menu...")
 
-    def __basic_input(self,message,commands,history_file_name,example=None,current_dir=''):
+    def __basic_input(self,message,commands,history_file_name,example=None,current_dir='',field_pair=None):
         auto_completer = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
-        print(Fore.LIGHTBLACK_EX+self.__shelf.display_state().replace('  :',':')+Fore.RESET)
-        self.__update_habit_inputs.display_copied_habit()
-        return auto_completer.prompt_input(message,commands,example,location=f"Home/RepeatHabit"+current_dir).lower()
+        if field_pair is None:
+            print(Fore.LIGHTBLACK_EX+self.__shelf.display_state().replace('  :',':')+Fore.RESET)
+            self.__update_habit_inputs.display_copied_habit()
+        else:
+            auto_completer.set_has_status(True)
+        return auto_completer.prompt_input(message,commands,example,location=f"Home/RepeatHabit"+current_dir,field_pair=field_pair).lower()
 
     def run(self):
         command_functions = {
