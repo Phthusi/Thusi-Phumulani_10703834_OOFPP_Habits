@@ -8,7 +8,7 @@ from prompt_toolkit.completion import WordCompleter, FuzzyCompleter
 from prompt_toolkit.history import FileHistory
 from src.data.db_functionality.db_interface import DB_Interface
 from src.data.db_manager import Habits
-from src.functionality_units.time_project.time_manager import HabitDateTimeManager
+from src.components.time_project.time_manager import HabitDateTimeManager
 from .read_json import read_json_files
 from colorama import Fore, Style
 from ..shelf import Shelf

@@ -1,19 +1,19 @@
 from .data.db_manager import DB_Interface,Habits
-from .functionality_units.add_unit.add_habit import Add_Habit
-from .functionality_units.delete_unit.delete_habit import DeleteHabit
-from .functionality_units.time_project.time_manager import HabitDateTimeManager
-from .functionality_units.update_habit.update_habit_inputs import UpdateHabitInputs
-from .functionality_units.update_habit.update_habit import UpdateHabit
-from .functionality_units.search_unit.search_habit_inputs import SearchHabitInputs
-from .functionality_units.search_unit.search_habit import SearchHabit
-from .functionality_units.ui.command_autocomplete import AutoCompleter,update_habit_statuses
-from .functionality_units.ui.terminal_utils import clear_screen
-from .functionality_units.analytics_unit.habits_analytics import Analytics
-from .functionality_units.habit_repeats_unit.habit_repeats import HabitRepeats
+from .components.add_habit.add_habit import Add_Habit
+from .components.delete_habit.delete_habit import DeleteHabit
+from .components.time_project.time_manager import HabitDateTimeManager
+from .components.update_habit.update_habit_inputs import UpdateHabitInputs
+from .components.update_habit.update_habit import UpdateHabit
+from .components.search_unit.search_habit_inputs import SearchHabitInputs
+from .components.search_unit.search_habit import SearchHabit
+from .components.ui.command_autocomplete import AutoCompleter,update_habit_statuses
+from .components.ui.terminal_utils import clear_screen
+from .components.analytics.habits_analytics import Analytics
+from .components.habit_repeats.habit_repeats import HabitRepeats
 from pathlib import Path
-from .functionality_units.ui.terminal_utils import clear_screen
-from .functionality_units.shelf import Shelf
-from .functionality_units.update_habit.complete_habit_session import CompleteHabitSession
+from .components.ui.terminal_utils import clear_screen
+from .components.shelf import Shelf
+from .components.update_habit.complete_habit_session import CompleteHabitSession
 
 BASE_DIR = Path(__file__).resolve().parent
 
