@@ -4,8 +4,8 @@ from .components.delete_habit.delete_habit import DeleteHabit
 from .components.time_project.time_manager import HabitDateTimeManager
 from .components.update_habit.update_habit_inputs import UpdateHabitInputs
 from .components.update_habit.update_habit import UpdateHabit
-from .components.search_unit.search_habit_inputs import SearchHabitInputs
-from .components.search_unit.search_habit import SearchHabit
+from .components.search_habits.search_habit_inputs import SearchHabitInputs
+from .components.search_habits.search_habit import SearchHabit
 from .components.ui.command_autocomplete import AutoCompleter,update_habit_statuses
 from .components.ui.terminal_utils import clear_screen
 from .components.analytics.habits_analytics import Analytics
