@@ -1,3 +1,5 @@
 {
-    "common_commands":["help","clear","esc"]
+    "common_commands":["help","clear","esc"],
+    "valid_statuses":["UPCOMING","IN_PROGRESS","TO_BE_CONFIRMED","COMPLETED","MISSED","UNKNOWN"],
+    "valid_periodicities":["DAILY","WEEKLY"]
 }
