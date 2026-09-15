@@ -8,9 +8,6 @@ class Habit:
         self.__id = id
         self.__periodicity = None
 
-    def set_periodicity(self,perioditicy):
-        self.__periodicity = perioditicy
-
     def get_periodicity(self):
         return self.__periodicity
 
@@ -40,6 +37,12 @@ class Habit:
     
     def set_status(self, status):
         self.__status = status
+
+    def set_periodicity(self,perioditicy):
+        self.__periodicity = perioditicy
+
+    def set_id(self,id):
+        self.__id = id
 
     def __str__(self):
         return f"Habit(id={self.__id}, name='{self.__name}', session_duration='{self.__session_duration}', start_date='{self.__start_date}', status='{self.__status}')"

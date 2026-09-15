@@ -4,11 +4,13 @@ from .db_functionality.db_interface import DB_Interface
 
 class CompleteHabit(Habit):     
     def __init__(self, name="default", session_duration="default", start_date="default", status="UPCOMING", id=None):
+        """Create a persistence-aware habit."""
         super().__init__(name, session_duration, start_date, status, id)
         self.__validator = HabitValidator(self)
         self.__db_interface = DB_Interface()
     
     def save_habit(self):
+        """Validate and persist this habit."""
         is_valid_habit, message = self.__validator.validate()
         if not is_valid_habit:
             return is_valid_habit,message
@@ -22,6 +24,7 @@ class CompleteHabit(Habit):
         return  success, id
 
     def update_habit(self,**kwargs):
+        """Update editable database fields for this habit."""
         if self.get_id() == None:
             return False, "Habit has no id"
 
@@ -37,6 +40,7 @@ class CompleteHabit(Habit):
         return self.__db_interface.update_habit(self.get_id(),**kwargs)
     
     def complete_habit(self,**kwargs):
+        """Mark a pending session as completed."""
         if self.get_id() == None:
             return False, "Habit has no id"
 
@@ -50,9 +54,11 @@ class CompleteHabit(Habit):
         return self.__db_interface.update_habit(habit_id=self.get_id(),**{'status':'COMPLETED'})
 
     def copy_habit(self):
-        return CompleteHabit(self.get_name(), self.get_session_duration(), self.get_start_date(), self.get_status())
+        """Return an unsaved copy of this habit."""
+        return CompleteHabit(self.get_name(), self.get_session_duration(), self.get_start_date(), self.get_status(),periodicity=self.get_periodicity())
 
     def delete_habit(self):
+        """Delete this habit from persistent storage."""
         if self.get_id() == None:
             return False, "Habit has no id"
 
@@ -63,37 +69,58 @@ class CompleteHabit(Habit):
         return self.__db_interface.delete_habit(self.get_id())
 
     def set_name(self, name):
+        """Set the name only when it passes validation."""
         old_name = self.get_name()
-        self._Habit__name = name
+        super().set_name(name)
         is_name_valid,message = self.__validator.valid_name()
         if not is_name_valid:
-            self._Habit__name = old_name
+            super().set_name(old_name)
         return is_name_valid, message
 
     def set_session_duration(self, session_duration):
+        """Set the duration only when it is valid."""
         old_session_duration = self.get_session_duration()
-        self._Habit__session_duration = session_duration
+        super().set_session_duration(session_duration)
         is_session_duration_valid,message = self.__validator.valid_session_duration()
         if not is_session_duration_valid:
-            self._Habit__session_duration = old_session_duration
+            super().set_session_duration(old_session_duration)
         return is_session_duration_valid, message
     
+    def set_start_date(self, start_date):
+        """Set the start date only when it is valid."""
+        old = self.get_start_date()
+        super().set_start_date(start_date)
+        valid, message = self.__validator.valid_start_date()
+        if not valid:
+            super().set_start_date(old)
+        return valid, message
+    
     def set_status(self, status):
+        """Set the status only when it is valid."""
         old_status = self.get_status()
-        self._Habit__status = status
+        super().set_status(status)
         is_status_valid,message = self.__validator.valid_status()
         if not is_status_valid:
-            self._Habit__status = old_status
+            super().set_status(old_status)
         return is_status_valid, message
     
     def set_id(self,id):
+        """Set the database ID only when it is an integer or ``None``."""
         old_id = self.get_id()
-        self._Habit__id = id
+        super().set_id(id)
         is_id_valid,message = self.__validator.valid_id()
         if not is_id_valid:
-            self._Habit__id = old_id
+            super().set_id(old_id)
         return is_id_valid, message
 
+    def set_periodicity(self, periodicity):
+        """Set the recurrence period only when it is valid."""
+        old = self.get_periodicity()
+        super().set_periodicity(periodicity)
+        valid, message = self.__validator.valid_periodicity()
+        if not valid:
+            super().set_periodicity(old)
+        return valid, message
 
 class Habits:
     __cached_data = []

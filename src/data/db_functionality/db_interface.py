@@ -1,5 +1,4 @@
 from pathlib import Path
-from typing import Any, List, Optional, Tuple, Union
 from .db import Database
 
 
@@ -9,12 +8,12 @@ class DB_Interface:
     Maintains an in-memory cache of habits to minimize raw database query overhead.
     """
 
-    __cached_data: List[Tuple[Any, ...]] = []
+    __cached_data = []
     is_db_updated = False
 
     def __init__(
         self,
-        database_name: Union[str, Path] = Path(__file__).resolve().parent.parent.parent.parent / "habit.db",
+        database_name = Path(__file__).resolve().parent.parent.parent.parent / "habit.db",
     ) -> None:
         """Initialize DB connection and warm up the in-memory cache.
 
@@ -35,7 +34,7 @@ class DB_Interface:
         """
         return habit_id in [entry[0] for entry in self.__cached_data]
 
-    def get_all_habits(self) -> List[Tuple[Any, ...]]:
+    def get_all_habits(self):
         """Refresh local cache from database and return all habit tuples.
 
         Returns:
@@ -48,7 +47,7 @@ class DB_Interface:
     def set_is_db_updated(cls,is_db_updated):
         cls.is_db_updated = is_db_updated
 
-    def update_habit(self, habit_id: int, **kwargs: Any) -> Tuple[str, str]:
+    def update_habit(self, habit_id: int, **kwargs):
         """Update a habit in database and refresh cache on success.
 
         Args:
@@ -70,8 +69,8 @@ class DB_Interface:
         start_datetime: str,
         duration: str,
         status: str,
-        periodicity: Optional[str] = None,
-    ) -> Tuple[str, Any]:
+        periodicity = None,
+    ) :
         """Add a habit to the database and update the local cache immediately.
 
         Args:
@@ -89,7 +88,7 @@ class DB_Interface:
             self.__cached_data.append((habit_id, name, start_datetime, duration, status, periodicity))
         return success, habit_id
 
-    def delete_habit(self, habit_id: int) -> Tuple[str, Optional[str]]:
+    def delete_habit(self, habit_id: int):
         """Remove habit from database and purge from in-memory cache.
 
         Args:
@@ -105,7 +104,7 @@ class DB_Interface:
             self.__cached_data = [entry for entry in self.__cached_data if entry[0] != habit_id]
         return success, result
 
-    def get_cached_data(self) -> List[Tuple[Any, ...]]:
+    def get_cached_data(self):
         """Return raw cached habit records without hitting the database.
 
         Returns:
