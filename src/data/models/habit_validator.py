@@ -6,9 +6,12 @@ class HabitValidator:
     '''
     def __init__(self, habit):
         self.habit = habit
-        self.__time_manager_validator = HabitDateTimeManagerValidator
+        self.__time_manager_validator = HabitDateTimeManagerValidator()
         self.__statuses = read_json_files()['valid_statuses']
         self.__periodicities = read_json_files()['valid_periodicities']
+
+    def set_habit(self,habit):
+        self.habit = habit
 
     def valid_name(self):
         """
@@ -37,28 +40,28 @@ class HabitValidator:
         duration = self.habit.get_session_duration()
 
         if duration=="default":
-            return False,"Name cannot be empty"
+            return False,"Duration cannot be empty"
     
         if not isinstance(duration, str):
-            return False, "session datetime must be a datetime object"
+            return False, "session datetime must be a string"
 
-        if not self.__time_manager_validator.validate_duration(duration):
-            return False, "Start datetime must use YYYY-MM-DD HH:MM:SS."
+        message,success = self.__time_manager_validator.validate_duration(duration)
+        if not success:
+            return False, "Duration must use HH:MM:SS."
         
         return True, "session datetime is valid."
 
     def valid_status(self):
         '''Validate the habit status.'''
         if self.habit.get_status()=="default":
-            return False,"Name cannot be empty"
+            return False,"Status cannot be empty"
     
         if self.habit.get_status() not in self.__statuses:
             return False, "Status must be one of: UPCOMING, IN_PROGRESS, COMPLETED, MISSED."
         return True, "status is valid."
 
     def valid_periodicity(self):
-        '''
-        '''
+        '''Return the recurrence period.'''
         value = self.habit.get_periodicity()
         if value is not None and value not in self.__periodicities:
             return False,"Periodicity must be Daily, Weekly, or None."
@@ -66,7 +69,9 @@ class HabitValidator:
 
     def valid_id(self):
         '''Validate the optional database ID.'''
-        if self.habit.get_id() is not None and not isinstance(self.habit.get_id(), int):
+        habit_id_is_none = self.habit.get_id() == None
+        habit_id_is_int =  isinstance(self.habit.get_id(), int)
+        if not habit_id_is_none and not habit_id_is_int:
             return False, "ID must be an integer or None."
         return True, "id is valid."
     
@@ -76,12 +81,28 @@ class HabitValidator:
             return False,"Habit cannot be updated because it has passed or it was completed"
         return True,"Habit can be updated"
 
+    def valid_start_datetime(self):
+        """Validate a scheduled datetime."""
+        value = self.habit.get_start_date()
+
+        if value == "default":
+            return False, "Start datetime must not be empty."
+    
+        if not isinstance(value, str):
+            return False, "Start datetime must be a datetime string."
+        
+        success = self.__time_manager_validator.is_datetime_valid
+        if not success:
+            return False, "Start datetime must use YYYY-MM-DD HH:MM:SS."
+        return True, "start datetime is valid."
+
     def validate(self):
         '''Run all model validation rules and return "(valid,message)"'''
         validators = [
             self.valid_id,
             self.valid_name,
             self.valid_session_duration,
+            self.valid_start_datetime,
             self.valid_status,
         ]
 
@@ -91,4 +112,3 @@ class HabitValidator:
                 return False, message
 
         return True, "Habit is valid."
-                
