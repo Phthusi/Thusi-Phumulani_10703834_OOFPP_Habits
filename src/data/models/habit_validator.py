@@ -88,10 +88,10 @@ class HabitValidator:
         if value == "default":
             return False, "Start datetime must not be empty."
     
-        if not isinstance(value, str):
-            return False, "Start datetime must be a datetime string."
+        # if not isinstance(value, str):
+        #     return False, "Start datetime must be a datetime string."
         
-        success = self.__time_manager_validator.is_datetime_valid
+        success = self.__time_manager_validator.is_datetime_valid(str(value))
         if not success:
             return False, "Start datetime must use YYYY-MM-DD HH:MM:SS."
         return True, "start datetime is valid."

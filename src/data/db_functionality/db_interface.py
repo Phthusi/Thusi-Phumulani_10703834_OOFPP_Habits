@@ -1,118 +1,68 @@
+"""Application-facing persistence interface with a small local cache."""
+
 from pathlib import Path
 from .db import Database
 
 
 class DB_Interface:
-    """Caching abstraction layer sitting over the low-level SQLite Database.
+    """Cache wrapper around :class:`Database`.
 
-    Maintains an in-memory cache of habits to minimize raw database query overhead.
+    The cache is instance-local so test databases and application sessions do not
+    accidentally share state.
     """
 
     is_db_updated = False
 
-    def __init__(
-        self,
-        database_name = None
-    ) -> None:
-        """Initialize DB connection and warm up the in-memory cache.
-
-        Args:
-            database_name (Union[str, Path]): Path to database file.
-        """
+    def __init__(self, database_name= None) -> None:
+        """Open a database and load its current rows into the cache."""
         if database_name is None:
-            database_name = Path(__file__).resolve().parent.parent.parent.parent / "habit.db"
+            database_name = Path(__file__).resolve().parents[3] / "habit.db"
         self.__db = Database(str(database_name))
         self.__cached_data = []
         self.get_all_habits()
 
-    def __id_in_db(self, habit_id: int) -> bool:
-        """Check if a given ID currently exists in the local cache.
+    def __id_in_db(self, habit_id: int):
+        """Return whether ``habit_id`` is present in the cache."""
+        return any(entry[0] == habit_id for entry in self.__cached_data)
 
-        Args:
-            habit_id (int): Primary key to verify.
-
-        Returns:
-            bool: True if ID exists in cache, False otherwise.
-        """
-        return habit_id in [entry[0] for entry in self.__cached_data]
-
-    def get_all_habits(self):
-        """Refresh local cache from database and return all habit tuples.
-
-        Returns:
-            List[Tuple[Any, ...]]: Cached habit tuples.
-        """
+    def get_all_habits(self) :
+        """Refresh and return all cached habit rows."""
         success, data = self.__db.get_all_habits()
         self.__cached_data = data if success == "success" else []
         return self.__cached_data
 
     @classmethod
-    def set_is_db_updated(cls,is_db_updated):
+    def set_is_db_updated(cls, is_db_updated):
+        """Mark all interface instances for a cache refresh."""
         cls.is_db_updated = is_db_updated
 
     def update_habit(self, habit_id: int, **kwargs):
-        """Update a habit in database and refresh cache on success.
-
-        Args:
-            habit_id (int): Primary key of target habit.
-            **kwargs (Any): Fields to update.
-
-        Returns:
-            Tuple[str, str]: Status ('success' or 'error') and result message.
-        """
-        if self.__id_in_db(habit_id):
-            success, message = self.__db.update_habit(habit_id, **kwargs)
-            self.get_all_habits()
-            return success, message
-        return "error", f"habit with id={habit_id} does not exist"
-
-    def add_habit(
-        self,
-        name: str,
-        start_datetime: str,
-        duration: str,
-        status: str,
-        periodicity = None,
-    ) :
-        """Add a habit to the database and update the local cache immediately.
-
-        Args:
-            name (str): Title of the habit.
-            start_datetime (str): Scheduled start time string.
-            duration (str): Session duration.
-            status (str): Initial state (e.g. 'UPCOMING').
-            periodicity (Optional[str]): Recurrence period.
-
-        Returns:
-            Tuple[str, Any]: Status ('success' or 'error') and newly generated ID or error details.
-        """
-        success, habit_id = self.__db.add_habit(name, start_datetime, duration, status, periodicity)
-        if success == "success":
-            self.get_all_habits()
-        return success, habit_id
-
-    def delete_habit(self, habit_id: int):
-        """Remove habit from database and purge from in-memory cache.
-
-        Args:
-            habit_id (int): Primary key ID to delete.
-
-        Returns:
-            Tuple[str, Optional[str]]: Status ('success' or 'error') and result message.
-        """
+        """Update a habit and refresh the cache."""
         if not self.__id_in_db(habit_id):
             return "error", f"habit with id={habit_id} does not exist"
-        success, result = self.__db.delete_habit(habit_id)
-        if success == "success":
+        result = self.__db.update_habit(habit_id, **kwargs)
+        if result[0] == "success":
             self.get_all_habits()
-        return success, result
+        return result
 
-    def get_cached_data(self):
-        """Return raw cached habit records without hitting the database.
+    def add_habit(self, name: str, start_datetime: str, duration: str, status: str, periodicity = None):
+        """Persist a habit and append it to the cache."""
+        result = self.__db.add_habit(name, start_datetime, duration, status, periodicity)
+        if result[0] == "success":
+            self.get_all_habits()
+        return result
 
-        Returns:
-            List[Tuple[Any, ...]]: Current list of cached habit tuples.
-        """
+    def delete_habit(self, habit_id: int):
+        """Delete a habit and remove it from the cache."""
+        if not self.__id_in_db(habit_id):
+            return "error", f"habit with id={habit_id} does not exist"
+        result = self.__db.delete_habit(habit_id)
+        if result[0] == "success":
+            self.get_all_habits()
+        return result
+
+    def get_cached_data(self) :
+        """Return the current cache, refreshing it after a flagged update."""
         if self.is_db_updated:
             self.get_all_habits()
             self.is_db_updated = False
@@ -121,7 +71,3 @@ class DB_Interface:
     def close(self):
         """Close the underlying database connection."""
         self.__db.close()
-
-if __name__ == "__main__":
-    interface = DB_Interface()
-    print(interface.get_all_habits())
