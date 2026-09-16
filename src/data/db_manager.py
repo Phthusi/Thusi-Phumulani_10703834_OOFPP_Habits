@@ -92,7 +92,7 @@ class CompleteHabit(Habit):
         """Set the start date only when it is valid."""
         old = self.get_start_date()
         super().set_start_date(start_date)
-        valid, message = self.__validator.valid_start_date()
+        valid, message = self.__validator.valid_start_datetime()
         if not valid:
             super().set_start_date(old)
         return valid, message
