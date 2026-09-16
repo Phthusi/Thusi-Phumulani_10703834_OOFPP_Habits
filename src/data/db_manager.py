@@ -3,6 +3,8 @@ from .models.habit_validator import HabitValidator
 from .db_functionality.db_interface import DB_Interface
 
 class CompleteHabit(Habit):     
+    """Habit model with validation and persistence operations."""
+
     def __init__(self, name="default", session_duration="default", start_date="default", status="UPCOMING", id=None):
         """Create a persistence-aware habit."""
         super().__init__(name, session_duration, start_date, status, id)
@@ -59,7 +61,7 @@ class CompleteHabit(Habit):
 
     def delete_habit(self):
         """Delete this habit from persistent storage."""
-        if self.get_id() == None:
+        if self.get_id() is None:
             return False, "Habit has no id"
 
         is_id_valid,message = self.__validator.valid_id()
@@ -123,21 +125,23 @@ class CompleteHabit(Habit):
         return valid, message
 
 class Habits:
-    __cached_data = []
+    """Collection/query facade for stored habit sessions."""
 
     def __init__(self):
+        """Create a habit collection backed by ``database_name`` when supplied."""
         self.__db_interface = DB_Interface()
-        self.__cached_data = self.__db_interface.get_cached_data()
     
     def get_habits(self):
-        self.__cached_data = self.__db_interface.get_cached_data()
-        return self.__cached_data
+        """Return all stored habit tuples."""
+        return self.__db_interface.get_cached_data()
 
     def id_is_available(self,id):
+        """Return whether a habit ID exists."""
         self.__cached_data = self.__db_interface.get_cached_data()
         return len([entry for entry in self.__cached_data if entry[0]==id])==1
 
     def get_habit_before_time(self,time):
+        """Return sessions scheduled before a clock time."""
         self.__cached_data = self.__db_interface.get_cached_data()
         habits = self.__cached_data
         results = []
@@ -149,6 +153,7 @@ class Habits:
         return results
     
     def get_habit_after_time(self,time):
+        """Return sessions scheduled after a clock time."""
         self.__cached_data = self.__db_interface.get_cached_data()
         habits = self.__cached_data
         results = []
@@ -160,6 +165,7 @@ class Habits:
         return results
 
     def get_habit_exactly_at(self,time):
+        """Return sessions scheduled exactly at a clock time."""
         self.__cached_data = self.__db_interface.get_cached_data()
         habits = self.__cached_data
         results = []
@@ -171,6 +177,7 @@ class Habits:
         return results
 
     def get_habit_exactly_at_date(self,date):
+        """Return sessions scheduled on an exact calendar date."""
         self.__cached_data = self.__db_interface.get_cached_data()
         habits = self.__cached_data
         results = []
@@ -182,64 +189,79 @@ class Habits:
         return results
 
     def get_habit_by_date(self, date):
+        """Return sessions occurring on ``date``."""
         self.__cached_data = self.__db_interface.get_cached_data()
         habits = self.__cached_data
         return [target_habit for target_habit in habits if date in target_habit[2]]
     
     def get_habit_by_name(self,name):
+        """Return habits whose name exactly matches ``name``."""
         self.__cached_data = self.__db_interface.get_cached_data()
         return list(filter(lambda  habit:name==habit[1],self.__cached_data))
     
     def get_habit_by_has_name(self,name):
+        """Return habits whose name contains ``name``."""
         self.__cached_data = self.__db_interface.get_cached_data()
         return list(filter(lambda  habit:name in habit[1],self.__cached_data)) 
 
     def get_habit_by_status(self,status):
+        """Return habits with the requested status."""
         self.__cached_data = self.__db_interface.get_cached_data()
         return list(filter(lambda  habit:status==habit[4],self.__cached_data))
     
     def get_habit_by_status_excluding_some_statuses(self,statuses):
+        """Return habits whose status is not in ``statuses``."""
         self.__cached_data = self.__db_interface.get_cached_data()
         return list(filter(lambda  habit:habit[4] not in statuses,self.__cached_data))
 
     def get_habit_by_id(self,id):
+        """Return the habit with ``habit_id`` as a one-item list."""
         self.__cached_data = self.__db_interface.get_cached_data()
         return list(filter(lambda  habit:id==habit[0],self.__cached_data))
     
     def get_habit_before_date(self,date):
+        """Return sessions before a calendar date."""
         self.__cached_data = self.__db_interface.get_cached_data()
         return list(filter(lambda  habit:habit[2]<date,self.__cached_data))
     
     def get_habit_after_date(self,date):
+        """Return sessions after a calendar date."""
         self.__cached_data = self.__db_interface.get_cached_data() 
         return list(filter(lambda  habit:habit[2]>date,self.__cached_data))
     
     def get_habits_on_and_after_date(self,date,habits=[]):
+        """Return supplied habits, or all habits, on/after ``date``."""
         self.__cached_data = self.__db_interface.get_cached_data()
         habits = self.__cached_data if habits == [] else habits
         return list(filter(lambda  habit:habit[2]>=date,habits))
 
     def get_habit_between_dates(self,start_date,end_date):
+        """Return sessions strictly between two calendar dates."""
         self.__cached_data = self.__db_interface.get_cached_data()
         return list(filter(lambda  habit:habit[2]>start_date and habit[2]<end_date,self.__cached_data))
     
     def get_by_duration(self,duration):
+        """Return sessions with an exact duration."""
         self.__cached_data = self.__db_interface.get_cached_data()
         return list(filter(lambda  habit:habit[3]==duration,self.__cached_data))
 
     def get_by_duration_between(self,start_duration,end_duration):
+        """Return sessions whose durations fall within the supplied range."""
         self.__cached_data = self.__db_interface.get_cached_data()
         return list(filter(lambda  habit:habit[3]>start_duration and habit[1]<end_duration,self.__cached_data))
 
     def get_by_duration_greater_than(self,duration):
+        """Return sessions longer than ``duration``."""
         self.__cached_data = self.__db_interface.get_cached_data()
         return list(filter(lambda  habit:habit[3]>duration,self.__cached_data))
 
     def get_by_duration_less_than(self,duration):
+        """Return sessions shorter than ``duration``."""
         self.__cached_data = self.__db_interface.get_cached_data()
         return list(filter(lambda  habit:habit[3]<duration,self.__cached_data))
     
     def get_upcoming_and_date_before(self,date):
+        """Return upcoming habits scheduled on/after ``date``."""
         self.__cached_data = self.__db_interface.get_cached_data()
         habits = self.get_habit_by_status('UPCOMING')
         return self.get_habits_on_and_after_date(date,habits)

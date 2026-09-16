@@ -8,19 +8,21 @@ class DB_Interface:
     Maintains an in-memory cache of habits to minimize raw database query overhead.
     """
 
-    __cached_data = []
     is_db_updated = False
 
     def __init__(
         self,
-        database_name = Path(__file__).resolve().parent.parent.parent.parent / "habit.db",
+        database_name = None
     ) -> None:
         """Initialize DB connection and warm up the in-memory cache.
 
         Args:
             database_name (Union[str, Path]): Path to database file.
         """
+        if database_name is None:
+            database_name = Path(__file__).resolve().parent.parent.parent.parent / "habit.db"
         self.__db = Database(str(database_name))
+        self.__cached_data = []
         self.get_all_habits()
 
     def __id_in_db(self, habit_id: int) -> bool:
@@ -40,7 +42,8 @@ class DB_Interface:
         Returns:
             List[Tuple[Any, ...]]: Cached habit tuples.
         """
-        _, self.__cached_data = self.__db.get_all_habits()
+        success, data = self.__db.get_all_habits()
+        self.__cached_data = data if success == "success" else []
         return self.__cached_data
 
     @classmethod
@@ -85,7 +88,7 @@ class DB_Interface:
         """
         success, habit_id = self.__db.add_habit(name, start_datetime, duration, status, periodicity)
         if success == "success":
-            self.__cached_data.append((habit_id, name, start_datetime, duration, status, periodicity))
+            self.get_all_habits()
         return success, habit_id
 
     def delete_habit(self, habit_id: int):
@@ -101,7 +104,7 @@ class DB_Interface:
             return "error", f"habit with id={habit_id} does not exist"
         success, result = self.__db.delete_habit(habit_id)
         if success == "success":
-            self.__cached_data = [entry for entry in self.__cached_data if entry[0] != habit_id]
+            self.get_all_habits()
         return success, result
 
     def get_cached_data(self):
@@ -113,7 +116,11 @@ class DB_Interface:
         if self.is_db_updated:
             self.get_all_habits()
             self.is_db_updated = False
-        return self.__cached_data
+        return list(self.__cached_data)
+
+    def close(self):
+        """Close the underlying database connection."""
+        self.__db.close()
 
 if __name__ == "__main__":
     interface = DB_Interface()
