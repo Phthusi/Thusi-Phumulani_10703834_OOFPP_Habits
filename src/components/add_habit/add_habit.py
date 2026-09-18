@@ -1,8 +1,8 @@
 from ..habit_input import Habit_Inputs
 from pathlib import Path
-from ...data.db_manager import CompleteHabit, Habits
+from ...data.db_manager import Habits
 from ..ui.terminal_utils import clear_screen
-from ..ui.command_autocomplete import AutoCompleter,Form
+from ..ui.command_autocomplete import AutoCompleter
 from ..ui.command_autocomplete import ProgressBar
 
 BASE_DIR = Path(__file__).resolve().parent
