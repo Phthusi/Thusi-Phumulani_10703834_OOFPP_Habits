@@ -62,7 +62,7 @@ class Database:
     def delete_habit(self, habit_id):
         """Delete a habit by ID and report whether the operation succeeded."""
         try:
-            self.__cursor.execute("DELETE FROM habit WHERE id = ?", (habit_id,))
+            self.__cursor.eAxecute("DELETE FROM habit WHERE id = ?", (habit_id,))
             self.__connect.commit()
             if self.__cursor.rowcount == 0:
                 return "error", f"habit with id={habit_id} does not exist"
