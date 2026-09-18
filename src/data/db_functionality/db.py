@@ -1,94 +1,96 @@
+"""SQLite persistence for habit records."""
+
 import sqlite3
+from datetime import datetime
+
 
 class Database:
-    def __init__(self, db_name) -> None:
-        self.__connect = sqlite3.connect(db_name)
+    """Small SQLite repository used by the habit tracker."""
+
+    VALID_FIELDS = {"name", "start_datetime", "duration", "status", "periodicity"}
+
+    def __init__(self, db_name):
+        """Open ``db_name`` and create the habit table when necessary."""
+        self.__name = str(db_name)
+        self.__connect = sqlite3.connect(self.__name)
+        self.__connect.execute("PRAGMA foreign_keys = ON")
         self.__cursor = self.__connect.cursor()
-        self.__name = db_name
-        self.__create_table(
-            """
-            CREATE TABLE IF NOT EXISTS habit
-            (
-                id INTEGER PRIMARY KEY, 
-                name TEXT NOT NULL ,
-                start_datetime TEXT NOT NULL, 
+        self.__create_table()
+
+    def __create_table(self):
+        """Create the habit table if it does not already exist."""
+        self.__cursor.execute("""
+            CREATE TABLE IF NOT EXISTS habit (
+                id INTEGER PRIMARY KEY,
+                name TEXT NOT NULL,
+                start_datetime TEXT NOT NULL,
                 duration TEXT NOT NULL,
                 status TEXT NOT NULL,
                 periodicity TEXT
-            );
-            """
-        )
+            )
+        """)
+        self.__connect.commit()
 
-    def __create_table(self, sql_query):
-        try:
-            with self.__connect:
-                self.__cursor.execute(sql_query)
-                return "success", None
-        except Exception as e:
-            return "error", e
+    @staticmethod
+    def _normalise_datetime(value):
+        """Convert a datetime object to the string representation used in SQLite."""
+        if isinstance(value, datetime):
+            return value.strftime("%Y-%m-%d %H:%M:%S")
+        return str(value)
 
-
-    def add_habit(self, name, start_datetime, duration,status, periodicity) -> tuple:
+    def add_habit(self, name, start_datetime, duration, status, periodicity=None):
         """Insert a habit and return ``('success', id)`` or an error tuple."""
         try:
             self.__cursor.execute(
                 "INSERT INTO habit (name, start_datetime, duration, status, periodicity) VALUES (?, ?, ?, ?, ?)",
-                [name, start_datetime, duration, status,periodicity]
+                (name, self._normalise_datetime(start_datetime), duration, status, periodicity),
             )
-
-        except Exception as e:
+            self.__connect.commit()
+            return "success", self.__cursor.lastrowid
+        except sqlite3.Error as exc:
             self.__connect.rollback()
-            return "error", str(e)
-    
-        self.__connect.commit()
-        return "success", self.__cursor.lastrowid
+            return "error", str(exc)
 
     def get_all_habits(self):
         """Return all habit rows ordered by their scheduled time."""
         try:
-            self.__cursor.execute("""SELECT * FROM habit ORDER BY id""")
+            self.__cursor.execute("SELECT id, name, start_datetime, duration, status, periodicity FROM habit ORDER BY start_datetime, id")
             return "success", self.__cursor.fetchall()
-        except Exception as e:
-            return "error", str(e)
+        except sqlite3.Error as exc:
+            return "error", str(exc)
 
-    def delete_habit(self, id):
+    def delete_habit(self, habit_id):
         """Delete a habit by ID and report whether the operation succeeded."""
         try:
-            self.__cursor.execute(
-            f"DELETE FROM habit WHERE id = ?",
-            (id,)
-            )
+            self.__cursor.execute("DELETE FROM habit WHERE id = ?", (habit_id,))
             self.__connect.commit()
             if self.__cursor.rowcount == 0:
-                return "error", f"habit with id={id} does not exist"
+                return "error", f"habit with id={habit_id} does not exist"
             return "success", None
-        except Exception as e:
+        except sqlite3.Error as exc:
             self.__connect.rollback()
-            return "error", str(e)
-    
-    def update_habit(self, id, **kwargs):
+            return "error", str(exc)
+
+    def update_habit(self, habit_id, **kwargs):
         """Update allowed habit columns using parameterised SQL."""
         if not kwargs:
             return "error", "No fields supplied for update."
-
-        valid_fields = {"name", "start_datetime", "duration", "status","periodicity"}   
-        if not set(kwargs).issubset(valid_fields):
-            return "error", f"Invalid fields for habit table. Valid fields are: {valid_fields}"
-
+        if not set(kwargs).issubset(self.VALID_FIELDS):
+            return "error", f"Invalid fields for habit table. Valid fields are: {self.VALID_FIELDS}"
         try:
-            self.__cursor.execute(
-            f"UPDATE habit SET {', '.join([f'{k}=?' for k in kwargs.keys()])} WHERE id = ?",
-            (*kwargs.values(), id))
+            assignments = ", ".join(f"{field} = ?" for field in kwargs)
+            values = [self._normalise_datetime(v) if field == "start_datetime" else v
+                      for field, v in kwargs.items()]
+            values.append(habit_id)
+            self.__cursor.execute(f"UPDATE habit SET {assignments} WHERE id = ?", values)
             self.__connect.commit()
-            return "success", f"habit Habit(id={id},) has been updated successfully..."
-        
-        except Exception as e:
+            if self.__cursor.rowcount == 0:
+                return "error", f"habit with id={habit_id} does not exist"
+            return "success", f"habit Habit(id={habit_id},) has been updated successfully..."
+        except sqlite3.Error as exc:
             self.__connect.rollback()
-            return "error", str(e)        
+            return "error", str(exc)
 
-if __name__=="__main__":
-    x = Database()
-    # x.add_habit('Exercise', '2023-01-01 08:00:00', '01:00:00', 'MISSED')
-    # x.add_habit('Exercise', '2023-01-01 08:00:00', '00:30:00', 'UPCOMING')
-    # print("hello world!")
-    print(x.get_all_habits())
+    def close(self):
+        """Close the SQLite connection."""
+        self.__connect.close()

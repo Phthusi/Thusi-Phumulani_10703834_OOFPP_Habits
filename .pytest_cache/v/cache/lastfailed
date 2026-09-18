@@ -1,0 +1,19 @@
+{
+  "src/components/time_project/test/time_manager_test.py::TestDateTimeValidator::test_calculate_time_difference_complex_case": true,
+  "src/components/time_project/test/time_manager_test.py::TestDateTimeValidator::test_calculate_time_difference_moderate_case": true,
+  "src/components/time_project/test/time_manager_test.py::TestDateTimeValidator::test_calculate_time_difference_simple_case": true,
+  "src/components/time_project/test/time_manager_test.py::TestDateTimeValidator::test_determine_habit_status": true,
+  "src/components/time_project/test/time_manager_test.py::TestDateTimeValidator::test_is_clashing": true,
+  "src/components/time_project/test/time_manager_test.py::TestDateTimeValidator::test_is_time_already_passed": true,
+  "src/components/time_project/test/time_manager_validator_test.py::TestDateTimeValidator::test_is_date_valid_with_invalid_date": true,
+  "src/components/time_project/test/time_manager_validator_test.py::TestDateTimeValidator::test_is_date_valid_with_valid_date": true,
+  "src/components/time_project/test/time_manager_validator_test.py::TestDateTimeValidator::test_is_datetime_valid_with_invalid_datetime": true,
+  "src/components/time_project/test/time_manager_validator_test.py::TestDateTimeValidator::test_is_datetime_valid_with_valid_datetime": true,
+  "src/components/time_project/test/time_manager_validator_test.py::TestDateTimeValidator::test_is_datetime_valid_without_seconds": true,
+  "src/components/time_project/test/time_manager_validator_test.py::TestDateTimeValidator::test_is_passed__with_passed_time_with_future_datetime": true,
+  "src/components/time_project/test/time_manager_validator_test.py::TestDateTimeValidator::test_is_passed__with_passed_time_with_passed_datetime": true,
+  "src/components/time_project/test/time_manager_validator_test.py::TestDateTimeValidator::test_is_time_format_valid_valid_with_invalid_time_format": true,
+  "src/components/time_project/test/time_manager_validator_test.py::TestDateTimeValidator::test_is_time_format_valid_valid_with_valid_time_format": true,
+  "src/components/time_project/test/time_manager_validator_test.py::TestDateTimeValidator::test_validate_duration_with_invalid_duration": true,
+  "src/components/time_project/test/time_manager_validator_test.py::TestDateTimeValidator::test_validate_duration_with_valid_duration": true
+}
