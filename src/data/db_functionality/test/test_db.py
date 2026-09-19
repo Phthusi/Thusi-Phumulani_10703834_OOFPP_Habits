@@ -27,12 +27,14 @@ class TestDatabase(unittest.TestCase):
 
     def test_get_all_habits(self):
         success,results = self.__database.get_all_habits()
+        results.sort(key=lambda entry:entry[0])
         self.assertEqual(3,len(results))
         self.assertEqual(success,'success')
         self.assertEqual(self.__habits,list(map(lambda habit:habit[1:],results)))
 
     def test_update_habit(self):
         expected_habit = self.__habits[2]
-        self.__database.update_habit(id=2,name='studying mathematics')
+        self.__database.update_habit(habit_id=2,name='studying mathematics')
         success,results = self.__database.get_all_habits()
+        results.sort(key=lambda entry:entry[0])
         self.assertEqual(results[2][1:],expected_habit)

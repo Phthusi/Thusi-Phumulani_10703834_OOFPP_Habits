@@ -86,7 +86,7 @@ class Habit_Inputs:
 
         time_list = time.split(':')
         if len(time_list)!=2:
-            return False, 'Invalid format: time is not in a valid format'
+             return False, 'Invalid format: time is not in a valid format'
 
         habit_start_datetime +=":00"
         if not self.__datetime_validator.is_datetime_valid(habit_start_datetime):
@@ -144,7 +144,7 @@ class Habit_Inputs:
  periodicity      :{self.__habit.get_periodicity()}
 -----------------------------------------
 '''
-        for habit in habits: 
+        for habit in habits:
             id, name, start_datetime, duration, status, periodicity = habit
             datetime2 = self.__datetime_manager.string_to_datetime(start_datetime)
             duration2 = self.__datetime_manager.convert_duration(duration)
@@ -163,7 +163,8 @@ class Habit_Inputs:
 '''
                 return False, f'❌ Sorry Habit not saved, The following Habits are Clashing: \n{habit_to_be_added} \nAND {habit_from_db}'
         clear_screen()
-        self.__shelf.preserve_habit((id+1,self.__habit.get_name(),self.__habit.get_start_date(),self.__habit.get_session_duration(),'UPCOMING',self.__habit.get_periodicity()))
+        next_id = max((habit[0] for habit in habits), default=0) + 1
+        self.__shelf.preserve_habit((next_id,self.__habit.get_name(),self.__habit.get_start_date(),self.__habit.get_session_duration(),'UPCOMING',self.__habit.get_periodicity()))
         return True, f'✅ Habit saved successfully....\n{habit_to_be_added.replace("Habit to be added","Habit added")}'
 
     def get_clashing_habits(self,habits_to_be_added):
@@ -171,7 +172,7 @@ class Habit_Inputs:
         clash_pairs = []
         for habit_to_be_added in habits_to_be_added:
             id_1, name_1, start_datetime_1, duration_1, status_1, periodicity_1 = habit_to_be_added
-            for habit in habits: 
+            for habit in habits:
                 id, name, start_datetime, duration, status, periodicity = habit
                 datetime2 = self.__datetime_manager.string_to_datetime(start_datetime)
                 duration2 = self.__datetime_manager.convert_duration(duration)

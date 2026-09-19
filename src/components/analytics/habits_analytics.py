@@ -1,225 +1,156 @@
+"""Functional analytics for habit sessions."""
+
+from functools import reduce
+from datetime import timedelta
 from ...data.db_manager import Habits
-from colorama import Fore, Back, Style
-from ..ui.terminal_utils import clear_screen
 from ..time_project.time_manager import HabitDateTimeManager
 from rich.table import Table
 from rich.text import Text
 from rich.console import Console
+from ..ui.terminal_utils import clear_screen
+
+
+def completion_streaks(statuses):
+    """Return consecutive COMPLETED run lengths from a status sequence."""
+    def step(acc, status):
+        current, completed_runs = acc
+        if status == "COMPLETED":
+            return current + 1, completed_runs
+        return 0, completed_runs + ([current] if current else [])
+    current, runs = reduce(step, statuses, (0, []))
+    return runs + ([current] if current else [])
+
+
+def longest_streak_for_habit(habits):
+    """Return the longest consecutive completed run in one habit's sessions."""
+    ordered = sorted(habits, key=lambda h: h[2])
+    return max(completion_streaks([h[4] for h in ordered]), default=0)
+
 
 class Analytics:
+    """Calculate habit statistics using functional transformations."""
 
     @classmethod
     def find_statuses(cls):
-        sorted_habits = list(sorted(Habits().get_habits(), key=lambda habit: habit[2]))
-        sorted_statuses = [habit[4] for habit in sorted_habits if habit[4] in ['MISSED', 'COMPLETED']]
-        return sorted_habits, sorted_statuses
+        """Return chronological rows and their completed/missed statuses."""
+        rows = sorted(Habits().get_habits(), key=lambda habit: habit[2])
+        tracked = [habit for habit in rows if habit[4] in {"MISSED", "COMPLETED"}]
+        return rows, [habit[4] for habit in tracked]
 
     @classmethod
-    def long_streak_duration_ave(cls):
-        habit_date_time_manager = HabitDateTimeManager()
-        streaks_totals, streak_habits = cls.streaks_calculator()
-        
-        streak_habits = [sh for sh in streak_habits if sh]
-        if not streak_habits:
-            return 'N/A'
-
-        max_index = streaks_totals.index(max(streaks_totals)) if streaks_totals else 0
-        target_streak = streak_habits[max_index] if max_index < len(streak_habits) else streak_habits[0]
-
-        if not target_streak:
-            return 'N/A'
-
-        duration_list = list(map(lambda habit: habit_date_time_manager.convert_duration(habit[3]), target_streak))
-        start = habit_date_time_manager.convert_duration('00:00:00')
-        total_streak_duration = sum(duration_list, start=start)
-        average_duration = f'{total_streak_duration / len(target_streak)}'
-        
-        hours, minutes, seconds = average_duration.split(':')
-        result = ''
-        result += '' if hours in ('0', '00') else f'{hours} Hrs'
-        mins_str = f'{minutes} mins' if result == '' else f',{minutes} mins'
-        result += '' if minutes in ('0', '00') else mins_str
-        return result if result else '0 mins'
+    def _tracked(cls):
+        """Return chronologically ordered completed/missed rows."""
+        rows = sorted(Habits().get_habits(), key=lambda habit: habit[2])
+        return [h for h in rows if h[4] in {"MISSED", "COMPLETED"}]
 
     @classmethod
     def streaks_calculator(cls):
-        sorted_habits, sorted_statuses = cls.find_statuses()
-        count = 0
-        streaks_totals = []
-        streak_habits = []
-        temporary_streak_habits = []
-        
-        for status, habit in zip(sorted_statuses, sorted_habits):
-            if status == 'COMPLETED':
-                count += 1
-                temporary_streak_habits.append(habit)
-            else:
-                if count > 0:
-                    streaks_totals.append(count)
-                    streak_habits.append(temporary_streak_habits)
-                temporary_streak_habits = []
-                count = 0
-                
-        # Catch any trailing active streak at the end of the list
-        if count > 0:
-            streaks_totals.append(count)
-            streak_habits.append(temporary_streak_habits)
+        """Return completed streak lengths and the rows belonging to each streak."""
+        tracked = cls._tracked()
+        streaks, groups, current = [], [], []
+        for habit in tracked:
+            if habit[4] == "COMPLETED":
+                current.append(habit)
+            elif current:
+                streaks.append(len(current)); groups.append(current); current = []
+        if current:
+            streaks.append(len(current)); groups.append(current)
+        return streaks, groups
 
-        return streaks_totals, streak_habits
+    @classmethod
+    def all_habits(cls):
+        """Return all currently tracked habit sessions."""
+        return Habits().get_habits()
+
+    @classmethod
+    def habits_by_periodicity(cls, periodicity):
+        """Return habit sessions matching ``DAILY`` or ``WEEKLY`` periodicity."""
+        return list(filter(lambda habit: habit[5] == periodicity, cls.all_habits()))
+
+    @classmethod
+    def longest_streak_for_habit(cls, habit_id):
+        """Return the longest completed streak for a specific habit ID."""
+        return f"{longest_streak_for_habit([h for h in cls.all_habits() if h[0] == habit_id])} days"
 
     @classmethod
     def longest_streak(cls):
+        """Return the longest tracked streak as a human-readable value."""
         totals, _ = cls.streaks_calculator()
-        if not totals:
-            return '0 days'
-        return f'{max(totals)} days'
+        return f"{max(totals)} days" if totals else "0 days"
 
     @classmethod
     def current_streak(cls):
-        sorted_habits, sorted_statuses = cls.find_statuses()
+        """Return the number of consecutive completed tracked sessions at the end."""
+        statuses = [h[4] for h in cls._tracked()]
         count = 0
-        for status in reversed(sorted_statuses):
-            if status == 'COMPLETED':
+        for status in reversed(statuses):
+            if status == "COMPLETED":
                 count += 1
             else:
                 break
-        return f'{count} days'
+        return f"{count} days"
 
     @classmethod
     def total_completed_sessions(cls):
-        sorted_habits, sorted_statuses = cls.find_statuses()
-        if not sorted_statuses:
-            return 'N/A'
-        return f"{sorted_statuses.count('COMPLETED')}"
-
-    @classmethod
-    def completion_rate(cls):
-        sorted_habits, sorted_statuses = cls.find_statuses()
-        if not sorted_statuses:
-            return 'N/A'
-        return f"{round((sorted_statuses.count('COMPLETED') / len(sorted_statuses)) * 100, 2)}%"
-
-    @classmethod
-    def completion_ratio(cls):
-        sorted_habits, sorted_statuses = cls.find_statuses()
-        if not sorted_statuses:
-            return 'N/A'
-        return f"{sorted_statuses.count('COMPLETED')} / {len(sorted_statuses)}"
-
-    @classmethod
-    def count_days(cls):
-    #    (5, 'studying for hours', '2026-06-01 14:10:00', '00:15:00', 'MISSED', None)
-        sorted_habits, sorted_statuses = cls.find_statuses() 
-        sorted_habits = [habit for habit in sorted_habits if habit[4] in ['MISSED', 'COMPLETED']]
-        return len(set([habit[2].split(' ')[0].strip() for habit in sorted_habits]))
+        """Return the number of completed tracked sessions."""
+        count = sum(1 for h in cls._tracked() if h[4] == "COMPLETED")
+        return str(count) if count else "N/A"
 
     @classmethod
     def total_missed_sessions(cls):
-        sorted_habits, sorted_statuses = cls.find_statuses()
-        if not sorted_statuses:
-            return 'N/A'
-        return f"{sorted_statuses.count('MISSED')}"
+        """Return the number of missed tracked sessions."""
+        count = sum(1 for h in cls._tracked() if h[4] == "MISSED")
+        return str(count) if count else "N/A"
+
+    @classmethod
+    def completion_rate(cls):
+        """Return completed sessions as a percentage of tracked sessions."""
+        statuses = [h[4] for h in cls._tracked()]
+        return "N/A" if not statuses else f"{round(statuses.count('COMPLETED') / len(statuses) * 100, 2)}%"
+
+    @classmethod
+    def completion_ratio(cls):
+        """Return completed sessions over all tracked sessions."""
+        statuses = [h[4] for h in cls._tracked()]
+        return "N/A" if not statuses else f"{statuses.count('COMPLETED')} / {len(statuses)}"
+
+    @classmethod
+    def count_days(cls):
+        """Return the number of distinct days containing tracked sessions."""
+        return len({h[2].split(" ")[0] for h in cls._tracked()})
+
+    @classmethod
+    def long_streak_duration_ave(cls):
+        """Return average duration of the longest completed streak."""
+        totals, groups = cls.streaks_calculator()
+        if not totals:
+            return "N/A"
+        group = groups[totals.index(max(totals))]
+        manager = HabitDateTimeManager()
+        total = sum((manager.convert_duration(h[3]) for h in group), timedelta())
+        average = total / len(group)
+        minutes = int(average.total_seconds() // 60)
+        hours, mins = divmod(minutes, 60)
+        return f"{hours} Hrs,{mins} mins" if hours else f"{mins} mins"
 
     @classmethod
     def display_detailed_analytics(cls):
-        day_of_week_completion_table = Table(width=80, header_style="bold white on blue")
+        """Display a compact, data-driven analytics report in the terminal."""
         console = Console()
-        day_of_week_completion_table.add_column("Day", style="bold",width=1)
-        day_of_week_completion_table.add_column("Completion", justify="center", style="bold")
-        day_of_week_completion_table.add_column("Sessions", justify="center", style="bold")
-        day_of_week_completion_table.add_row("Mon","89%",'8/9')
-        day_of_week_completion_table.add_row("Tue","89%",'8/9')
-        day_of_week_completion_table.add_row("Wed","89%",'8/9')
-        day_of_week_completion_table.add_row("Thurs","89%",'8/9')
-        day_of_week_completion_table.add_row("Fri","89%",'8/9')
-        day_of_week_completion_table.add_row("Sat","89%",'8/9')
-        day_of_week_completion_table.add_row("Sun","89%",'8/9')
-# 
-        daily_load_vs_completion     = Table(header_style="bold white on blue", width=80)
-        special_val = Text("6+ hrs", style="bold cyan on #ca7c57", justify="center")
-        daily_load_vs_completion.add_column("Committed Time(Load)", justify="center",width=10, style="bold")
-        daily_load_vs_completion.add_column("Completion", justify="center", style="bold")
-        daily_load_vs_completion.add_column("Sessions", justify="center", style="bold")
-        daily_load_vs_completion.add_row('0 hrs ≤ load < 01 hr','50%','5/10')
-        daily_load_vs_completion.add_row('01 hr ≤ load < 2 hrs','50%','5/10')
-        daily_load_vs_completion.add_row('2 hrs ≤ load < 3 hrs','50%','5/10')
-        daily_load_vs_completion.add_row('3 hrs ≤ load < 4 hrs','50%','5/10')
-        daily_load_vs_completion.add_row('4 hrs ≤ load < 5 hrs','50%','5/10')
-        daily_load_vs_completion.add_row('5 hrs ≤ load < 6 hrs','50%','5/10')
-        daily_load_vs_completion.add_row(special_val,'50%','5/10')
-
-        special_val = Text("5+ sessions", style="bold cyan on #ca7c57", justify="center")
-        overall_baseline_session_vol_distribution = Table( width=80, header_style="bold white on blue")
-        overall_baseline_session_vol_distribution.add_column("Sessions", justify="center",width=10, style="bold")
-        overall_baseline_session_vol_distribution.add_column("Share of Days", justify="center", style="bold")
-        overall_baseline_session_vol_distribution.add_column("Ave commited time", justify="center", style="bold")
-        overall_baseline_session_vol_distribution.add_row('0 sessions','50%','None')
-        overall_baseline_session_vol_distribution.add_row('1 - 2 sessions','85%','1 /day')
-        overall_baseline_session_vol_distribution.add_row('3 - 4 sessions','23%','2 hrs/day')
-        overall_baseline_session_vol_distribution.add_row(special_val,'80%','4hrs 40mins/day')
-
-        current_streak_session_vol_distribution = Table( width=80, header_style="bold white on blue")
-        current_streak_session_vol_distribution.add_column("Sessions", justify="center",width=10, style="bold")
-        current_streak_session_vol_distribution.add_column("Share of Days", justify="center", style="bold")
-        current_streak_session_vol_distribution.add_column("Ave commited time", justify="center", style="bold")
-        current_streak_session_vol_distribution.add_row('0 sessions','50%','None')
-        current_streak_session_vol_distribution.add_row('1 - 2 sessions','85%','1 /day')
-        current_streak_session_vol_distribution.add_row('3 - 4 sessions','23%','2 hrs/day')
-        current_streak_session_vol_distribution.add_row(special_val,'80%','4hrs 40mins/day')
-
-        longest_streak_session_vol_distribution = Table( width=80, header_style="bold white on blue")
-        longest_streak_session_vol_distribution.add_column("Sessions", justify="center",width=10, style="bold")
-        longest_streak_session_vol_distribution.add_column("Share of Days", justify="center", style="bold")
-        longest_streak_session_vol_distribution.add_column("Ave commited time", justify="center", style="bold")
-        longest_streak_session_vol_distribution.add_row('0 sessions','50%','None')
-        longest_streak_session_vol_distribution.add_row('1 - 2 sessions','85%','1 /day')
-        longest_streak_session_vol_distribution.add_row('3 - 4 sessions','23%','2 hrs/day')
-        longest_streak_session_vol_distribution.add_row(special_val,'80%','4hrs 40mins/day')
+        table = Table(title="Basic Habit Analytics")
+        table.add_column("Metric")
+        table.add_column("Value")
+        metrics = [
+            ("Analysis period", f"{cls.count_days()} days"),
+            ("Longest streak", cls.longest_streak()),
+            ("Current streak", cls.current_streak()),
+            ("Completion rate", cls.completion_rate()),
+            ("Completed sessions", cls.total_completed_sessions()),
+            ("Missed sessions", cls.total_missed_sessions()),
+            ("Completion ratio", cls.completion_ratio()),
+        ]
+        for name, value in metrics:
+            table.add_row(name, str(value))
         clear_screen()
-        if False:
-            print(f'''--------------------------------------------------------------------------------
-                            📊  BASIC ANALYTICS
-    --------------------------------------------------------------------------------
-                                
-    I. {Back.BLUE}🌐 OVERALL PERFORMANCE                                                       {Style.RESET_ALL}
-        • Analysis Period    : {cls.count_days()} days
-        • Avg Sessions       : 5 sessions/day
-        • Completion Rate    : {cls.completion_rate()} ({cls.completion_ratio()} sessions)
-        • Avg Committed Time : 1.80 hrs/day
-        • Peak Zone          : Afternoon (75.0% share)
-        • Maximum Daily Commit : 5h
-        • Minimum Daily Commit : 0m
-    ''')
-            console.print(overall_baseline_session_vol_distribution)
-            print(f'''
-    II.  {Back.BLUE}🔥 CURRENT STREAK                                                          {Style.RESET_ALL} 
-        • Streak Length      : {cls.current_streak()}
-        • Avg Committed Time : 2.4 hrs/day
-        • Peak Zone          : Morning (85.0% share)
-        • Maximum Daily Commit : 5h
-        • Minimum Daily Commit : 0m
-    ''')
-            console.print(current_streak_session_vol_distribution)
-            print(f'''
-    III. {Back.BLUE}🏆 LONGEST STREAK                                                          {Style.RESET_ALL}
-        • Streak Length      : {cls.longest_streak()}
-        • Avg Committed Time : {cls.long_streak_duration_ave()}/day
-        • Peak Zone          : Not enough distribution
-        • Maximum Daily Commit : 5h
-        • Minimum Daily Commit : 0m
-    ''')        
-            console.print(longest_streak_session_vol_distribution)
-            print(f'''
-    IV. {Back.BLUE}📅 COMPLETION RATE BY DAY OF WEEK                                           {Style.RESET_ALL}
-    ''')
-            console.print(day_of_week_completion_table)
-            print(f'''
-    V.  {Back.BLUE}🏋️  COMPLETION RATE BY DAILY COMMITTED TIME                                  {Style.RESET_ALL}
-    ''')
-            console.print(daily_load_vs_completion)
-            print('''----------------------------------------------------------------------------------''')
-            input('                         Press Enter to continue')
-        else:
-            print('IMPLEMENTATION IS COMING SOON')
-            input('Press Enter to continue')
-
+        console.print(table)
+        input('Press enter to continue')
