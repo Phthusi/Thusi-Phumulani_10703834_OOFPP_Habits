@@ -20,14 +20,17 @@ Gifs can be used to illustrate steps for the user in action.
   - [Add Component Purpose](#add-component-purpose)
   - [Table of Contents](#table-of-contents)
   - [High-Level Flow](#high-level-flow)
+    - [Screen views](#screen-views)
+    - [Steps to create a habit](#steps-to-create-a-habit)
   - [Command Loop](#command-loop)
   - [Testing](#testing)
 
   
 ## [High-Level Flow](#table-of-contents)
+### [Screen views](#table-of-contents) 
 ![Add Habit Image](../add_habit/media/add_habit.png)
 
-- ### Create a habit
+### [Steps to create a habit](#table-of-contents)
   1.  ### user enters the add habit component screen.
   2.  ### enter field values
       - Enter name
