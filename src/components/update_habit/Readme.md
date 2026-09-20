@@ -45,7 +45,7 @@ Gifs can be used to illustrate steps for the user in action.
   ![Add Habit Image](../delete_habit/media/copied_habit_on_shelf_.png)
 
 ### [Steps to delete a habit](#table-of-contents)
-  1.  ### [Search for a habit you want to delete]()
+  1.  ### [Search for a habit you want to delete](/src/components/search_habits/Readme.md)
   2.  ### Copy habit to the shelf
   3.  ### Delete habit
 

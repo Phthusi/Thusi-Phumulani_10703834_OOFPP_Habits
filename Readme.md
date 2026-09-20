@@ -22,9 +22,9 @@ It’s a lightweight but fully featured system for building **consistency, accou
     - [Loading the predefined fixtures](#loading-the-predefined-fixtures)
     - [Add habit](/src/components/add_habit/Readme.md)
     - [Delete habit](/src/components/delete_habit/Readme.md)
-    - [Update habit]()
-    - [Search habit]()
-    - [Habit repeats]()
+    - [Update habit](/src/components/update_habit/Readme.md)
+    - [Search habit](/src/components/search_habits/Readme.md)
+    - [Habit repeats](/src/components/habit_repeats/Readme.md)
   
 A Python habit-tracking backend/CLI using object-oriented modelling, SQLite persistence, functional analytics, and a command-line interface.
 

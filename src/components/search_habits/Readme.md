@@ -1,9 +1,9 @@
 >[Go back home](../../../Readme.md)
 
-# Delete Habit
+# Search Habit
 
 
-## Delete Component Purpose
+## Search Component Purpose
 
 
 The **DeleteHabitController** component allows users to safely delete a habit from the database via the command-line interface.
@@ -21,33 +21,33 @@ Gifs can be used to illustrate steps for the user in action.
 ---
 
 ## Table of Contents
-- [Delete Habit](#delete-habit)
-  - [Delete Component Purpose](#delete-component-purpose)
+- [Search Habit](#search-habit)
+  - [Search Component Purpose](#search-component-purpose)
   - [Table of Contents](#table-of-contents)
   - [High-Level Flow](#high-level-flow)
     - [Screen views](#screen-views)
-      - [Delete habit screen without grabbing any habit](#delete-habit-screen-without-grabbing-any-habit)
-      - [Delete habit screen view with grabbed any habit but didn't copy it from the shelf](#delete-habit-screen-view-with-grabbed-any-habit-but-didnt-copy-it-from-the-shelf)
-      - [Delete habit screen view with grabbed any habit copied from the shelf](#delete-habit-screen-view-with-grabbed-any-habit-copied-from-the-shelf)
+      - [Search habit screen without grabbing any habit](#search-habit-screen-without-grabbing-any-habit)
+      - [Search habit screen view with grabbed any habit but didn't copy it from the shelf](#search-habit-screen-view-with-grabbed-any-habit-but-didnt-copy-it-from-the-shelf)
+      - [Search habit screen view with grabbed any habit copied from the shelf](#search-habit-screen-view-with-grabbed-any-habit-copied-from-the-shelf)
     - [Steps to delete a habit](#steps-to-delete-a-habit)
   - [Testing](#testing)
 
   
 ## [High-Level Flow](#table-of-contents)
 ### [Screen views](#table-of-contents) 
-  #### Delete habit screen without grabbing any habit
+  #### Search habit screen without grabbing any habit
   ![Add Habit Image](../delete_habit/media/delete_habit.png)
 
-  #### Delete habit screen view with grabbed any habit but didn't copy it from the shelf
+  #### Search habit screen view with grabbed any habit but didn't copy it from the shelf
   ![Add Habit Image](../delete_habit/media/habit_on_shelf_not_copied.png)
 
-  #### Delete habit screen view with grabbed any habit copied from the shelf
+  #### Search habit screen view with grabbed any habit copied from the shelf
   ![Add Habit Image](../delete_habit/media/copied_habit_on_shelf_.png)
 
 ### [Steps to delete a habit](#table-of-contents)
   1.  ### [Search for a habit you want to delete]()
   2.  ### Copy habit to the shelf
-  3.  ### Delete habit
+  3.  ### Search habit
 
   Gif example of the high level flow:
 
