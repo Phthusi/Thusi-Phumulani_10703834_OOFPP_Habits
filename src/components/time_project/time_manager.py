@@ -21,9 +21,19 @@ class HabitDateTimeManager:
 
     def is_clashing(self, datetime1, duration1, datetime2, duration2):
         """Return whether two sessions overlap in time."""
-        end1 = datetime1 + duration1
-        end2 = datetime2 + duration2
-        return datetime1 < end2 and datetime2 < end1
+        datetime_pair = {'datetime1':[datetime1,duration1],'datetime2':[datetime2,duration2]}
+        
+        if datetime1 == datetime2:
+            return True
+        
+        earliest_time_key,latest_time_key = ['datetime1','datetime2'] if datetime1 < datetime2 else ['datetime2','datetime1']
+        earliest_time_t_initial,earliest_duration = datetime_pair[earliest_time_key]
+        earliest_time_t_final = earliest_time_t_initial+earliest_duration
+
+        latest_time_t_initial,_ = datetime_pair[latest_time_key]
+
+        return earliest_time_t_initial <= latest_time_t_initial <= earliest_time_t_final
+
 
     def determine_habit_status(self, start_dt_str: str, duration_str: str, now=None):
         """Determine session status from its start, duration and current time."""

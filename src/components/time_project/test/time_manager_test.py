@@ -1,6 +1,6 @@
 import unittest
 from src.components.time_project.time_manager import HabitDateTimeManager
-from datetime import timedelta
+from datetime import timedelta,datetime
 
 class TestDateTimeValidator(unittest.TestCase):
     def setUp(self):
@@ -24,13 +24,30 @@ class TestDateTimeValidator(unittest.TestCase):
         self.assertEqual(results,timedelta(total_days,minutes=minutes,seconds=seconds))
 
     def test_is_time_already_passed(self):
-        pass
+        self.assertFalse(self.__habit_datetime_validator.is_time_already_passed('2090-11-28 23:15:00'))
+        self.assertTrue(self.__habit_datetime_validator.is_time_already_passed('1990-11-28 14:00:00'))
 
     def test_is_clashing(self):
-        pass
+        self.assertFalse(self.__habit_datetime_validator.is_clashing(datetime.strptime('2010-06-10 12:10:00','%Y-%m-%d %H:%M:%S'),timedelta(minutes=30),datetime.strptime('2010-06-10 11:30:00','%Y-%m-%d %H:%M:%S'),timedelta(minutes=30)))
+        self.assertTrue(self.__habit_datetime_validator.is_clashing(datetime.strptime('2010-06-10 12:10:00','%Y-%m-%d %H:%M:%S'),timedelta(minutes=30),datetime.strptime('2010-06-10 11:30:00','%Y-%m-%d %H:%M:%S'),timedelta(minutes=50)))
 
     def test_determine_habit_status(self):
         pass
     
+    def test_convert_duration(self): 
+        pass
+
+    def test_string_to_datetime(self):
+        pass
+
+    def test_is_date_valid(self):
+        pass
+
+    def test_get_weekday(self):
+        pass
+
+    def test_increase_by_day(self):
+        pass
+
 if __name__=='__main__':
     unittest.main()
