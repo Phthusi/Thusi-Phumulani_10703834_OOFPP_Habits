@@ -1,6 +1,6 @@
 # Habit Tracker
 
-![Habit Image](./media/habit_tracker_image.png)
+[![Habit Image](./media/habit_tracker_image.png)](./media/habit_tracker_image.png)
 
 ## Project Purpose
 This **Habit Tracker** is a command-line interface (CLI) application designed to help users:
@@ -36,9 +36,6 @@ A Python habit-tracking backend/CLI using object-oriented modelling, SQLite pers
 ### [Installation](#table-of-content)
 
 ```bash
-python -m venv .venv
-# Windows: .venv\Scripts\activate
-# macOS/Linux: source .venv/bin/activate
 python -m pip install -r requirements.txt
 ```
 
@@ -73,3 +70,4 @@ The project includes five predefined habits and four weeks of example tracking d
 ```bash
 python seed_fixtures.py
 ```
+[⬆ Back to top](#top)

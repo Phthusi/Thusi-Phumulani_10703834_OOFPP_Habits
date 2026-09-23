@@ -1,57 +1,58 @@
 >[Go back home](../../../Readme.md)
 
-# Delete Habit
+# Update Habit
 
 
-## Delete Component Purpose
+## Update Component Purpose
 
 
-The **DeleteHabitController** component allows users to safely delete a habit from the database via the command-line interface.
+The **Update Habit Component** component allows users to update, complete, and view habits in the command-line interface.
 
-It ensures:
+It provides functionality to:
 
-* Habit exists before deletion
-* Reflections and descriptions are preserved until deletion
-* User confirmation before removing
+* Update habit details
+* Mark tasks as completed
+* Update habit statuses based on start time and duration
+* View individual or multiple habits
 
-This component follows a **command-driven interaction loop**, where each user action is mapped to appropriate methods.
+The component follows a **command-driven loop**, where each command maps to a handler method.
 
 Gifs can be used to illustrate steps for the user in action.
 
 ---
 
 ## Table of Contents
-- [Delete Habit](#delete-habit)
-  - [Delete Component Purpose](#delete-component-purpose)
+- [Update Habit](#update-habit)
+  - [Update Component Purpose](#update-component-purpose)
   - [Table of Contents](#table-of-contents)
   - [High-Level Flow](#high-level-flow)
     - [Screen views](#screen-views)
-      - [Delete habit screen without grabbing any habit](#delete-habit-screen-without-grabbing-any-habit)
-      - [Delete habit screen view with grabbed any habit but didn't copy it from the shelf](#delete-habit-screen-view-with-grabbed-any-habit-but-didnt-copy-it-from-the-shelf)
-      - [Delete habit screen view with grabbed any habit copied from the shelf](#delete-habit-screen-view-with-grabbed-any-habit-copied-from-the-shelf)
-    - [Steps to delete a habit](#steps-to-delete-a-habit)
+      - [Update habit screen without grabbing any habit](#update-habit-screen-without-grabbing-any-habit)
+      - [Update habit screen view with grabbed any habit but didn't copy it from the shelf](#update-habit-screen-view-with-grabbed-any-habit-but-didnt-copy-it-from-the-shelf)
+      - [Update habit screen view with grabbed any habit copied from the shelf](#update-habit-screen-view-with-grabbed-any-habit-copied-from-the-shelf)
+    - [Steps to update a habit](#steps-to-update-a-habit)
   - [Testing](#testing)
 
   
 ## [High-Level Flow](#table-of-contents)
 ### [Screen views](#table-of-contents) 
-  #### Delete habit screen without grabbing any habit
-  ![Add Habit Image](../delete_habit/media/delete_habit.png)
+  #### Update habit screen without grabbing any habit
+  [![Update Habit Image](../update_habit/media/update_habit_empty_shelf.png)](../update_habit/media/update_habit_empty_shelf.png)
 
-  #### Delete habit screen view with grabbed any habit but didn't copy it from the shelf
-  ![Add Habit Image](../delete_habit/media/habit_on_shelf_not_copied.png)
+  #### Update habit screen view with grabbed any habit but didn't copy it from the shelf
+  [![Update Habit Image](../update_habit/media/update_habit_not_copied_from_shelf.png)](../update_habit/media/update_habit_not_copied_from_shelf.png)
 
-  #### Delete habit screen view with grabbed any habit copied from the shelf
-  ![Add Habit Image](../delete_habit/media/copied_habit_on_shelf_.png)
+  #### Update habit screen view with grabbed any habit copied from the shelf
+  [![Update Habit Image](../update_habit/media/update_habit_copied_from_shelf.png)](../update_habit/media/update_habit_copied_from_shelf.png)
 
-### [Steps to delete a habit](#table-of-contents)
-  1.  ### [Search for a habit you want to delete](/src/components/search_habits/Readme.md)
+### [Steps to update a habit](#table-of-contents)
+  1.  ### [Search for a habit you want to update](/src/components/search_habits/Readme.md)
   2.  ### Copy habit to the shelf
-  3.  ### Delete habit
+  3.  ### Update habit
 
   Gif example of the high level flow:
 
-  ![Add Habit Flow](../delete_habit/media/delete_habit.gif)
+  [![Update Habit Flow](../update_habit/media/update_habit.gif)](../update_habit/media/update_habit.gif)
 - Go back to the home screen (select esc)
 - Clear the screen(select clear)
 - get help(select help)
@@ -60,5 +61,6 @@ Gifs can be used to illustrate steps for the user in action.
 
 ## [Testing](#table-of-contents)
 ```bash
-python -m unittest discover -s src/components/delete_habit/test
+python -m unittest discover -s src/components/update_habit/test
 ```
+[⬆ Back to top](#top)
