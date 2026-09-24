@@ -6,6 +6,7 @@ from ..shelf import Shelf
 from ..view import View
 from colorama import Fore
 from ...data.db_manager import CompleteHabit,Habits
+from ..ui.terminal_utils import clear_screen
 
 from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent
@@ -75,40 +76,14 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
         return 'success...'
 
     @retry_until_success
-    def set_habit_field_number(self,message):
-        if not self.__is_habit_found_in_shelf:
-            return True, 'Find the habit first'
-        commands = ['1','2','3']
-        history_file_name = 'num_habit_fields'
-        habit_field_number = self.__my_input(message,history_file_name,commands,(self.__main_form.get_field_status('number_of_habit_fields'),self.__number_of_habit_fields))
-        # ********* start of common functions ************        
-        did_run_common_func = ran_common_functions(habit_field_number)
-        message_to_display = find_message(habit_field_number)
-        if did_run_common_func==False:
-            return True, message_to_display
-        elif did_run_common_func==True:
-            return False, message_to_display
-        # ********** end of common functions ************
-        if not self.__update_habit_validator.is_valid_habit_field_number(habit_field_number):
-            return False, f"{habit_field_number} is not an integer in the set "+'{1,2,3}'
-        self.__number_of_habit_fields = int(habit_field_number)
-        self.__main_form.set_field_status('number_of_habit_fields',True)
-        return True, 'success..'
-
-    @retry_until_success
     def __choose_fields_to_update(self,message):
+        clear_screen()
         self.__field_names = []
         if not self.__is_habit_found_in_shelf:
-            return True, 'Find the habit first'
-        
-        if self.__number_of_habit_fields==None:
-            return True, 'You cannot choose fields to update before successfully setting the habit field number'
+            return True, 'Please search for the habit you want to update and select it before you come to this step'
         
         commands = ['name','start_datetime','duration']
         history_file_name = 'choose_fields_to_update'
-        if int(self.__number_of_habit_fields)==3:
-            self.__field_names.extend(['name','start_datetime','duration'])
-            return True, 'Escaping...'
         
         habit_field = self.__my_input(message,history_file_name,commands)
         # ********* start of common functions ************        
@@ -188,8 +163,7 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
     def update(self):
         if not self.__is_habit_found_in_shelf:
             return True, 'Find the habit first or copy the habit from the shelf'
-        if self.__number_of_habit_fields==None:
-            return True, 'Choose the number of fields first'
+
         if len(self.update_field_dict().keys())==0:
             return True, 'At least have one filled field'
         

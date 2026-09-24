@@ -25,10 +25,6 @@ class UpdateHabit:
 
     def run(self):
         command_functions = {
-            'number of fields to update':[
-                self.__update_habit_inputs.set_habit_field_number,
-                'Enter the number of fields: '
-            ],
             'choose fields to update':[
                 self.__update_habit_inputs.choose_fields_to_update,
                 self.__update_habit_inputs.set_fields_to_update,
@@ -57,10 +53,7 @@ class UpdateHabit:
                     break
                 continue
             # ********** end of common functions ************            
-            if user_input in commands[:1]:
-                funct,message = command_functions[user_input]
-                funct(message)
-            
+    
             if user_input=='choose fields to update':
                 funct1,funct2,message = command_functions[user_input]
                 funct1(message)
