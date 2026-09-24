@@ -1,6 +1,5 @@
-from .update_habit_inputs import UpdateHabitInputs,retry_until_success,ran_common_functions, AutoCompleter
+from .update_habit_inputs import UpdateHabitInputs,ran_common_functions, AutoCompleter
 from ..ui.terminal_utils import clear_screen
-from ..ui.command_autocomplete import ProgressBar
 from ..shelf import Shelf
 from pathlib import Path
 from colorama import Fore
