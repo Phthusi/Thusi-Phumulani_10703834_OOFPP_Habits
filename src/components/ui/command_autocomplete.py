@@ -10,7 +10,7 @@ from src.data.db_functionality.db_interface import DB_Interface
 from src.data.db_manager import Habits
 from src.components.time_project.time_manager import HabitDateTimeManager
 from .read_json import read_json_files
-from colorama import Fore, Style
+from colorama import Fore, Style, Back
 from ..shelf import Shelf
 
 '''
@@ -42,6 +42,20 @@ def update_habit_statuses():
         db_interface.get_all_habits()
         update_cache = False
 
+def display_urget_updates(location):
+    habits = Habits()
+    habit_to_complete = habits.get_habit_by_status('TO_BE_CONFIRMED')
+    locations_for_decos = ['Home']
+    if len(habit_to_complete) >0:
+        message = f'Notifications   : ⚠ You have {len(habit_to_complete)} habits to complete, Please search for habits to complete to complete these'
+        if location in locations_for_decos:
+            print(Fore.WHITE+f'''----------------------------------------------------------------------------------------------------------
+{message}
+----------------------------------------------------------------------------------------------------------''')
+        else:
+            print(Fore.LIGHTBLACK_EX+message.replace('Notifications   : ',"").replace('You','').replace('⚠',Fore.YELLOW+'⚠'+Fore.WHITE)+' ')
+            Fore.RESET
+            Style.RESET_ALL
 class ProgressBar:
     def __init__(self, number_of_fields):
         self.__advance = 1/number_of_fields *100
@@ -179,6 +193,7 @@ class AutoCompleter:
 
     def prompt_input(self, message, commands=None,example=None,location='Home',field_pair=None,multiple_values=""):
         update_habit_statuses()
+        display_urget_updates(location)
         if field_pair is None:
             field_status=None
             field_value=None
