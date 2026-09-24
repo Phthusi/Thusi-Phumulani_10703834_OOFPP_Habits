@@ -10,9 +10,11 @@ ROOT = Path(__file__).resolve().parent
 FIXTURE_FILE = ROOT / "fixtures" / "habits_fixture.json"
 
 
-def seed(database_path=None):
-    """Insert fixture sessions into ``database_path`` and return inserted IDs."""
-    database = DB_Interface(database_path) if database_path else DB_Interface()
+def seed(database_name=None,database=None):
+    """Insert fixture sessions into ``database_name`` and return inserted IDs."""
+    if database==None:
+        database = DB_Interface(database_name) if database_name else DB_Interface()
+    
     with FIXTURE_FILE.open(encoding="utf-8") as handle:
         fixture = json.load(handle)
 

@@ -3,7 +3,6 @@
 from pathlib import Path
 from .db import Database
 
-
 class DB_Interface:
     """Cache wrapper around :class:`Database`.
 

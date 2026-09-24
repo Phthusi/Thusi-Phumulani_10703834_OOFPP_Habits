@@ -1,0 +1,408 @@
+{
+  "period_days": 28,
+  "habits": [
+    {
+      "name": "Morning exercise",
+      "periodicity": "DAILY",
+      "duration": "00:30:00",
+      "sessions": [
+        {
+          "date": "2026-08-01 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-02 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-03 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-04 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-05 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-06 07:00:00",
+          "status": "MISSED"
+        },
+        {
+          "date": "2026-08-07 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-08 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-09 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-10 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-11 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-12 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-13 07:00:00",
+          "status": "MISSED"
+        },
+        {
+          "date": "2026-08-14 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-15 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-16 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-17 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-18 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-19 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-20 07:00:00",
+          "status": "MISSED"
+        },
+        {
+          "date": "2026-08-21 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-22 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-23 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-24 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-25 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-26 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-27 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-28 07:00:00",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "name": "Read for 20 minutes",
+      "periodicity": "DAILY",
+      "duration": "00:20:00",
+      "sessions": [
+        {
+          "date": "2026-08-01 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-02 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-03 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-04 07:00:00",
+          "status": "MISSED"
+        },
+        {
+          "date": "2026-08-05 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-06 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-07 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-08 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-09 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-10 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-11 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-12 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-13 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-14 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-15 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-16 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-17 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-18 07:00:00",
+          "status": "MISSED"
+        },
+        {
+          "date": "2026-08-19 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-20 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-21 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-22 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-23 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-24 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-25 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-26 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-27 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-28 07:00:00",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "name": "Plan the week",
+      "periodicity": "WEEKLY",
+      "duration": "00:45:00",
+      "sessions": [
+        {
+          "date": "2026-08-01 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-08 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-15 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-22 07:00:00",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "name": "Meal preparation",
+      "periodicity": "WEEKLY",
+      "duration": "01:00:00",
+      "sessions": [
+        {
+          "date": "2026-08-03 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-10 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-17 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-24 07:00:00",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "name": "Study Python",
+      "periodicity": "DAILY",
+      "duration": "01:00:00",
+      "sessions": [
+        {
+          "date": "2026-08-01 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-02 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-03 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-04 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-05 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-06 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-07 07:00:00",
+          "status": "MISSED"
+        },
+        {
+          "date": "2026-08-08 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-09 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-10 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-11 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-12 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-13 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-14 07:00:00",
+          "status": "MISSED"
+        },
+        {
+          "date": "2026-08-15 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-16 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-17 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-18 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-19 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-20 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-21 07:00:00",
+          "status": "MISSED"
+        },
+        {
+          "date": "2026-08-22 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-23 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-24 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-25 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-26 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-27 07:00:00",
+          "status": "COMPLETED"
+        },
+        {
+          "date": "2026-08-28 07:00:00",
+          "status": "MISSED"
+        }
+      ]
+    }
+  ]
+}
