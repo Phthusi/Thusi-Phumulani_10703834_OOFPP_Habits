@@ -21,6 +21,7 @@ class CompleteHabit(Habit):
         valid, message = self.__validator.validate()
         if not valid:
             return valid, message
+        self.__db_interface.set_is_db_updated(True)
         return self.__db_interface.add_habit(
             self.get_name(), self.get_start_date(), self.get_session_duration(),
             self.get_status(), self.get_periodicity())
@@ -62,6 +63,8 @@ class CompleteHabit(Habit):
         valid, message = self.__validator.valid_id()
         if not valid:
             return valid, message
+        
+        self.__db_interface.set_is_db_updated(True)
         return self.__db_interface.delete_habit(self.get_id())
 
     def set_name(self, name):

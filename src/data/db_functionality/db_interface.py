@@ -23,6 +23,7 @@ class DB_Interface:
 
     def __id_in_db(self, habit_id: int):
         """Return whether ``habit_id`` is present in the cache."""
+        self.get_cached_data()
         return any(entry[0] == habit_id for entry in self.__cached_data)
 
     def get_all_habits(self) :
