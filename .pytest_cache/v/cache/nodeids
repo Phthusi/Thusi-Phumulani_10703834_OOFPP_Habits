@@ -1,4 +1,13 @@
 [
+  "src/components/time_project/test/time_manager_test.py::TestDateTimeManager::test_calculate_time_difference_complex_case",
+  "src/components/time_project/test/time_manager_test.py::TestDateTimeManager::test_convert_duration",
+  "src/components/time_project/test/time_manager_test.py::TestDateTimeManager::test_determine_habit_status",
+  "src/components/time_project/test/time_manager_test.py::TestDateTimeManager::test_get_weekday",
+  "src/components/time_project/test/time_manager_test.py::TestDateTimeManager::test_increase_by_day",
+  "src/components/time_project/test/time_manager_test.py::TestDateTimeManager::test_is_clashing",
+  "src/components/time_project/test/time_manager_test.py::TestDateTimeManager::test_is_date_valid",
+  "src/components/time_project/test/time_manager_test.py::TestDateTimeManager::test_is_time_already_passed",
+  "src/components/time_project/test/time_manager_test.py::TestDateTimeManager::test_string_to_datetime",
   "src/components/time_project/test/time_manager_test.py::TestDateTimeValidator::test_calculate_time_difference_complex_case",
   "src/components/time_project/test/time_manager_test.py::TestDateTimeValidator::test_calculate_time_difference_moderate_case",
   "src/components/time_project/test/time_manager_test.py::TestDateTimeValidator::test_calculate_time_difference_simple_case",

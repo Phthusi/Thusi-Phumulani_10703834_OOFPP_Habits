@@ -54,9 +54,13 @@ class HabitDateTimeManager:
 
     def convert_duration(self, duration_str):
         """Convert ``HH:MM:SS`` into a :class:`timedelta`."""
-        hours, minutes, seconds = map(int, duration_str.split(":"))
+        try:
+            hours, minutes, seconds = map(int, duration_str.split(":"))
+        except Exception:
+            return f'Invalid duration: "{duration_str}" is not a valid duration'
+
         if hours < 0 or hours >= 24 or not 0 <= minutes < 60 or not 0 <= seconds < 60:
-            raise ValueError("Invalid duration")
+            raise ValueError('invalid format:Hours(0-23):Minutes(0-59):Seconds(0-59)')
         return timedelta(hours=hours, minutes=minutes, seconds=seconds)
 
     def string_to_datetime(self, string_datetime):
