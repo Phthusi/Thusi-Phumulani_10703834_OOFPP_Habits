@@ -38,9 +38,15 @@ class Habit_Inputs:
         return self.__main_autocompleter.prompt_input(message,location=f"Home/AddHabit/{modified_history_file_name}",field_pair=field_pair,example=f'Text length minimum : 3 \nExample : Run\n{'-'*95}\n[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands').lower()
     
     @retry_until_success
-    def set_habit_name(self,message):
+    def set_habit_name(self,message,form=None,name=None,field_value= None, update_mode=False):
         clear_screen()
-        habit_name = self.__set_habit_name(message,(self.__main_form.get_field_status('name'),self.__habit.get_name()))
+        if form is None:
+            form = self.__main_form
+
+        if name is None:
+            name = self.__habit.get_name()
+
+        habit_name = self.__set_habit_name(message,(form.get_field_status('name',field_value= field_value, update_mode=update_mode),name))
         # ********* start of common functions ************
         did_run_common_func = ran_common_functions(habit_name)
         if did_run_common_func==False:
@@ -65,9 +71,15 @@ class Habit_Inputs:
         return self.__habit
 
     @retry_until_success
-    def set_start_datetime(self,message):
+    def set_start_datetime(self,message,form=None,start_datetime=None,field_value= None, update_mode=True):
         clear_screen()
-        habit_start_datetime = self.__set_habit_start_datetime(message,(self.__main_form.get_field_status('start_datetime'),self.__habit.get_start_date())).replace(',','')
+        if form is None:
+            form = self.__main_form
+
+        if start_datetime is None:
+            start_datetime = self.__habit.get_start_date()
+
+        habit_start_datetime = self.__set_habit_start_datetime(message,(form.get_field_status('start_datetime',field_value=field_value,update_mode=update_mode),start_datetime)).replace(',','')
 
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(habit_start_datetime)
@@ -111,9 +123,15 @@ class Habit_Inputs:
         self.__habit = habit
 
     @retry_until_success
-    def set_session_duration(self,message):
+    def set_session_duration(self,message,form=None,duration=None,field_value= None, update_mode=False):
         clear_screen()
-        habit_session_duration = self.__set_habit_session_duration(message,field_pair=(self.__main_form.get_field_status('duration'),self.__habit.get_session_duration()))
+        if form is None:
+            form = self.__main_form
+        
+        if duration is None:
+            duration = self.__habit.get_session_duration()
+
+        habit_session_duration = self.__set_habit_session_duration(message,field_pair=(form.get_field_status('duration',field_value= field_value, update_mode=update_mode),duration))
 
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(habit_session_duration)

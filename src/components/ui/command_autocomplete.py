@@ -137,9 +137,14 @@ class Form:
     def number_of_filled_fields(self):
         return sum(1 for filled in self.fields.values() if filled)
 
-    def get_field_status(self, field_name):
+    def get_field_status(self, field_name,field_value=None,update_mode=False):
+        additional_message = ''
+        if update_mode and field_value is None:
+            additional_message = f'{field_name} to be update to: N/A\n'
+        elif update_mode:
+            additional_message = f'{field_name} to be update to: {field_value}\n'
         if field_name in self.fields:
-            return f"✅ {field_name} filled" if self.fields[field_name] else f"❌ {field_name} not filled"
+            return additional_message + f"✅ {field_name} filled" if self.fields[field_name] else f"❌ {field_name} not filled"
         if field_name is None:
             return None
         return f"{field_name} not found"
@@ -207,6 +212,9 @@ class AutoCompleter:
         if self.__has_status:
             status = field_status
             if status!=None:
+                if '\n' in status:
+                    additional_message,status = status.split('\n')
+                    print(f"""{Fore.LIGHTBLACK_EX}{additional_message}""")
                 print(f"""{Fore.LIGHTBLACK_EX}Status        : {status}
 Current Value : {Fore.LIGHTBLUE_EX if field_value is None else Fore.LIGHTGREEN_EX}{field_value if field_value is not None else 'N/A'}{Fore.LIGHTBLACK_EX + multiple_values}{Fore.RESET}""")
         return self.get_session().prompt(ANSI(prompt_string)).strip()

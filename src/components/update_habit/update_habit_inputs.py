@@ -21,6 +21,7 @@ class UpdateHabitInputs(Habit_Inputs):
         self.__display_map = """
 [cyan]📌 LEVEL 1: PARAMETERS[/] [green]{name}[/] Name [blue] {start_datetime}[/] Start Datetime [green] {duration}[/] Duration  |  [cyan]🔒 LEVEL 2: ACTION(S) [/] Complete update"""
         self.__display_form = Form({field: False for field in ['name','start_datetime','duration']},self.__display_map)
+        self.__fiiled_form = Form({field: True for field in ['name','start_datetime','duration']},self.__display_map)
         self.__fields_to_update_form = None
         self.__selected_habit_tuple = None
         self.__current_fields = dict()
@@ -124,27 +125,39 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
         input('press enter to stop viewing this')
 
     def set_fields_to_update(self):
+        habit = self.__habits.get_habit_by_id(self.__habit.get_id())[0]
+        id,name,start_datetime,duration,status,periodicity = habit
         commands = {
             'name':[
-                    self.set_habit_name,
-                    "Enter the habit name you want this to be updated to: "
+                    lambda: self.set_habit_name("Enter the habit name you want this to be updated to: ",
+                    form=self.__fiiled_form,name=name,
+                    field_value= self._Habit_Inputs__habit._Habit__name if self._Habit_Inputs__habit._Habit__name!='default' else None, 
+                    update_mode=True)
                     ],
             'view habit to update':[
                 self.view_habit_to_update,
             ],
             'start_datetime':[
-                    self.set_start_datetime,
-                    "Enter the habit datetime you want this to be updated to: "
+                    lambda : self.set_start_datetime("Enter the habit datetime you want this to be updated to: ",
+                    form=self.__fiiled_form,
+                    start_datetime=start_datetime,
+                    field_value= self._Habit_Inputs__habit._Habit__start_date if self._Habit_Inputs__habit._Habit__start_date!='default' else None, 
+                    update_mode=True
+                    )
                 ],
             'duration':[
-                self.set_session_duration,
-                "Enter the habit session duration you want this to be updated to: "
+                lambda : self.set_session_duration("Enter the habit session duration you want this to be updated to: ",
+                form=self.__fiiled_form,
+                duration=duration,
+                field_value= self._Habit_Inputs__habit._Habit__session_duration if self._Habit_Inputs__habit._Habit__session_duration!='default' else None, 
+                update_mode=True
+                )
             ]
         }
 
         for field_name in set(self.__field_names):
-            func,message = commands[field_name]
-            display_message = func(message)
+            func = commands[field_name][0]
+            display_message = func()
 
         for field_name in super().get_main_form().get_filled_fields():
             self.__display_form.set_field_status(field_name,True)
