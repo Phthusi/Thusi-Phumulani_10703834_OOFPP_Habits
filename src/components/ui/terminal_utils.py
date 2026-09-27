@@ -2,6 +2,8 @@ import time
 import functools
 import os
 
+call_history = []
+
 def clear_screen():
     """
     Clears the terminal screen depending on OS.
@@ -18,9 +20,32 @@ def retry_until_success(function):
     def wrapper(self, *args, **kwargs):
         while True:
             success,message = function(self, *args, **kwargs)
-            temporary_message(message)
+            if len(call_history) >= 1:
+                call_history.clear()
+                print(message)
+                input('Press Enter to continue')
+            else:
+                temporary_message(message)
             if success:
                 return success,message
+    return wrapper
+
+def trace_call(function):
+    @functools.wraps(function)
+    def wrapper(*args, **kwargs):
+        result = function(*args, **kwargs)
+        message = ''
+        success = ''
+        if type(result) is not bool and len(result)==2:
+            success,message = result
+        else:
+            success = result
+            
+        if not success:
+            call_history.append(function.__name__)
+            if message=='':
+                return success
+        return success,message
     return wrapper
 
 def ran_common_functions(user_input,function=None):
@@ -52,7 +77,7 @@ def find_message(message):
             return 'help function'
     return None
 
-def temporary_message(message, duration=3.5):
+def temporary_message(message, duration=2):
     """
     Displays a temporary message for a specified duration.
 

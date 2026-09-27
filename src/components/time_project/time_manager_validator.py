@@ -1,6 +1,9 @@
 from datetime import datetime
+from ...components.ui.terminal_utils import trace_call
 
 class HabitDateTimeManagerValidator:
+
+    @trace_call
     def is_datetime_valid(self, date_str):
         try:
             datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S")
@@ -8,6 +11,7 @@ class HabitDateTimeManagerValidator:
         except ValueError:
             return False
         
+    @trace_call
     def is_date_valid(self, date_str):
         try:
             datetime.strptime(date_str, "%Y-%m-%d")
@@ -15,9 +19,11 @@ class HabitDateTimeManagerValidator:
         except ValueError:
             return False
         
+    @trace_call
     def is_passed(self,date_str):
         return datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S") > datetime.now()
 
+    @trace_call
     def is_time_format_valid(self, time_str):
         try:
             hours, minutes, seconds = map(int, time_str.split(":"))
@@ -26,7 +32,7 @@ class HabitDateTimeManagerValidator:
             return False
         except Exception:
             return False
-    
+
     def validate_duration(self,duration):
         try:
             hours, minutes, seconds = map(int, duration.split(":"))

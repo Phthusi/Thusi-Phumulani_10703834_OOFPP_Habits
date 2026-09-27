@@ -1,7 +1,7 @@
 """Validation rules for the habit domain model."""
 
 from datetime import datetime
-
+from ...components.ui.terminal_utils import trace_call
 
 class HabitValidator:
     """Validate habit values before they reach the persistence layer."""
@@ -17,6 +17,7 @@ class HabitValidator:
     def set_habit(self,habit):
         self.habit = habit
 
+    @trace_call
     def valid_name(self):
         """Return whether the habit has a non-empty name of at least 3 characters."""
         name = self.habit.get_name()
@@ -28,6 +29,7 @@ class HabitValidator:
             return False, "Name must be at least 3 characters long."
         return True, "name is valid."
 
+    @trace_call
     def valid_session_duration(self):
         """Validate a duration in ``HH:MM:SS`` format."""
         duration = self.habit.get_session_duration()
@@ -41,6 +43,7 @@ class HabitValidator:
             return False, "Session duration must use HH:MM:SS with valid values."
         return True, "session duration is valid."
 
+    @trace_call
     def valid_start_date(self):
         """Validate a scheduled datetime."""
         value = self.habit.get_start_date()
@@ -54,12 +57,14 @@ class HabitValidator:
             return False, "Start datetime must use YYYY-MM-DD HH:MM:SS."
         return True, "start datetime is valid."
 
+    @trace_call
     def valid_status(self):
         """Validate the habit status."""
         if self.habit.get_status() not in self.VALID_STATUSES:
             return False, f"Status must be one of: {', '.join(sorted(self.VALID_STATUSES))}."
         return True, "status is valid."
 
+    @trace_call
     def valid_periodicity(self):
         """Validate daily/weekly recurrence when one is supplied."""
         value = self.habit.get_periodicity()
@@ -67,18 +72,21 @@ class HabitValidator:
             return False, "Periodicity must be DAILY, WEEKLY, or None."
         return True, "periodicity is valid."
 
+    @trace_call
     def valid_id(self):
         """Validate the optional database ID."""
         if self.habit.get_id() is not None and not isinstance(self.habit.get_id(), int):
             return False, "ID must be an integer or None."
         return True, "id is valid."
 
+    @trace_call
     def valid_for_updating(self):
         """Return whether a habit is still editable."""
         if self.habit.get_status() not in {"UPCOMING", "ONGOING", "IN_PROGRESS", "TO_BE_CONFIRMED"}:
             return False, "Habit cannot be updated because it has passed or was completed."
         return True, "Habit can be updated."
 
+    @trace_call
     def validate(self):
         """Run all model validation rules and return ``(valid, message)``."""
         for validator in (self.valid_id, self.valid_name, self.valid_session_duration,
