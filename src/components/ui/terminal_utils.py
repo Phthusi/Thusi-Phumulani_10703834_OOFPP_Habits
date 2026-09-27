@@ -52,7 +52,7 @@ def find_message(message):
             return 'help function'
     return None
 
-def temporary_message(message, duration=2):
+def temporary_message(message, duration=3.5):
     """
     Displays a temporary message for a specified duration.
 
