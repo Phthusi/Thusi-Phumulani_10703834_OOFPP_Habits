@@ -18,6 +18,9 @@ class UpdateHabitInputs(Habit_Inputs):
         self.__field_names  = []
         self.__is_habit_found_in_shelf = False
         self.__main_form = Form({field: False for field in ['id','number_of_habit_fields']})
+        self.__display_map = """
+[cyan]📌 LEVEL 1: PARAMETERS[/] [green]{name}[/] Name [blue] {start_datetime}[/] Start Datetime [green] {duration}[/] Duration  |  [cyan]🔒 LEVEL 2: ACTION(S) [/] Complete update"""
+        self.__display_form = Form({field: False for field in ['name','start_datetime','duration']},self.__display_map)
         self.__fields_to_update_form = None
         self.__selected_habit_tuple = None
         self.__current_fields = dict()
@@ -142,7 +145,10 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
         for field_name in set(self.__field_names):
             func,message = commands[field_name]
             display_message = func(message)
-    
+
+        for field_name in super().get_main_form().get_filled_fields():
+            self.__display_form.set_field_status(field_name,True)
+            
     def update_field_dict(self):
         commands = {
             'name': self._Habit_Inputs__habit._Habit__name,
@@ -178,5 +184,12 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
         self.__habit = None
         self.__copied_habit_status = "No habit has been copied from the shelf, please copy the habit from the shelf"
         self.__main_form.reset_fields()
+        self.__display_form.reset_fields()
         return True,message
+    
+    def get_display_form(self):
+        return self.__display_form
+    
+    def set_display_map(self,display_map):
+        self.__display_map = display_map
 # gimp

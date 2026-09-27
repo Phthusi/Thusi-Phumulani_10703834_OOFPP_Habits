@@ -1,6 +1,6 @@
 from .update_habit_inputs import UpdateHabitInputs,retry_until_success,ran_common_functions, AutoCompleter
 from ..ui.terminal_utils import clear_screen
-from ..ui.command_autocomplete import ProgressBar
+from ..ui.command_autocomplete import Form, ProgressBar
 from ..shelf import Shelf
 from pathlib import Path
 from colorama import Fore
@@ -10,17 +10,27 @@ class UpdateHabit:
     def __init__(self):
         self.__update_habit_inputs = UpdateHabitInputs()
         self.__form = self.__update_habit_inputs.get_main_form()
-        self.progress_bar = ProgressBar(2)
         self.__current_filled_fields = self.__form.number_of_filled_fields()
         self.__shelf = Shelf()
 
     def __my_input(self,message,history_file_name,commands,example=None):
         autocompleter = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
         if self.__current_filled_fields != self.__form.number_of_filled_fields():
-            self.progress_bar.increase_progress_percentage(self.__form.number_of_filled_fields())
             self.__current_filled_fields = self.__form.number_of_filled_fields()
         print(f'{Fore.LIGHTBLACK_EX}{self.__shelf.display_state().replace('  :',':')}')
         self.__update_habit_inputs.display_copied_habit()
+        Fore.RESET
+        if len(self.__update_habit_inputs.get_display_form().get_filled_fields()) == 0:
+            display_map = """
+[cyan]📌 LEVEL 1: PARAMETERS[/] [green]{name}[/] Name [blue] {start_datetime}[/] Start Datetime [green] {duration}[/] Duration  |  [cyan]🔒 LEVEL 2: ACTION(S) [/] Complete update"""
+            self.__update_habit_inputs.get_display_form().set_display_map(display_map)
+        else:
+            display_map = """
+            [cyan]📌 LEVEL 1: PARAMETERS[/] [green]{name}[/] Name [blue] {start_datetime}[/] Start Datetime [green] {duration}[/] Duration  |  [cyan]🔓 LEVEL 2: ACTION(S) [/] Complete update"""
+            self.__update_habit_inputs.get_display_form().set_display_map(display_map)
+
+        display_map = self.__update_habit_inputs.get_display_form().get_display_map().replace('[/]','{Fore.WHITE}').replace('[green]','{Fore.GREEN}').replace('[cyan]','{Fore.CYAN}').replace('[blue]','{Fore.BLUE}')
+        print(display_map.format_map(globals()))
         return autocompleter.prompt_input(message,location=f"Home/UpdateHabit",example=example).lower()
 
     def run(self):

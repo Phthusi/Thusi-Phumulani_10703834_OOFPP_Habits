@@ -55,22 +55,6 @@ def find_message(message):
             return 'help function'
     return None
 
-
-
-def retry_until_success_v2(function):
-    """
-    Repeats a function call until it returns True.
-    Intended for CLI input validation.
-    """
-
-    @functools.wraps(function)
-    def wrapper(self, *args, **kwargs):
-        while True:
-            message,success,method = function(self, *args, **kwargs)
-            if success:
-                return method
-    return wrapper
-
 def temporary_message(message, duration=2):
     """
     Displays a temporary message for a specified duration.
