@@ -22,11 +22,11 @@ class UpdateHabit:
         Fore.RESET
         if len(self.__update_habit_inputs.get_display_form().get_filled_fields()) == 0:
             display_map = """
-[cyan]📌 LEVEL 1: PARAMETERS[/] [green]{name}[/] Name [blue] {start_datetime}[/] Start Datetime [green] {duration}[/] Duration  |  [cyan]🔒 LEVEL 2: ACTION(S) [/] Complete update"""
+[cyan]📌 LEVEL 1: PARAMETERS[/] [green]{name}[/] Name [blue] {start_datetime}[/] Start Datetime [green] {duration}[/] Duration  | [cyan]🔒 LEVEL 2: ACTION(S) [/] Complete update"""
             self.__update_habit_inputs.get_display_form().set_display_map(display_map)
         else:
             display_map = """
-            [cyan]📌 LEVEL 1: PARAMETERS[/] [green]{name}[/] Name [blue] {start_datetime}[/] Start Datetime [green] {duration}[/] Duration  |  [cyan]🔓 LEVEL 2: ACTION(S) [/] Complete update"""
+            [cyan]📌 LEVEL 1: PARAMETERS[/] [green]{name}[/] Name [blue] {start_datetime}[/] Start Datetime [green] {duration}[/] Duration  | [cyan]🔓 LEVEL 2: ACTION(S) [/] Complete update"""
             self.__update_habit_inputs.get_display_form().set_display_map(display_map)
 
         display_map = self.__update_habit_inputs.get_display_form().get_display_map().replace('[/]','{Fore.WHITE}').replace('[green]','{Fore.GREEN}').replace('[cyan]','{Fore.CYAN}').replace('[blue]','{Fore.BLUE}')

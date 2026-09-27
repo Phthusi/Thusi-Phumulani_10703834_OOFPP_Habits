@@ -53,7 +53,9 @@ def display_urget_updates(location):
 {message}
 ----------------------------------------------------------------------------------------------------------''')
         else:
-            print(Fore.LIGHTBLACK_EX+message.replace('Notifications   : ',"").replace('You','').replace('⚠',Fore.YELLOW+'⚠'+Fore.WHITE)+' ')
+            print(f'''\n{Back.LIGHTBLACK_EX}                                                                                                         
+  {message.replace('Notifications   : ',"").replace('You','').replace('⚠',Fore.YELLOW+'⚠'+Fore.WHITE)+' '}                  
+                                                                                                         ''')
             Fore.RESET
             Style.RESET_ALL
 class ProgressBar:

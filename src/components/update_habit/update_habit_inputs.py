@@ -19,7 +19,7 @@ class UpdateHabitInputs(Habit_Inputs):
         self.__is_habit_found_in_shelf = False
         self.__main_form = Form({field: False for field in ['id','number_of_habit_fields']})
         self.__display_map = """
-[cyan]📌 LEVEL 1: PARAMETERS[/] [green]{name}[/] Name [blue] {start_datetime}[/] Start Datetime [green] {duration}[/] Duration  |  [cyan]🔒 LEVEL 2: ACTION(S) [/] Complete update"""
+[cyan]📌 LEVEL 1: PARAMETERS[/] [green]{name}[/] Name [blue] {start_datetime}[/] Start Datetime [green] {duration}[/] Duration  | [cyan]🔒 LEVEL 2: ACTION(S) [/] Complete update"""
         self.__display_form = Form({field: False for field in ['name','start_datetime','duration']},self.__display_map)
         self.__fiiled_form = Form({field: True for field in ['name','start_datetime','duration']},self.__display_map)
         self.__fields_to_update_form = None
