@@ -4,8 +4,8 @@
 # Ignore any folder named 'history' anywhere in the repository
 **/history/*.txt
 **/history/.gitkeep
-**/view_history/*.txt
-**/main_history/*.txt
+*/view_history/*.txt
+*/main_history/*.txt
 # Optional: compiled Python files
 *.py[cod]
 *$py.class
