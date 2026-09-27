@@ -23,9 +23,6 @@ def retry_until_success(function):
                 return success,message
     return wrapper
 
-# def lock_method(function):
-#     def wrapper()
-
 def ran_common_functions(user_input,function=None):
     '''
     try to make the help function that will help the user to pick things up quick
