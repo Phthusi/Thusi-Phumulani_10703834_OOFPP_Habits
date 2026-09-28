@@ -76,6 +76,9 @@ class CompleteHabit(Habit):
             super().set_name(old)
         return valid, message
 
+    def clear_name(self):
+        super().set_name('default')
+
     def set_session_duration(self, duration):
         """Set the duration only when it is valid."""
         old = self.get_session_duration()
@@ -85,6 +88,9 @@ class CompleteHabit(Habit):
             super().set_session_duration(old)
         return valid, message
 
+    def clear_session_duration(self):
+        super().set_session_duration('default')
+
     def set_start_date(self, start_date):
         """Set the start date only when it is valid."""
         old = self.get_start_date()
@@ -93,6 +99,9 @@ class CompleteHabit(Habit):
         if not valid:
             super().set_start_date(old)
         return valid, message
+
+    def clear_start_date(self):
+        super().set_start_date('default')
 
     def set_status(self, status):
         """Set the status only when it is valid."""

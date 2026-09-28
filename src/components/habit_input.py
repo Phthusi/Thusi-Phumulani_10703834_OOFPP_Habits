@@ -29,9 +29,11 @@ class Habit_Inputs:
     def start_setup(self,base_directory):
         self.__start_setup(base_directory)
 
-    def __set_habit_name(self,message,field_pair=None):
+    def __set_habit_name(self,message,field_pair=None, update_mode=False):
         history_file_name='habit_name'
         commands = []
+        if update_mode:
+            commands = ['reset name']
         self.__main_autocompleter = AutoCompleter(self.__BASE_DIR / f"history/{history_file_name}",commands)
         self.__main_autocompleter.set_has_status(True)
         modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
@@ -46,7 +48,11 @@ class Habit_Inputs:
         if name is None:
             name = self.__habit.get_name()
 
-        habit_name = self.__set_habit_name(message,(form.get_field_status('name',field_value= field_value, update_mode=update_mode),name))
+        habit_name = self.__set_habit_name(message,(form.get_field_status('name',field_value= field_value, update_mode=update_mode),name), update_mode=update_mode)
+        if update_mode and habit_name=='reset name':
+            self.__habit.clear_name()
+            self.__main_form.set_field_status('name',False)
+            return True, 'success...'
         # ********* start of common functions ************
         did_run_common_func = ran_common_functions(habit_name)
         if did_run_common_func==False:
@@ -59,9 +65,11 @@ class Habit_Inputs:
             self.__main_form.set_field_status('name',True)
         return is_name_valid, message
 
-    def __set_habit_start_datetime(self,message,field_pair=None):
+    def __set_habit_start_datetime(self,message,field_pair=None,update_mode=False):
         history_file_name='start_datetime'
         commands = []
+        if update_mode:
+            commands = ['reset start_datetime']
         self.__main_autocompleter = AutoCompleter(self.__BASE_DIR / f"history/{history_file_name}",commands)
         self.__main_autocompleter.set_has_status(True)
         modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
@@ -71,7 +79,7 @@ class Habit_Inputs:
         return self.__habit
 
     @retry_until_success
-    def set_start_datetime(self,message,form=None,start_datetime=None,field_value= None, update_mode=True):
+    def set_start_datetime(self,message,form=None,start_datetime=None,field_value= None, update_mode=False):
         clear_screen()
         if form is None:
             form = self.__main_form
@@ -79,7 +87,11 @@ class Habit_Inputs:
         if start_datetime is None:
             start_datetime = self.__habit.get_start_date()
 
-        habit_start_datetime = self.__set_habit_start_datetime(message,(form.get_field_status('start_datetime',field_value=field_value,update_mode=update_mode),start_datetime)).replace(',','')
+        habit_start_datetime = self.__set_habit_start_datetime(message,(form.get_field_status('start_datetime',field_value=field_value,update_mode=update_mode),start_datetime),update_mode=update_mode).replace(',','')
+        if update_mode and habit_start_datetime=='reset start_datetime':
+            self.__habit.clear_start_date()
+            self.__main_form.set_field_status('start_datetime',False)
+            return True, 'success...'
 
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(habit_start_datetime)
@@ -111,9 +123,11 @@ class Habit_Inputs:
         self.__main_form.set_field_status('start_datetime',True)
         return True, 'valid start datetime'
 
-    def __set_habit_session_duration(self,message,example=None,field_pair=False):
+    def __set_habit_session_duration(self,message,example=None,field_pair=False, update_mode=False):
         history_file_name='session_duration'
         commands = []
+        if update_mode:
+            commands = ['reset duration']
         self.__main_autocompleter = AutoCompleter(self.__BASE_DIR / f"history/{history_file_name}",commands)
         self.__main_autocompleter.set_has_status(True)
         modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
@@ -131,8 +145,12 @@ class Habit_Inputs:
         if duration is None:
             duration = self.__habit.get_session_duration()
 
-        habit_session_duration = self.__set_habit_session_duration(message,field_pair=(form.get_field_status('duration',field_value= field_value, update_mode=update_mode),duration))
-
+        habit_session_duration = self.__set_habit_session_duration(message,field_pair=(form.get_field_status('duration',field_value= field_value, update_mode=update_mode),duration), update_mode=update_mode)
+        if update_mode and habit_session_duration=='reset duration':
+            self.__habit.clear_start_date()
+            self.__main_form.set_field_status('duration',False)
+            return True, 'success...'
+        
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(habit_session_duration)
         if did_run_common_func==False:

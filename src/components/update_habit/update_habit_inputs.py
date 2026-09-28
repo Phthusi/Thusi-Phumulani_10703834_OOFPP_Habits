@@ -127,11 +127,14 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
     def set_fields_to_update(self):
         habit = self.__habits.get_habit_by_id(self.__habit.get_id())[0]
         id,name,start_datetime,duration,status,periodicity = habit
+        saved_name = self._Habit_Inputs__habit._Habit__name
+        saved_start_datetime = self._Habit_Inputs__habit._Habit__start_date
+        saved_duration = self._Habit_Inputs__habit._Habit__session_duration
         commands = {
             'name':[
                     lambda: self.set_habit_name("Enter the habit name you want this to be updated to: ",
                     form=self.__fiiled_form,name=name,
-                    field_value= self._Habit_Inputs__habit._Habit__name if self._Habit_Inputs__habit._Habit__name!='default' else None, 
+                    field_value= saved_name if saved_name!='default' else None, 
                     update_mode=True)
                     ],
             'view habit to update':[
@@ -141,7 +144,7 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
                     lambda : self.set_start_datetime("Enter the habit datetime you want this to be updated to: ",
                     form=self.__fiiled_form,
                     start_datetime=start_datetime,
-                    field_value= self._Habit_Inputs__habit._Habit__start_date if self._Habit_Inputs__habit._Habit__start_date!='default' else None, 
+                    field_value= saved_start_datetime if saved_start_datetime!='default' else None, 
                     update_mode=True
                     )
                 ],
@@ -149,7 +152,7 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
                 lambda : self.set_session_duration("Enter the habit session duration you want this to be updated to: ",
                 form=self.__fiiled_form,
                 duration=duration,
-                field_value= self._Habit_Inputs__habit._Habit__session_duration if self._Habit_Inputs__habit._Habit__session_duration!='default' else None, 
+                field_value= saved_duration if saved_duration!='default' else None, 
                 update_mode=True
                 )
             ]
@@ -159,9 +162,12 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
             func = commands[field_name][0]
             display_message = func()
 
-        for field_name in super().get_main_form().get_filled_fields():
-            self.__display_form.set_field_status(field_name,True)
-            
+        for field_name in super().get_main_form().get_fields():
+            if field_name in super().get_main_form().get_filled_fields():
+                self.__display_form.set_field_status(field_name,True)
+            elif field_name in self.__display_form.get_fields():
+                self.__display_form.set_field_status(field_name,False)
+                
     def update_field_dict(self):
         commands = {
             'name': self._Habit_Inputs__habit._Habit__name,
