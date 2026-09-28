@@ -84,7 +84,9 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
         clear_screen()
         self.__field_names = []
         if not self.__is_habit_found_in_shelf:
-            return True, 'Please search for the habit you want to update and select it before you come to this step'
+            print('Please search for the habit you want to update and select it before you come to this step')
+            input('Press Enter to continue')
+            return True, ''
         
         commands = ['name','start_datetime','duration']
         history_file_name = 'choose_fields_to_update'
