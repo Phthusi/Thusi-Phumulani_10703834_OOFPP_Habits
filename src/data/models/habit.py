@@ -1,7 +1,5 @@
 """Domain model for habits."""
 
-from typing import Optional
-
 
 class Habit:
     """Represent one scheduled habit session.
@@ -11,8 +9,8 @@ class Habit:
     """
 
     def __init__(self, name: str, session_duration: str, start_date,
-                 status: str = "UPCOMING", id: Optional[int] = None,
-                 periodicity: Optional[str] = "DAILY") -> None:
+                 status: str = "UPCOMING", id = None,
+                 periodicity = "DAILY"):
         """Create a habit with its scheduling and tracking information."""
         self.__name = name
         self.__session_duration = session_duration
@@ -21,7 +19,7 @@ class Habit:
         self.__id = id
         self.__periodicity = periodicity
 
-    def set_periodicity(self, periodicity: Optional[str]) -> None:
+    def set_periodicity(self, periodicity) -> None:
         """Set the recurrence period, for example ``DAILY`` or ``WEEKLY``."""
         self.__periodicity = periodicity
 

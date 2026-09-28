@@ -265,7 +265,7 @@ class HabitRepeats:
         id = 0
         for habit in habits_to_add:
             id, name, start_date, session_duration, status, periodicity = habit
-            success, id =CompleteHabit(name, session_duration, start_date, status).save_habit()
+            success, id =CompleteHabit(name, session_duration, start_date, status,periodicity=periodicity).save_habit()
         
         if len(habits_to_add) > 0:
             self.__shelf.preserve_habit((id,name,start_date,session_duration,status,periodicity))
@@ -389,7 +389,7 @@ class HabitRepeats:
             return True, 'Set the week pattern first'
 
         history_file_name = 'weekly_repeat_habit_name'
-        user_input = self.__basic_input("Enter week_name: ",list(self.__week_pattern.week_patterns.keys()),history_file_name,'[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands',f'/WeeklyRepeatHabit/WeekPatternName')
+        user_input = self.__basic_input("Enter the name of the week you want to save(press enter to see your options): ",list(self.__week_pattern.week_patterns.keys()),history_file_name,'[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands',f'/WeeklyRepeatHabit/WeekPatternName')
         # ********* start of common functions ************
         did_run_common_func = ran_common_functions(user_input)
         if did_run_common_func==False:
@@ -425,11 +425,61 @@ class HabitRepeats:
         self.__months_pattern.set_months_pattern(added_months)
         self.__months_pattern.save_months_pattern()
         copied_habit = self.__shelf.copy_last_place_habit()
+        # (1, 'studying', '2026-09-30 16:49:00', '00:25:00', 'UPCOMING', 'DAILY')
+        copied_id,copied_name,copied_startdatetime,copied_duration,copied_status,copied_periodicity = copied_habit
+        copied_habit = (copied_id,copied_name,copied_startdatetime,copied_duration,copied_status,'WEEKLY')
         filtered_months_pattern = [{list(i.keys())[0]: list(i.values())[0]} for i in self.__months_pattern.get_months_pattern()]
 
         self.__save_habit_repeats(copied_habit,months_pattern=filtered_months_pattern)
         print(f"Week data saved: {self.__number_of_weeks} weeks")
         return True, 'Success...'
+
+    def run_daily_repeats(self):
+        '''
+        number of days -> group days by 7 and name week1,week2,week3....
+
+        '''
+        command_functions = {
+            'week pattern name':[
+                    self.set_habit_week_pattern_name,
+                    "Enter the week pattern name: "
+                ],
+            'week pattern':[
+                self.set_habit_week_pattern,
+                "Enter the week pattern: "
+                ],
+            'number of weeks':[
+                self.set_number_of_pattern_entities,
+                'Enter the number of weeks: '
+            ],
+            'save':[
+                self.save_week,
+                ''
+            ]
+        }
+        while True:
+            clear_screen()
+            commands = list(command_functions.keys())
+            history_file_name = 'daily_repeat_habit'
+            user_input = self.__basic_input("Enter command: ",commands,history_file_name,'[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands','/WeeklyRepeatHabit')            
+            match user_input:
+                case 'esc':
+                    break
+                case 'clear':
+                    clear_screen()
+            
+            if user_input not in commands:
+                print('invalid input')
+                input('Press Enter to continue')
+                continue
+            
+            func,message = command_functions[user_input]
+            if message =='':
+                success, message = func()
+            if message == 'Enter the number of days: ':
+                display_message = func(message,'days')
+            else:
+                display_message = func(message)
 
     def run_week_repeats(self):
         command_functions = {
@@ -470,7 +520,7 @@ class HabitRepeats:
             if message =='':
                 success, message = func()
             if message == 'Enter the number of weeks: ':
-                display_message = func(message,'weeks')
+                 display_message = func(message,'weeks')
             else:
                 display_message = func(message)
 
@@ -490,8 +540,9 @@ class HabitRepeats:
     def run(self):
         command_functions = {
             'copy habit from shelf':self.__update_habit_inputs.collect_copied_habit,
-            'run custom repeat pattern':self.run_custom_repeats,
+            'run daily repeat pattern':self.run_daily_repeats,
             'run weekly repeat pattern':self.run_week_repeats,
+            'run custom repeat pattern':self.run_custom_repeats,
             'run monthly repeat pattern':self.run_monthly_repeats,  
         }
         commands = list(command_functions.keys())
