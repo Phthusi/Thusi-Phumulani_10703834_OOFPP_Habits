@@ -236,6 +236,8 @@ class HabitRepeats:
         if months_pattern is None:
             months_pattern = self.__months_pattern.get_months_pattern()
         
+        current_day = self.__habit_date_time_manger.increase_by_day(current_day)
+
         for i in months_pattern:
             if list(i.keys())[0] == 'skip':
                 for _ in range(7*4):
@@ -272,10 +274,10 @@ class HabitRepeats:
     
     def save(self):
         copied_habit = self.__shelf.copy_last_place_habit()
-        id, name, _ , duration, status, periodicity = copied_habit
+        id, name, start_datetime , duration, status, periodicity = copied_habit
         if status == 'MISSED':
             return False, 'sorry we cannot perform this operation for MISSED sessions'
-        self.__save_habit_repeats(copied_habit)
+        self.__save_habit_repeats((id, name, start_datetime , duration, status, 'CUSTOM'))
         return True,'success...'
 
     def run_custom_repeats(self):
@@ -343,6 +345,7 @@ class HabitRepeats:
         commands = []
         history_file_name = f'set_number_of_{entity_name}'
 
+
         match entity_name:
             case 'weeks':
                 state_message = f'✅ Number of {entity_name} filled'if self.__number_of_weeks!=0 else f'❌ Number of {entity_name} not filled'
@@ -389,7 +392,7 @@ class HabitRepeats:
             return True, 'Set the week pattern first'
 
         history_file_name = 'weekly_repeat_habit_name'
-        user_input = self.__basic_input("Enter the name of the week you want to save(press enter to see your options): ",list(self.__week_pattern.week_patterns.keys()),history_file_name,'[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands',f'/WeeklyRepeatHabit/WeekPatternName')
+        user_input = self.__basic_input("Enter the name of the week you want to save(press enter to see your options): ",list(self.__week_pattern.week_patterns.keys()),history_file_name,f'\nPlease note that the week pattern you are choosing will be repeated {self.__number_of_weeks} times, because you chose to repeat this pattern\n[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands',f'/WeeklyRepeatHabit/WeekPatternName')
         # ********* start of common functions ************
         did_run_common_func = ran_common_functions(user_input)
         if did_run_common_func==False:
@@ -450,7 +453,7 @@ class HabitRepeats:
                 ],
             'number of weeks':[
                 self.set_number_of_pattern_entities,
-                'Enter the number of weeks: '
+                'Enter the number of times you want to repeat the week pattern you will save: '
             ],
             'save':[
                 self.save_week,
@@ -556,6 +559,7 @@ class HabitRepeats:
                 case 'clear':
                     clear_screen()
             if user_input=='copy habit from shelf':
+                self.__update_habit_inputs.set_habit_is_copied_once(True)
                 funct = command_functions[user_input]
                 funct()
             

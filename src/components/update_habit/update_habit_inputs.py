@@ -16,6 +16,7 @@ class UpdateHabitInputs(Habit_Inputs):
         self.__update_habit_validator = UpdateHabitValidator()
         self.__number_of_habit_fields = None
         self.__field_names  = []
+        self.__habit_is_copied_once = False
         self.__is_habit_found_in_shelf = False
         self.__main_form = Form({field: False for field in ['id','number_of_habit_fields']})
         self.__display_map = """
@@ -27,6 +28,7 @@ class UpdateHabitInputs(Habit_Inputs):
         self.__current_fields = dict()
         super().__init__(BASE_DIR)
         self.__habit = None
+        self.__habit_copy = None
         self.__view = View()
         self.__shelf = Shelf()
         self.__habits = Habits()
@@ -45,6 +47,10 @@ class UpdateHabitInputs(Habit_Inputs):
         return self.__main_form
 
     def display_copied_habit(self):
+        if self.__habit_is_copied_once:
+            self.collect_copied_habit()
+        
+        
         if self.__habit is None:
             print(f'''{Fore.LIGHTBLACK_EX}Status        : ❌ {self.__copied_habit_status}
 Habit ID      : {Fore.LIGHTBLUE_EX}N/A''')
@@ -52,6 +58,9 @@ Habit ID      : {Fore.LIGHTBLUE_EX}N/A''')
         print(f'''{Fore.LIGHTBLACK_EX}Status        : ✅ {self.__copied_habit_status}
 Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
 
+    def set_habit_is_copied_once(self,habit_copied_once=False):
+        self.__habit_is_copied_once = habit_copied_once
+   
     def collect_copied_habit(self):
         self.__selected_habit_tuple = Shelf.copy_last_place_habit()
         habit = {
@@ -60,10 +69,16 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
             'start_date':self.__selected_habit_tuple[2],
             'session_duration':self.__selected_habit_tuple[3],
             'status':self.__selected_habit_tuple[4]
-            } if self.__selected_habit_tuple is not None else None
+            } if self.__selected_habit_tuple is not None and len(self.__selected_habit_tuple)!=0 else None
+        
         habit = CompleteHabit(**habit) if not habit is None else None
-        if habit is None:
+        
+        if habit is None or len(self.__selected_habit_tuple)==0:
             self.__copied_habit_status = 'No habit was found in the shelf, please copy the habit from the shelf'
+            self.__habit = habit
+            self.__is_habit_found_in_shelf = False
+            self.__main_form.set_field_status('id',False)
+            
             return self.__copied_habit_status
         
         self.__current_fields = {
@@ -73,6 +88,7 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
             'duration':self.__selected_habit_tuple[3],
             'status':self.__selected_habit_tuple[4]
         }
+        
         self.__habit = habit
         self.__copied_habit_status = "Habit has been successfully copied from the shelf"
         self.__is_habit_found_in_shelf = True

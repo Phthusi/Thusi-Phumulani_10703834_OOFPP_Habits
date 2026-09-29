@@ -31,7 +31,7 @@ class Shelf:
 
     @classmethod
     def copy_last_place_habit(cls):
-        if len(cls.__habits_shelf)!=0:
+        if len(list(cls.__habits_shelf))!=0:
             return list(cls.__habits_shelf)[0]
         return None
     

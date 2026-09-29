@@ -78,6 +78,7 @@ class UpdateHabit:
             elif user_input=='copy habit from shelf':
                 funct = command_functions[user_input][0]
                 funct()
+                self.__update_habit_inputs.set_habit_is_copied_once(True)
             
             elif user_input=='view habit to update':  
                 funct = command_functions[user_input][0]
