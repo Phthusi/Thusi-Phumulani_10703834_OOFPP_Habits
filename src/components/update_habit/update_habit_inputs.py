@@ -50,7 +50,6 @@ class UpdateHabitInputs(Habit_Inputs):
         if self.__habit_is_copied_once:
             self.collect_copied_habit()
         
-        
         if self.__habit is None:
             print(f'''{Fore.LIGHTBLACK_EX}Status        : ❌ {self.__copied_habit_status}
 Habit ID      : {Fore.LIGHTBLUE_EX}N/A''')

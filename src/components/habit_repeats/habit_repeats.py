@@ -30,6 +30,7 @@ class HabitRepeats:
         self.__shelf = Shelf()
         self.progress_bar = ProgressBar(7)
         self.__number_of_weeks = 0
+        self.__number_of_days = 0
         self.__number_of_months = 0
         self.__habit_date_time_manger = HabitDateTimeManager()
         self.__levels = {'level1':'➡️','level2':' ','level3':' ','level4':' '}
@@ -345,7 +346,6 @@ class HabitRepeats:
         commands = []
         history_file_name = f'set_number_of_{entity_name}'
 
-
         match entity_name:
             case 'weeks':
                 state_message = f'✅ Number of {entity_name} filled'if self.__number_of_weeks!=0 else f'❌ Number of {entity_name} not filled'
@@ -353,10 +353,13 @@ class HabitRepeats:
             case 'months':
                 state_message = f'✅ Number of {entity_name} filled'if self.__number_of_months!=0 else f'❌ Number of {entity_name} not filled'
                 current_value = self.__number_of_months if self.__number_of_months!=0 else f'{Fore.BLUE}N/A{Fore.RESET}'
+            case 'days':
+                state_message = f'✅ Number of {entity_name} filled'if self.__number_of_days!=0 else f'❌ Number of {entity_name} not filled'
+                current_value = self.__number_of_days if self.__number_of_days!=0 else f'{Fore.BLUE}N/A{Fore.RESET}'
 
-        field_pair = (state_message,current_value) if entity_name=='weeks' else (state_message,current_value)   
+        field_pair = (state_message,current_value)   
 
-        user_input = self.__basic_input("Enter number of weeks: ",commands,history_file_name,'[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands',f'/WeeklyRepeatHabit/NumberOf{entity_name.title()}',field_pair=field_pair)
+        user_input = self.__basic_input(f"Enter number of {entity_name}: ",commands,history_file_name,'[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands',f'/{entity_name.title()}RepeatHabit/NumberOf{entity_name.title()}',field_pair=field_pair)
         # ********* start of common functions ************
         did_run_common_func = ran_common_functions(user_input)
         if did_run_common_func==False:
@@ -371,6 +374,9 @@ class HabitRepeats:
         if int(user_input) == 0:
             return False, f'Invalid input. the number of {entity_name} must be greater than 0.'
         match entity_name:
+            case 'days':
+                self.__number_of_days = int(user_input)
+                return True, f'Number of {entity_name} was set successfully...'
             case 'weeks':
                 self.__number_of_weeks = int(user_input)
                 return True, f'Number of {entity_name} was set successfully...'
@@ -437,26 +443,74 @@ class HabitRepeats:
         print(f"Week data saved: {self.__number_of_weeks} weeks")
         return True, 'Success...'
 
+    @retry_until_success
+    def save_day(self, *args,**kwargs):
+        if self.__number_of_days == 0:
+            return True, 'Set the number of days first'
+ 
+        count = self.__number_of_days
+        total_week_with_seven_days_of_given_week = count // 7
+        days_left_to_complete_the_week           = count % 7
+        number_of_skipped_days                   = 7 - days_left_to_complete_the_week
+        number_weekdays_pairs = {
+            1: ['mon'],
+            2: ['mon', 'tue'],
+            3: ['mon', 'tue', 'wed'],
+            4: ['mon', 'tue', 'wed', 'thu'],
+            5: ['mon', 'tue', 'wed', 'thu', 'fri'],
+            6: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat'],
+        }
+        added_weeks = []
+        added_months = []
+
+        for _ in range(total_week_with_seven_days_of_given_week):
+            week_name = f'week_id_{token_urlsafe(16)}'
+            self.__week_pattern.set_name(week_name)
+            added_weeks.append(week_name)
+            self.__week_pattern_manager.save_week_pattern(week_name,['mon','tue','wed','thu','fri','sat','sun'])
+
+        if days_left_to_complete_the_week!=0:
+            week_name = f'week_id_{token_urlsafe(16)}'
+            self.__week_pattern.set_name(week_name)
+            added_weeks.append(week_name)
+            temporary_week_pattern = number_weekdays_pairs[days_left_to_complete_the_week]
+            temporary_week_pattern.extend(['skip'] * number_of_skipped_days)
+            self.__week_pattern_manager.save_week_pattern(week_name,temporary_week_pattern)
+
+        for _ in range(total_week_with_seven_days_of_given_week if total_week_with_seven_days_of_given_week!=0 else 1):
+            grouped_weeks = [added_weeks[i:i+4] for i in range(0, len(added_weeks), 4)]
+            for week_group in grouped_weeks:
+                month_name = f'month_id_{token_urlsafe(16)}'
+                self.__month_pattern.set_name(month_name)
+                added_months.append(month_name)
+                if len(week_group) < 4:
+                    week_group.extend(['skip'] * (4 - len(week_group)))
+                self.__month_pattern_manager.save_month_pattern(month_name,week_group)
+        
+        # save months pattern
+        self.__months_pattern.set_months_pattern(added_months)
+        self.__months_pattern.save_months_pattern()
+        copied_habit = self.__shelf.copy_last_place_habit()
+        copied_id,copied_name,copied_startdatetime,copied_duration,copied_status,copied_periodicity = copied_habit
+        copied_habit = (copied_id,copied_name,copied_startdatetime,copied_duration,copied_status,'DAILY')
+        filtered_months_pattern = [{list(i.keys())[0]: list(i.values())[0]} for i in self.__months_pattern.get_months_pattern()]
+
+        self.__save_habit_repeats(copied_habit,months_pattern=filtered_months_pattern)
+        print(f"Day data saved: {self.__number_of_days} days")
+        return True, 'Success...'
+
     def run_daily_repeats(self):
         '''
         number of days -> group days by 7 and name week1,week2,week3....
 
         '''
         command_functions = {
-            'week pattern name':[
-                    self.set_habit_week_pattern_name,
-                    "Enter the week pattern name: "
-                ],
-            'week pattern':[
-                self.set_habit_week_pattern,
-                "Enter the week pattern: "
-                ],
-            'number of weeks':[
-                self.set_number_of_pattern_entities,
-                'Enter the number of times you want to repeat the week pattern you will save: '
+            'number of days':[
+                lambda :self.set_number_of_pattern_entities(message='Enter the number days you want to repeat this habit session: ',entity_name='days'),
+                ''
             ],
             'save':[
-                self.save_week,
+                self.save_day,
                 ''
             ]
         }
@@ -464,7 +518,7 @@ class HabitRepeats:
             clear_screen()
             commands = list(command_functions.keys())
             history_file_name = 'daily_repeat_habit'
-            user_input = self.__basic_input("Enter command: ",commands,history_file_name,'[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands','/WeeklyRepeatHabit')            
+            user_input = self.__basic_input("Enter command: ",commands,history_file_name,'[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands','/DailyRepeatHabit')            
             match user_input:
                 case 'esc':
                     break
@@ -479,8 +533,6 @@ class HabitRepeats:
             func,message = command_functions[user_input]
             if message =='':
                 success, message = func()
-            if message == 'Enter the number of days: ':
-                display_message = func(message,'days')
             else:
                 display_message = func(message)
 
