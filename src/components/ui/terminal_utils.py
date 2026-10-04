@@ -5,17 +5,21 @@ import os
 call_history = []
 
 def clear_screen():
-    """
-    Clears the terminal screen depending on OS.
-    """
+    """Clears the terminal screen depending on the host operating system."""
     os.system("cls" if os.name == "nt" else "clear")
 
 def retry_until_success(function):
-    """
-    Repeats a function call until it returns True.
-    Intended for CLI input validation.
-    """
+    """Decorator that repeatedly executes a CLI input function until it succeeds.
 
+    Evaluates validation output, displays feedback messages, checks `call_history`
+    tracking, and prompts for confirmation if validation failures occur.
+
+    Args:
+        function (callable): Method or function returning a tuple `(success, message)`.
+
+    Returns:
+        callable: Wrapped function executing the input retry loop.
+    """
     @functools.wraps(function)
     def wrapper(self, *args, **kwargs):
         while True:
@@ -31,6 +35,17 @@ def retry_until_success(function):
     return wrapper
 
 def trace_call(function):
+    """Decorator that tracks validation failures in global call history.
+
+    Monitors function return values and appends the function name to `call_history`
+    if execution flags an unsuccessful result (`False`).
+
+    Args:
+        function (callable): Validation function returning a boolean or `(success, message)` tuple.
+
+    Returns:
+        callable: Wrapped function with trace logic.
+    """
     @functools.wraps(function)
     def wrapper(*args, **kwargs):
         result = function(*args, **kwargs)
@@ -49,10 +64,16 @@ def trace_call(function):
     return wrapper
 
 def ran_common_functions(user_input,function=None):
-    '''
-    try to make the help function that will help the user to pick things up quick
-    e.g use html to show gifs
-    '''
+    """Executes shared CLI shortcut commands based on user input strings.
+
+    Args:
+        user_input (str): Input command string ('help', 'clear', or 'esc').
+        function (callable, optional): Custom help function callback. Defaults to None.
+
+    Returns:
+        bool | None: True if 'help' or 'clear' was handled, False for 'esc', 
+            or None if the command was not recognized.
+    """
     match user_input:
         case 'help':
             if function==None:
@@ -68,6 +89,15 @@ def ran_common_functions(user_input,function=None):
     return None
 
 def find_message(message):
+    """Maps command keyword strings to status descriptive text.
+
+    Args:
+        message (str): Target command keyword ('esc', 'clear', or 'help').
+
+    Returns:
+        str | None: Description string associated with the command keyword, 
+            or None if unknown.
+    """
     match message:
         case 'esc':
             return 'escaping...'
@@ -78,12 +108,15 @@ def find_message(message):
     return None
 
 def temporary_message(message, duration=2):
-    """
-    Displays a temporary message for a specified duration.
+    """Displays a transient inline message in the terminal that disappears after a delay.
 
-    Parameters:
-        message (str): Message to display
-        duration (int): Duration in seconds to display the message
+    Prints the message to standard output, pauses execution for `duration` seconds,
+    and clears the printed line by overwriting it with whitespace.
+
+    Args:
+        message (str): Text message to display.
+        duration (int, optional): Duration in seconds to display the message. 
+            Defaults to 2.
     """
     print(message, end="", flush=True)
     time.sleep(duration)

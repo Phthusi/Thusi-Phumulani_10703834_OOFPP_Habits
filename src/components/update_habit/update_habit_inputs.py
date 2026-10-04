@@ -12,7 +12,17 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent
 
 class UpdateHabitInputs(Habit_Inputs):
+    """Manages multi-step user form input for modifying existing habits.
+
+    Inherits from `Habit_Inputs` to provide validation, terminal autocompletion, 
+    and UI state synchronization when selecting fields and applying updates to
+    habits stored in memory and on the shelf.
+
+    Attributes:
+        BASE_DIR (Path): Module directory used for history file resolutions.
+    """
     def __init__(self):
+        """Initializes validator instances, forms, state tracking flags, and shelf interfaces."""
         self.__update_habit_validator = UpdateHabitValidator()
         self.__number_of_habit_fields = None
         self.__field_names  = []
@@ -35,18 +45,40 @@ class UpdateHabitInputs(Habit_Inputs):
         self.__copied_habit_status = "No habit has been copied from the shelf, please copy the habit from the shelf"
 
     def __my_input(self,message,history_file_name,commands,field_pair=None):
+        """Presents an autocompleted terminal input prompt with status indicator headers.
+
+        Args:
+            message (str): Prompt text displayed to the user.
+            history_file_name (str): Identifier for loading persistent history.
+            commands (list[str]): List of autocomplete command strings.
+            field_pair (tuple[str, Any], optional): Field status and field value tuple. Defaults to None.
+
+        Returns:
+            str: Normalized lower-case input string entered by the user.
+        """
         self.__main_auto_completer = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
         self.__main_auto_completer.set_has_status(True)
         modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
         return self.__main_auto_completer.prompt_input(message,location=f"Home/UpdateHabit/{modified_history_file_name}",field_pair=field_pair).lower()
 
     def get_habit(self):
+        """Retrieves the active habit instance.
+
+        Returns:
+            CompleteHabit | None: Currently loaded habit model, or None if empty.
+        """
         return self.__habit
 
     def get_main_form(self):
+        """Retrieves the primary level-one input form.
+
+        Returns:
+            Form: Form tracking readiness of required habit metadata fields.
+        """
         return self.__main_form
 
     def display_copied_habit(self):
+        """Prints terminal indicators showing status and ID of the current copied habit."""
         if self.__habit_is_copied_once:
             self.collect_copied_habit()
         
@@ -58,9 +90,19 @@ Habit ID      : {Fore.LIGHTBLUE_EX}N/A''')
 Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
 
     def set_habit_is_copied_once(self,habit_copied_once=False):
+        """Sets the flag controlling whether a copied habit has already been fetched once.
+
+        Args:
+            habit_copied_once (bool, optional): True if previously copied. Defaults to False.
+        """
         self.__habit_is_copied_once = habit_copied_once
    
     def collect_copied_habit(self):
+        """Fetches habit data from the shelf and populates internal models and field states.
+
+        Returns:
+            str: Status string indicating 'success...' or an error message if missing.
+        """
         self.__selected_habit_tuple = Shelf.copy_last_place_habit()
         habit = {
             'id':int(self.__selected_habit_tuple[0]),
@@ -96,6 +138,14 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
 
     @retry_until_success
     def __choose_fields_to_update(self,message):
+        """Prompts for and validates an individual field selection for modification.
+
+        Args:
+            message (str): Prompt text displayed to the user.
+
+        Returns:
+            tuple[bool, str]: Tuple containing `(success_flag, display_message)`.
+        """
         clear_screen()
         self.__field_names = []
         if not self.__is_habit_found_in_shelf:
@@ -124,6 +174,11 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
         return True, 'success...'
     
     def choose_fields_to_update(self,message):
+        """Loops field choice prompting up to the target number of selectable fields.
+
+        Args:
+            message (str): Prompt text displayed to the user.
+        """
         count = 0
         while True:
             message_to_display = self.__choose_fields_to_update(message)
@@ -135,6 +190,7 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
         self.__fields_to_update_form = Form({field: False for field in self.__field_names})
 
     def view_habit_to_update(self):
+        """Renders a tabular view of the currently selected habit tuple."""
         if self.__selected_habit_tuple is None:
             print('No selected habit')
             return
@@ -142,6 +198,7 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
         input('press enter to stop viewing this')
 
     def set_fields_to_update(self):
+        """Iterates selected target fields and prompts for their updated values."""
         habit = self.__habits.get_habit_by_id(self.__habit.get_id())[0]
         id,name,start_datetime,duration,status,periodicity = habit
         saved_name = self._Habit_Inputs__habit._Habit__name
@@ -186,6 +243,11 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
                 self.__display_form.set_field_status(field_name,False)
                 
     def update_field_dict(self):
+        """Constructs a key-value map of updated habit values excluding defaulted fields.
+
+        Returns:
+            dict[str, Any]: Map of field names to non-default updated values.
+        """
         commands = {
             'name': self._Habit_Inputs__habit._Habit__name,
             'start_datetime': self._Habit_Inputs__habit._Habit__start_date,
@@ -203,6 +265,11 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
 
     @retry_until_success
     def update(self):
+        """Applies configured field changes to the habit instance and resets input session state.
+
+        Returns:
+            tuple[bool, str]: Tuple containing `(success_flag, result_message)`.
+        """
         if not self.__is_habit_found_in_shelf:
             return True, 'Find the habit first or copy the habit from the shelf'
 
@@ -224,8 +291,18 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
         return True,message
     
     def get_display_form(self):
+        """Retrieves the display form mapping.
+
+        Returns:
+            Form: Primary form tracking display field status.
+        """
         return self.__display_form
     
     def set_display_map(self,display_map):
+        """Sets the raw template map string for output formatting.
+
+        Args:
+            display_map (str): Format string template containing field placeholders.
+        """
         self.__display_map = display_map
 # gimp

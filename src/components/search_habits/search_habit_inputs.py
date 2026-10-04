@@ -8,11 +8,12 @@ from ..view import View
 from ..time_project.time_manager_validator import HabitDateTimeManagerValidator
 
 from pathlib import Path
-BASE_DIR = Path(__file__).resolve().parent
+BASE_DIR = Path(__file__).resolve().parent 
 
 # view after finding results -> decide stacking queries ->
 class SearchHabitInputs(Habit_Inputs):
     def __init__(self):
+        """Initializes state attributes, autocomplete form defaults, database search, and view instances."""
         self.__number_of_habit_fields = None
         self.__field_names  = []
         self.__main_form = Form({field: False for field in ['id','number_of_habit_fields']})
@@ -28,20 +29,48 @@ class SearchHabitInputs(Habit_Inputs):
         self.__view = View()
 
     def __my_input(self,message,history_file_name,commands,field_pair=None,base='Home/SearchHabit/',example=None):
+        """
+        Configures an autocompleter instance and prompts the user for terminal input.
+
+        Args:
+            message (str): Prompt text presented to the user.
+            history_file_name (str): Filename used to persist and retrieve command history.
+            commands (list[str]): List of autocomplete command strings.
+            field_pair (tuple, optional): Field pair metadata for the autocompleter form. Defaults to None.
+            base (str, optional): Navigation breadcrumb location header. Defaults to 'Home/SearchHabit/'.
+            example (str, optional): Help text or format example displayed under the prompt. Defaults to None.
+
+        Returns:
+            str: Lowercased user input string.
+        """
         self.__main_auto_completer = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
         self.__main_auto_completer.set_has_status(True)
         modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
         return self.__main_auto_completer.prompt_input(message,location=f"{base}{modified_history_file_name}",field_pair=field_pair,example=example).lower()
 
     def get_main_form(self):
+        """
+        Retrieves the main interactive form instance.
+
+        Returns:
+            Form: The form object containing search metadata field states.
+        """
         return self.__main_form
 
     def display_copied_habit(self):
+        """Copies the active habit from the shelf reference and prints the current shelf state formatted."""
         self.__habit = Shelf.copy_last_place_habit() 
         print(f'{Fore.LIGHTBLACK_EX}{self.__shelf.display_state()}')
 
     @retry_until_success
     def handle_get_status(self):
+        """
+        Prompts the user to filter habits by status ('MISSED', 'ONGOING', 'UPCOMING').
+
+        Returns:
+            tuple[bool, str]: A tuple containing execution status (success boolean) 
+                and feedback message.
+        """
         commands = ['MISSED','ONGOING','UPCOMING']
         history_file_name = 'status'
         clear_screen()
@@ -65,6 +94,12 @@ class SearchHabitInputs(Habit_Inputs):
 
     @retry_until_success
     def handle_get_habits_to_complete(self):
+        """
+        Queries and displays all pending habits flagged as 'TO_BE_CONFIRMED'.
+
+        Returns:
+            tuple[bool, str]: A tuple containing execution status (True) and 'success...' message.
+        """
         results = self.__habit_search.get_habit_by_status('TO_BE_CONFIRMED')
         self.__view.display_habits(results,'Home/SearchHabit/Filter/Status/HabitsToUpdate/',search_input=f'habits to complete')
         input('Press enter to continue')
@@ -72,6 +107,12 @@ class SearchHabitInputs(Habit_Inputs):
 
     @retry_until_success
     def __get_habits_before(self):
+        """
+        Prompts for a target time string and fetches habits configured before that time.
+
+        Returns:
+            tuple[bool, str]: Success boolean and status message.
+        """
         commands =  []
         history_file_name = 'before'
         clear_screen()
@@ -92,6 +133,12 @@ class SearchHabitInputs(Habit_Inputs):
 
     @retry_until_success
     def __get_habits_name_has(self):
+        """
+        Prompts for a substring search and displays habits containing the keyword in their title/name.
+
+        Returns:
+            tuple[bool, str]: Success boolean and status message.
+        """
         commands =  []
         history_file_name = 'has'
         clear_screen()
@@ -110,6 +157,12 @@ class SearchHabitInputs(Habit_Inputs):
 
     @retry_until_success
     def __get_by_duration_less_than(self):
+        """
+        Prompts for a duration string and fetches habits running for less than the specified duration.
+
+        Returns:
+            tuple[bool, str]: Success boolean and status message.
+        """
         commands =  []
         history_file_name = 'less_than'
         clear_screen()
@@ -130,6 +183,12 @@ class SearchHabitInputs(Habit_Inputs):
 
     @retry_until_success
     def __get_by_duration_greater_than(self):
+        """
+        Prompts for a duration string and fetches habits running longer than the specified duration.
+
+        Returns:
+            tuple[bool, str]: Success boolean and status message.
+        """
         commands =  []
         history_file_name = 'greater_than'
         clear_screen()
@@ -152,6 +211,12 @@ class SearchHabitInputs(Habit_Inputs):
 
     @retry_until_success
     def __get_by_duration(self):
+        """
+        Prompts for a duration string and fetches habits matching the exact duration.
+
+        Returns:
+            tuple[bool, str]: Success boolean and status message.
+        """
         commands =  []
         history_file_name = 'at'
         clear_screen()
@@ -170,6 +235,12 @@ class SearchHabitInputs(Habit_Inputs):
 
     @retry_until_success
     def __get_habits_before_date(self):
+        """
+        Prompts for a date input (YYYY-MM-DD) and fetches habits scheduled prior to that date.
+
+        Returns:
+            tuple[bool, str]: Success boolean and status message.
+        """
         commands =  []
         history_file_name = 'before'
         clear_screen()
@@ -190,6 +261,12 @@ class SearchHabitInputs(Habit_Inputs):
 
     @retry_until_success
     def __get_habits_after(self):
+        """
+        Prompts for a time input and fetches habits configured after that time.
+
+        Returns:
+            tuple[bool, str]: Success boolean and status message.
+        """
         commands =  []
         history_file_name = 'after'
         clear_screen()
@@ -210,6 +287,12 @@ class SearchHabitInputs(Habit_Inputs):
         
     @retry_until_success
     def __get_habits_name_is(self):
+        """
+        Prompts for an exact habit name and searches for a direct name match.
+
+        Returns:
+            tuple[bool, str]: Success boolean and status message.
+        """
         commands =  []
         history_file_name = 'is'
         clear_screen()
@@ -228,6 +311,12 @@ class SearchHabitInputs(Habit_Inputs):
     
     @retry_until_success
     def __get_habits_at(self):
+        """
+        Prompts for an exact time string and fetches habits scheduled precisely at that time.
+
+        Returns:
+            tuple[bool, str]: Success boolean and status message.
+        """
         commands =  []
         history_file_name = 'on'
         clear_screen()
@@ -248,6 +337,12 @@ class SearchHabitInputs(Habit_Inputs):
 
     @retry_until_success
     def __get_habits_at_date(self):
+        """
+        Prompts for a date string (YYYY-MM-DD) and fetches habits scheduled specifically on that date.
+
+        Returns:
+            tuple[bool, str]: Success boolean and status message.
+        """
         commands =  []
         history_file_name = 'on'
         clear_screen()
@@ -268,6 +363,12 @@ class SearchHabitInputs(Habit_Inputs):
     
     @retry_until_success
     def __get_habits_after_date(self):
+        """
+        Prompts for a date input (YYYY-MM-DD) and fetches habits scheduled after that date.
+
+        Returns:
+            tuple[bool, str]: Success boolean and status message.
+        """
         commands =  []
         history_file_name = 'after'
         clear_screen()
@@ -287,6 +388,7 @@ class SearchHabitInputs(Habit_Inputs):
         return True,'success...'
 
     def handle_get_time(self):
+        """Displays a menu loop for time-based search filters ('before', 'after', 'on')."""
         history_file_name = 'time'
         command_functions = {
             'before':self.__get_habits_before,
@@ -314,6 +416,7 @@ class SearchHabitInputs(Habit_Inputs):
                 input('Press enter to continue')
 
     def handle_get_duration(self):
+        """Displays a menu loop for duration filters ('less than', 'greater than', 'on')."""
         history_file_name = 'duration'
         command_functions = {
             'less than':self.__get_by_duration_less_than,
@@ -340,6 +443,7 @@ class SearchHabitInputs(Habit_Inputs):
                 input('Press enter to continue')
 
     def handle_get_date(self):
+        """Displays a menu loop for date-based search filters ('before', 'after', 'on')."""
         history_file_name = 'date'
         command_functions = {
             'before':self.__get_habits_before_date,
@@ -367,6 +471,7 @@ class SearchHabitInputs(Habit_Inputs):
                 input('Press enter to continue')
 
     def handle_get_name(self):
+        """Displays a menu loop for name matching filters ('is' for exact, 'has' for substring)."""
         history_file_name = 'name'
         command_functions = {
             'is':self.__get_habits_name_is,
@@ -393,6 +498,12 @@ class SearchHabitInputs(Habit_Inputs):
                 input('Press enter to continue')
 
     def find_habits(self):
+        """
+        Launches the primary entry menu loop for searching and filtering habits.
+
+        Routes user selection to specific filter submenus including date, time, 
+        duration, name, status, or habits pending completion.
+        """
         history_file_name = 'filter'
         command_functions = {
             'date':self.handle_get_date,
@@ -423,6 +534,7 @@ class SearchHabitInputs(Habit_Inputs):
                 input('Press enter to continue')
     
     def view_selected_habit(self):
+        """Retrieves the active selected habit from the shelf and renders it in a plain table layout."""
         habit = Shelf.copy_last_place_habit()
         if habit is None:
             print('No habit has been selected')

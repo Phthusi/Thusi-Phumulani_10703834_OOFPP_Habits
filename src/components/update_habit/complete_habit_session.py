@@ -7,17 +7,42 @@ from colorama import Fore
 BASE_DIR = Path(__file__).resolve().parent
 
 class CompleteHabitSession:
+    """Manages an interactive terminal session for marking habits as completed.
+
+    Handles user menu selection, integrates autocompletion history, retrieves copied
+    habits from the shelf storage, displays current habit state, and updates completion
+    statuses in memory and persistence layers.
+    """
     def __init__(self):
+        """Initializes dependencies for managing habit updates and shelf interaction."""
         self.__update_habit_inputs = UpdateHabitInputs()
         self.__shelf = Shelf()
 
     def __my_input(self,message,history_file_name,commands,example=None):
+        """Helper method to prompt for user input with autocompletion and status displays.
+
+        Args:
+            message (str): Text prompt shown to the user.
+            history_file_name (str): Relative path/filename for persistent command history.
+            commands (list[str]): Available command strings for fuzzy autocompletion.
+            example (str, optional): Keyboard shortcuts or usage guidance text. Defaults to None.
+
+        Returns:
+            str: Normalized lower-case input string entered by the user.
+        """
         autocompleter = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
         print(f'{Fore.LIGHTBLACK_EX}{self.__shelf.display_state().replace('  :',':')}')
         self.__update_habit_inputs.display_copied_habit()
         return autocompleter.prompt_input(message,location=f"Home/CompleteSession",example=example).lower()
 
     def run(self):
+        """Executes the main interactive loop for completing habit sessions.
+
+        Clears the terminal, prompts for command entry, validates common shortcut commands
+        ('esc', 'clear', 'help'), enforces requirement checks for active habit selection,
+        and triggers actions like copying habits from shelf, viewing details, or saving
+        completed states.
+        """
         command_functions = {
             'complete update':None,
             'copy habit from shelf':[

@@ -16,7 +16,17 @@ from ..time_project.time_manager import HabitDateTimeManager
 BASE_DIR = Path(__file__).resolve().parent
 
 class HabitRepeats:
+    """Manages custom, daily, weekly, and monthly recurrence schedules for habit sessions.
+
+    Coordinates terminal interactive forms, pattern aggregation (weeks, months, multi-month series),
+    clash detection, and persistence into storage components (`Shelf` and database via `CompleteHabit`).
+
+    Example:
+        >>> repeater = HabitRepeats()
+        >>> repeater.run_daily_repeats()
+    """
     def __init__(self):
+        """Initializes terminal UI forms, pattern managers, validators, shelf storage, and progress indicators."""
         self.__habit_inputs = Habit_Inputs(BASE_DIR)
         self.__update_habit_inputs = UpdateHabitInputs()
         self.__week_pattern_manager = WeekPatternManager()
@@ -47,6 +57,19 @@ class HabitRepeats:
         self.__current_filled_fields = self.__form.number_of_filled_fields()
 
     def __my_input(self,message,history_file_name,commands,field_pair=None,example=None,multiple_values=''):
+        """Internal helper to render auto-completion prompts, updating progress bar state on form changes.
+
+        Args:
+            message (str): Prompt text displayed to the user.
+            history_file_name (str): History file path target inside the history directory.
+            commands (list[str]): Available command strings for auto-completion.
+            field_pair (tuple[str, str] | None): Tuple containing status and current string values.
+            example (str | None): Guidance text or usage rules displayed above the prompt.
+            multiple_values (str): Additional context string (e.g. current selected items list).
+
+        Returns:
+            str: Lowercased user input received from autocompleter prompt.
+        """
         self.__main_auto_completer = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
         if self.__current_filled_fields != self.__form.number_of_filled_fields():
             self.progress_bar.increase_progress_percentage(self.__form.number_of_filled_fields())
@@ -59,6 +82,11 @@ class HabitRepeats:
         return self.__main_auto_completer.prompt_input(message,location=f"Home/RepeatHabit/{modified_history_file_name}",field_pair=field_pair,example=example,multiple_values=multiple_values).lower()
 
     def __level_management(self,no_of_filled_fields):
+        """Updates internal level indicator arrows based on filled parameter count.
+
+        Args:
+            no_of_filled_fields (int): Number of completed form fields.
+        """
         match no_of_filled_fields:
             case 2:
                 self.__levels = {'level1':' ','level2':'➡️','level3':' ','level4':' '}
@@ -68,6 +96,15 @@ class HabitRepeats:
                 self.__levels = {'level1':' ','level2':' ','level3':' ','level4':'➡️'}
 
     def __set_habit_week_pattern_name(self,message,field_pair=None):
+        """Prompts user for a unique week pattern identifier string.
+
+        Args:
+            message (str): Output prompt message.
+            field_pair (tuple[str, str] | None): Status flag and currently assigned value.
+
+        Returns:
+            str: Lowercase string entry from prompt input.
+        """
         history_file_name='week_pattern_name'
         commands = []
         self.__main_autocompleter = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
@@ -77,6 +114,20 @@ class HabitRepeats:
 
     @retry_until_success
     def set_habit_week_pattern_name(self,message):
+        """Handles setting and validating a new week pattern name.
+
+        Args:
+            message (str): Prompt text passed to terminal input handler.
+
+        Returns:
+            tuple[bool, str]: Status tuple containing:
+                - bool: True if operation completed or escaped, False if switching.
+                - str: Validation error or operational outcome text.
+
+        Example:
+            >>> repeater.set_habit_week_pattern_name("Enter week pattern name: ")
+            (True, 'name is valid')
+        """
         clear_screen()
         week_pattern_name = self.__set_habit_week_pattern_name(message,(self.__form.get_field_status('week_pattern_name'),self.__week_pattern.get_name()))
         # ********* start of common functions ************
@@ -96,6 +147,15 @@ class HabitRepeats:
         return is_week_pattern_valid, message
 
     def __set_habit_week_pattern(self,message,field_pair=None):
+        """Prompts user for space-separated weekday tokens.
+
+        Args:
+            message (str): Output prompt message.
+            field_pair (tuple[str, str] | None): Status flag and currently assigned name value.
+
+        Returns:
+            str: Lowercase space-separated weekday string.
+        """
         history_file_name='week_pattern'
         commands = []
         self.__main_autocompleter = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
@@ -106,6 +166,18 @@ class HabitRepeats:
 
     @retry_until_success
     def set_habit_week_pattern(self,message):
+        """Validates and persists weekday tokens associated with the current week pattern name.
+
+        Args:
+            message (str): Prompt text.
+
+        Returns:
+            tuple[bool, str]: Status tuple indicating success/failure and operational message.
+
+        Example:
+            >>> repeater.set_habit_week_pattern("Enter days: ")
+            (True, 'week pattern saved successfully')
+        """
         clear_screen()
         week_pattern = self.__set_habit_week_pattern(message,(self.__form.get_field_status('week_pattern'),None if self.__week_pattern.get_name()=='default' else self.__week_pattern.get_name()))
         # ********* start of common functions ************
@@ -128,6 +200,15 @@ class HabitRepeats:
         return is_week_pattern_valid, message
 
     def __set_habit_month_pattern(self,message,field_pair=None):
+        """Prompts user to enter 4 registered week pattern names (or 'skip') for month composition.
+
+        Args:
+            message (str): Output prompt message.
+            field_pair (tuple[str, str] | None): Status flag and currently assigned month pattern name.
+
+        Returns:
+            str: Lowercase string containing four space-separated week identifiers.
+        """
         history_file_name='month_pattern'
         commands = self.__week_pattern.week_patterns.keys()
         self.__main_autocompleter = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
@@ -138,6 +219,18 @@ class HabitRepeats:
 
     @retry_until_success
     def set_habit_month_pattern(self,message):
+        """Validates and persists a 4-week month pattern under the current month pattern name.
+
+        Args:
+            message (str): Terminal prompt string.
+
+        Returns:
+            tuple[bool, str]: Outcome flag and validation string.
+
+        Example:
+            >>> repeater.set_habit_month_pattern("Enter 4 week patterns: ")
+            (True, 'month pattern saved successfully')
+        """
         clear_screen()
         if self.__week_pattern.week_patterns == {}:
             return True,'please set the week pattern first'
@@ -163,6 +256,15 @@ class HabitRepeats:
         return is_month_pattern_valid, message
 
     def __set_habit_month_pattern_name(self,message,field_pair=None):
+        """Prompts user for a unique month pattern identifier string.
+
+        Args:
+            message (str): Prompt text.
+            field_pair (tuple[str, str] | None): Status flag and currently assigned name.
+
+        Returns:
+            str: Lowercase string entry.
+        """
         history_file_name='month_pattern_name'
         commands = []
         self.__main_autocompleter = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
@@ -172,6 +274,18 @@ class HabitRepeats:
 
     @retry_until_success
     def set_habit_month_pattern_name(self,message):
+        """Validates and assigns a new month pattern name.
+
+        Args:
+            message (str): Prompt text displayed to user.
+
+        Returns:
+            tuple[bool, str]: Validation tuple (success_boolean, feedback_message).
+
+        Example:
+            >>> repeater.set_habit_month_pattern_name("Enter month pattern name: ")
+            (True, 'name is valid')
+        """
         clear_screen()
         month_pattern_name = self.__set_habit_month_pattern_name(message,(self.__form.get_field_status('month_pattern_name'),self.__month_pattern.get_name()))
         # ********* start of common functions ************
@@ -191,6 +305,15 @@ class HabitRepeats:
         return is_month_pattern_valid, message
 
     def __set_habit_months_pattern(self,message,field_pair=None):
+        """Prompts user to select an ordered list of saved month patterns (or 'skip').
+
+        Args:
+            message (str): Output prompt string.
+            field_pair (tuple[str, str] | None): Status flag and currently active selection name.
+
+        Returns:
+            str: Lowercase string of space-delimited month identifiers.
+        """
         history_file_name='months_pattern'
         commands = []
         self.__main_autocompleter = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
@@ -201,6 +324,18 @@ class HabitRepeats:
 
     @retry_until_success
     def set_habit_months_pattern(self,message):
+        """Validates and persists the top-level multi-month schedule pattern.
+
+        Args:
+            message (str): Prompt text.
+
+        Returns:
+            tuple[bool, str]: Validation tuple (success_boolean, status_text).
+
+        Example:
+            >>> repeater.set_habit_months_pattern("Enter month patterns: ")
+            (True, 'months pattern saved successfully')
+        """
         clear_screen()
         months_pattern = self.__set_habit_months_pattern(message,(self.__form.get_field_status('months_pattern'),None if self.__week_pattern.get_name()=='default' else self.__week_pattern.get_name()))
         # ********* start of common functions ************
@@ -230,6 +365,12 @@ class HabitRepeats:
         return is_months_pattern_valid, message
 
     def __save_habit_repeats(self,copied_habit,months_pattern=None):
+        """Generates future habit occurrences from pattern structure, filters clashing schedules, and persists valid habits.
+
+        Args:
+            copied_habit (tuple): Base habit tuple (id, name, datetime_str, duration, status, periodicity).
+            months_pattern (list[dict] | None): Custom months schedule structure, defaults to loaded `months_pattern`.
+        """
         id, name, _ , duration, status, periodicity = copied_habit
         current_day,time = copied_habit[2].split(' ')
         habits_to_add = []
@@ -274,6 +415,15 @@ class HabitRepeats:
             self.__shelf.preserve_habit((id,name,start_date,session_duration,status,periodicity))
     
     def save(self):
+        """Saves custom habit repeating sessions based on active shelf copy and configured parameters.
+
+        Returns:
+            tuple[bool, str]: Success flag and completion message.
+
+        Example:
+            >>> repeater.save()
+            (True, 'success...')
+        """
         copied_habit = self.__shelf.copy_last_place_habit()
         id, name, start_datetime , duration, status, periodicity = copied_habit
         if status == 'MISSED':
@@ -282,6 +432,11 @@ class HabitRepeats:
         return True,'success...'
 
     def run_custom_repeats(self):
+        """Executes the interactive command menu loop for fully customized repeat schedule setup.
+
+        Example:
+            >>> repeater.run_custom_repeats()
+        """
         command_functions = {
             'week pattern name':[
                     self.set_habit_week_pattern_name,
@@ -342,6 +497,19 @@ class HabitRepeats:
 
     @retry_until_success
     def set_number_of_pattern_entities(self,message,entity_name):
+        """Sets numeric counts for repeating cycles (days, weeks, or months).
+
+        Args:
+            message (str): Output prompt string.
+            entity_name (str): The entity count target ('days', 'weeks', or 'months').
+
+        Returns:
+            tuple[bool, str]: Validation outcome and confirmation message.
+
+        Example:
+            >>> repeater.set_number_of_pattern_entities("Enter weeks count: ", "weeks")
+            (True, 'Number of weeks was set successfully...')
+        """
         clear_screen()
         commands = []
         history_file_name = f'set_number_of_{entity_name}'
@@ -388,6 +556,19 @@ class HabitRepeats:
 
     @retry_until_success
     def save_week(self, *args,**kwargs):
+        """Generates, validates, and saves weekly repeating habits across configured week iterations.
+
+        Args:
+            *args: Variable length argument list.
+            **kwargs: Arbitrary keyword arguments.
+
+        Returns:
+            tuple[bool, str]: Outcome flag and execution status text.
+
+        Example:
+            >>> repeater.save_week()
+            (True, 'Success...')
+        """
         if self.__number_of_weeks == 0:
             return True, 'Set the number of weeks first'
 
@@ -445,6 +626,19 @@ class HabitRepeats:
 
     @retry_until_success
     def save_day(self, *args,**kwargs):
+        """Generates, chunks into 7-day weeks, and persists daily repeating habit sessions.
+
+        Args:
+            *args: Variable length argument list.
+            **kwargs: Arbitrary keyword arguments.
+
+        Returns:
+            tuple[bool, str]: Success flag and completion status text.
+
+        Example:
+            >>> repeater.save_day()
+            (True, 'Success...')
+        """
         if self.__number_of_days == 0:
             return True, 'Set the number of days first'
  
@@ -500,10 +694,7 @@ class HabitRepeats:
         return True, 'Success...'
 
     def run_daily_repeats(self):
-        '''
-        number of days -> group days by 7 and name week1,week2,week3....
-
-        '''
+        """Runs the command loop for configuring simple daily repetition schedules."""
         command_functions = {
             'number of days':[
                 lambda :self.set_number_of_pattern_entities(message='Enter the number days you want to repeat this habit session: ',entity_name='days'),
@@ -537,6 +728,11 @@ class HabitRepeats:
                 display_message = func(message)
 
     def run_week_repeats(self):
+        """Executes the interactive loop for configuring weekly repeat patterns.
+
+        Presents sub-commands for pattern name, weekday selections, duration count,
+        and final persistence execution.
+        """
         command_functions = {
             'week pattern name':[
                     self.set_habit_week_pattern_name,
@@ -580,10 +776,24 @@ class HabitRepeats:
                 display_message = func(message)
 
     def run_monthly_repeats(self):
+        """Executes the interactive setup for monthly repeat patterns."""
         print("This feature is under development. Please check back later.")
         input("Press Enter to return to the main menu...")
 
     def __basic_input(self,message,commands,history_file_name,example=None,current_dir='',field_pair=None):
+        """Wraps auto-completer input prompt handling and menu status header.
+
+        Args:
+            message: Prompt text shown to user.
+            commands: List of auto-completable string commands.
+            history_file_name: File key for storing command history.
+            example: Footer instructions or usage hints displayed under prompt.
+            current_dir: Sub-path append string for location breadcrumb display.
+            field_pair: Field key-value context for complex input fields.
+
+        Returns:
+            str: Normalized lower-case string command entered by the user.
+        """
         auto_completer = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
         if field_pair is None:
             print(Fore.LIGHTBLACK_EX+self.__shelf.display_state().replace('  :',':')+Fore.RESET)
@@ -593,6 +803,11 @@ class HabitRepeats:
         return auto_completer.prompt_input(message,commands,example,location=f"Home/RepeatHabit"+current_dir,field_pair=field_pair).lower()
 
     def run(self):
+        """Launches the main Repeat Habit controller interactive navigation loop.
+
+        Routes commands to sub-menus for copying habit templates or launching daily,
+        weekly, custom, and monthly recurrence engine wizards.
+        """
         command_functions = {
             'copy habit from shelf':self.__update_habit_inputs.collect_copied_habit,
             'run daily repeat pattern':self.run_daily_repeats,

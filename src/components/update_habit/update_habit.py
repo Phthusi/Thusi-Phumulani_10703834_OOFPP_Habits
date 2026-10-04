@@ -7,13 +7,26 @@ from colorama import Fore
 BASE_DIR = Path(__file__).resolve().parent
 
 class UpdateHabit:
+    """Manages the interactive terminal workflow loop for updating habits."""
     def __init__(self):
+        """Initializes update input handlers, form status tracking, and shelf state access."""
         self.__update_habit_inputs = UpdateHabitInputs()
         self.__form = self.__update_habit_inputs.get_main_form()
         self.__current_filled_fields = self.__form.number_of_filled_fields()
         self.__shelf = Shelf()
 
     def __my_input(self,message,history_file_name,commands,example=None):
+        """Presents a custom terminal prompt styled with header states and autocompletion.
+
+        Args:
+            message (str): Prompt display text for input collection.
+            history_file_name (str): History storage identifier.
+            commands (list[str]): Autocompleter keyword choices.
+            example (str, optional): Key binding helper footer text. Defaults to None.
+
+        Returns:
+            str: Lowercase string entry from terminal user prompt.
+        """
         autocompleter = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
         if self.__current_filled_fields != self.__form.number_of_filled_fields():
             self.__current_filled_fields = self.__form.number_of_filled_fields()
@@ -34,6 +47,7 @@ class UpdateHabit:
         return autocompleter.prompt_input(message,location=f"Home/UpdateHabit",example=example).lower()
 
     def run(self):
+        """Executes the main terminal loop for processing habit update command actions."""
         command_functions = {
             'choose fields to update':[
                 self.__update_habit_inputs.choose_fields_to_update,

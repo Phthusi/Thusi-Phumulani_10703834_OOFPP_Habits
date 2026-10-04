@@ -8,13 +8,36 @@ from ..ui.command_autocomplete import ProgressBar
 BASE_DIR = Path(__file__).resolve().parent
 
 class Add_Habit:
+    """Manages the interactive terminal workflow for adding a new habit.
+
+    Controls form state, tracks user completion progress via a CLI progress bar,
+    checks for time slot conflicts against existing schedule entries, and handles
+    persistence.
+
+    Attributes:
+        progress_bar (ProgressBar): Terminal progress indicator tracking completed fields.
+        __habit_inputs (Habit_Inputs): Interface handling form field validation and values.
+        __form (Any): Main form data structure containing field states and display maps.
+        __current_filled_fields (int): Number of fields currently populated in the form.
+        __main_auto_completer (AutoCompleter): Helper for prompt autocompletion and history.
+    """
     def __init__(self):
+        """Initializes the habit creation controller, progress bar, and form state."""
         self.__habit_inputs = Habit_Inputs(BASE_DIR)
         self.progress_bar = ProgressBar(4)
         self.__form = self.__habit_inputs.get_main_form()
         self.__current_filled_fields = self.__form.number_of_filled_fields()
 
     def is_clashing_with_any_habit(self):
+        """Checks if the staged habit's time window overlaps with active database entries.
+
+        Fetches existing scheduled habits (excluding missed or unknown entries) and computes
+        whether the proposed start time and duration clash with existing commitments.
+
+        Returns:
+            Optional[Tuple[bool, str]]: A tuple containing (False, error_message) if an overlap
+            is detected; otherwise returns None if no clashes exist.
+        """
         habits = [Habits().get_habit_by_status_excluding_some_statuses(['MISSED','UNKNOWN'])] 
         datetime1 = self.__habit_inputs.get_habit().get_start_date()
         duration1 = self.__datetime_manager.convert_duration(self.__habit_inputs.get_habit().get_session_duration())
@@ -28,6 +51,18 @@ class Add_Habit:
                 return False, f'{habit_to_be_added} cannot be saved beacuse it clashes with {habit_from_db}'
 
     def __my_input(self,message,history_file_name,commands,field_pair=None,example=None):
+        """Renders progress updates, handles input completion, and returns normalized input.
+
+        Args:
+            message: Prompt label displayed to the user.
+            history_file_name: Identifier for storing and loading CLI command history.
+            commands: List of available completion options.
+            field_pair: Optional key-value pair for specialized input fields.
+            example: Footer instructions or help guidelines displayed below prompt.
+
+        Returns:
+            str: Normalized lower-case command entered by the user.
+        """
         self.__main_auto_completer = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
         if self.__current_filled_fields != self.__form.number_of_filled_fields():
             self.progress_bar.increase_progress_percentage(self.__form.number_of_filled_fields())
@@ -41,6 +76,12 @@ class Add_Habit:
 
 
     def run(self):
+        """Launches the interactive form navigation and input loop.
+
+        Routes prompts for habit parameters (name, start datetime, duration), updates
+        field progress, toggles lock icons based on field completion, and handles saving
+        and form resets upon successful completion.
+        """
         command_functions = {
             'name':[
                     self.__habit_inputs.set_habit_name,

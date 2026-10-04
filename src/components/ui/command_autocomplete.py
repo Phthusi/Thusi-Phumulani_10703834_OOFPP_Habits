@@ -21,6 +21,13 @@ update functionality FOR MONTHS
 shelf = Shelf()
 
 def update_habit_statuses():
+    """Synchronizes stored habit statuses with real-time temporal constraints.
+
+    Evaluates active habits stored in the database (excluding terminal statuses
+    such as 'MISSED', 'UNKNOWN', and 'COMPLETED'), recalculates their status using
+    HabitDateTimeManager, and updates both database storage and the local active
+    habit cache when state changes occur.
+    """
     db_interface = DB_Interface()
     habits = Habits()
     saved_habits = habits.get_habit_by_status_excluding_some_statuses(['MISSED','UNKNOWN','COMPLETED'])
@@ -43,6 +50,14 @@ def update_habit_statuses():
         update_cache = False
 
 def display_urget_updates(location):
+    """Displays urgent habit notifications based on user location in the CLI workflow.
+
+    Queries the database for habits marked as 'TO_BE_CONFIRMED' and prints a styled
+    warning banner to the terminal if pending items require action.
+
+    Args:
+        location (str): Current navigation context/location identifier (e.g., 'Home').
+    """
     habits = Habits()
     habit_to_complete = habits.get_habit_by_status('TO_BE_CONFIRMED')
     locations_for_decos = ['Home']
@@ -59,11 +74,22 @@ def display_urget_updates(location):
             Fore.RESET
             Style.RESET_ALL
 class ProgressBar:
+    """Renders terminal progress indicators using Rich panels and progress widgets.
+
+    Manages a step-based progress metric for complex interactive flows such as
+    query construction or multi-step form entry.
+    """
     def __init__(self, number_of_fields):
         self.__advance = 1/number_of_fields *100
         self.__progress_percentage = 0
 
     def display_progress_bar(self,menu_text="to be"):
+        """Renders an animated panel containing the current progress state.
+
+        Args:
+            menu_text (str, optional): Descriptive text or menu markup to embed 
+                inside the query builder panel. Defaults to "to be".
+        """
         progress = Progress(
             TextColumn("[bold magenta]Complete        :[/]"),
             BarColumn(
@@ -89,33 +115,76 @@ class ProgressBar:
             pass
 
     def increase_progress_percentage(self,increase_by=0):
+        """Increments the progress percentage up to a maximum cap of 95%.
+
+        Args:
+            increase_by (int, optional): Number of field completion units to increment. Defaults to 0.
+        """
         if increase_by==0:
             return
         self.__progress_percentage += increase_by * self.__advance
         self.__progress_percentage = min(self.__progress_percentage, 95)
 
     def complete_progress(self):
+        """Forces the progress percentage indicator to 100% completion."""
         self.__progress_percentage = 100
 
 class Form:
+    """Manages multi-field data entry state and formatting mapping for forms.
+
+    Tracks completion status for named input fields and produces formatted string 
+    representations featuring visual status icons (✅/❌).
+    """
     def __init__(self, fields: dict[str, bool],display_map=None,levels=None):
+        """Initializes the form tracking structure.
+
+        Args:
+            fields (dict[str, bool]): Mapping of field names to initial completion boolean states.
+            display_map (str, optional): Template format string for displaying form status. Defaults to None.
+            levels (dict, optional): Additional contextual metadata mapping used during format formatting. Defaults to None.
+        """
         self.fields = fields
         self.__display_map = display_map
         self.__levels = levels
 
     def get_fields(self):
+        """Returns the current field completion status dictionary.
+
+        Returns:
+            dict[str, bool]: Key-value pair of field names and their completion status.
+        """
         return self.fields
     
     def set_map(self,map_string):
+        """Sets the raw mapping template string.
+
+        Args:
+            map_string (str): Template string for the form map.
+        """
         self.__map_string = map_string
 
     def set_display_map(self,display_map):
+        """Sets the template format string for human-readable output display.
+
+        Args:
+            display_map (str): Display template string containing `{field_name}` placeholders.
+        """
         self.__display_map = display_map
 
     def get_raw_map(self):
+        """Retrieves the unformatted display template map string.
+
+        Returns:
+            str: Raw display template string.
+        """
         return self.__display_map
 
     def get_display_map(self):
+        """Formats the display map string, substituting boolean values with visual status indicators.
+
+        Returns:
+            str: Interpolated string representation replacing `True` with '✅' and `False` with '❌'.
+        """
         if self.__levels:
             fields = self.fields.copy()
             fields.update(self.__levels)
@@ -123,23 +192,62 @@ class Form:
         return self.__display_map.format(**self.fields).replace('True','✅').replace('False','❌')
 
     def set_fields(self, fields):
+        """Replaces the active form fields mapping.
+
+        Args:
+            fields (dict[str, bool]): New dictionary mapping of field names to boolean statuses.
+        """
         self.fields = fields
 
     def add_field(self, field_name):
+        """Registers a new input field into the form initialized as uncompleted (`False`).
+
+        Args:
+            field_name (str): Name of the new field to track.
+        """
         if field_name not in self.fields:
             self.fields[field_name] = False
 
     def field_filled(self, field_name):
+        """Marks a specific field as completed (`True`).
+
+        Args:
+            field_name (str): Name of the field to update.
+        """
         if field_name in self.fields:
             self.fields[field_name] = True
 
     def is_filled(self, field_name):
+        """Checks whether a given field has been filled.
+
+        Args:
+            field_name (str): Name of the field to check.
+
+        Returns:
+            bool: True if filled, False if unfilled or non-existent.
+        """
         return self.fields.get(field_name, False)
     
     def number_of_filled_fields(self):
+        """Counts the total number of fields marked as filled.
+
+        Returns:
+            int: Number of completed form fields.
+        """
         return sum(1 for filled in self.fields.values() if filled)
 
     def get_field_status(self, field_name,field_value=None,update_mode=False):
+        """Generates a status summary string for a given field.
+
+        Args:
+            field_name (str): Name of the field to evaluate.
+            field_value (Any, optional): Value assigned to the field in update contexts. Defaults to None.
+            update_mode (bool, optional): Whether to format output for update mode operations. Defaults to False.
+
+        Returns:
+            str | None: Formatted status message describing field completion and value,
+                or None if `field_name` is None.
+        """
         additional_message = ''
         if update_mode and field_value is None:
             additional_message = f'{field_name} to be update to: N/A\n'
@@ -152,24 +260,57 @@ class Form:
         return f"{field_name} not found"
     
     def all_fields_filled(self):
+        """Determines if every tracked field in the form is marked as completed.
+
+        Returns:
+            bool: True if all fields are True, False otherwise.
+        """
         return all(self.fields.values())
     
     def reset_fields(self):
+        """Resets all tracked fields in the form to uncompleted (`False`)."""
         for field in self.fields:
             self.fields[field] = False
 
     def get_filled_fields(self):
+        """Retrieves a list of all field names currently marked as completed.
+
+        Returns:
+            list[str]: List of field names where status is True.
+        """
         return [field for field, filled in self.fields.items() if filled]
     
     def get_unfilled_fields(self):
+        """Retrieves a list of all field names currently marked as incomplete.
+
+        Returns:
+            list[str]: List of field names where status is False.
+        """
         return [field for field, filled in self.fields.items() if not filled]
 
     def set_field_status(self, field_name, status):
+        """Explicitly sets the boolean completion state for a target field.
+
+        Args:
+            field_name (str): Name of the field to update.
+            status (bool): Completion status to set.
+        """
         if field_name in self.fields:
             self.fields[field_name] = status
 
 class AutoCompleter:
+    """Manages command-line prompt sessions with persistent history and fuzzy autocompletion.
+
+    Wraps prompt_toolkit's PromptSession with common application commands, status updates,
+    and urgent habit reminders.
+    """
     def __init__(self,history_file_name, commands=[]):
+        """Initializes the autocompleter with persistent history file and command sets.
+
+        Args:
+            history_file_name (str): Base filename (without extension) for loading and saving prompt history.
+            commands (list[str], optional): Additional custom commands to combine with default common commands. Defaults to [].
+        """
         self.__history = FileHistory(f"{history_file_name}.txt")
         self.__common_commands = read_json_files()['common_commands']
         self.__commands = [*commands,*self.__common_commands]
@@ -177,28 +318,79 @@ class AutoCompleter:
         self.__has_status = False
 
     def get_completer(self):
+        """Constructs a FuzzyCompleter wrapping a WordCompleter for registered commands.
+
+        Returns:
+            FuzzyCompleter: Case-insensitive fuzzy matching completion engine.
+        """
         return FuzzyCompleter(WordCompleter(self.__commands, ignore_case=True))
 
     def get_commands(self):
+        """Retrieves the full list of autocomplete commands available in the session.
+
+        Returns:
+            list[str]: Registered prompt commands.
+        """
         return self.__commands
     
     def add_field_to_form(self, field_name):
+        """Adds a field entry to an internal form instance if present.
+
+        Args:
+            field_name (str): Name of the field to append.
+        """
         self.__form.add_field(field_name)
     
     def set_commmands(self,commands):
+        """Replaces the current active commands list and reinitializes the prompt session.
+
+        Args:
+            commands (list[str]): New list of command strings to enable for completion.
+        """
         self.__commands = commands
         self.__session = PromptSession(completer=self.get_completer(), history=self.__history)
 
     def set_has_status(self, has_status):
+        """Configures whether field status and value summaries should print during prompting.
+
+        Args:
+            has_status (bool): True to render field status block prior to prompt entry.
+        """
         self.__has_status = has_status
     
     def set_has_progress_bar(self, has_progress_bar):
+        """Configures progress bar display settings for prompt interactions.
+
+        Args:
+            has_progress_bar (bool): True to enable progress bar UI context.
+        """
         self.__has_progress_bar = has_progress_bar
 
     def get_session(self):
+        """Returns the underlying prompt_toolkit PromptSession instance.
+
+        Returns:
+            PromptSession: Active command prompt session.
+        """
         return self.__session
 
     def prompt_input(self, message, commands=None,example=None,location='Home',field_pair=None,multiple_values=""):
+        """Displays notifications, optional field status metadata, and captures user terminal input.
+
+        Triggers habit status updates, renders urgent notification banners, formats location-aware
+        prompts, and prompts the user via the active PromptSession.
+
+        Args:
+            message (str): Prompt text presented to the user.
+            commands (list[str], optional): Unused override parameter for prospective command sets. Defaults to None.
+            example (str, optional): Optional helper guide or keyboard shortcut reference string. Defaults to None.
+            location (str, optional): Current active navigation scope string. Defaults to 'Home'.
+            field_pair (tuple[str, Any], optional): Tuple containing (field_status, field_value) for active metadata tracking. Defaults to None.
+            multiple_values (str, optional): Additional text appended to the current field value line. Defaults to "".
+
+        Returns:
+            str: Striped string containing input entered by the user.
+        """
         update_habit_statuses()
         display_urget_updates(location)
         if field_pair is None:
