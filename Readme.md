@@ -40,6 +40,7 @@ A Python habit-tracking backend/CLI using object-oriented modelling, SQLite pers
 ```bash
 python -m pip install -r requirements.txt
 ```
+[![Requirements](./media/requirements.gif)](./media/requirements.gif)
 ---
 
 
@@ -50,6 +51,7 @@ Run the complete automated test suite with:
 ```bash
 python -m unittest discover -s src -p "test*.py" -v
 ```
+[![Press Space](./media/run_tests.gif)](./media/press_space.gif)
 
 The tests cover the habit model and validation, datetime calculations, scheduling/clash detection, SQLite CRUD operations, collection queries, and functional analytics.
 
@@ -63,6 +65,7 @@ From the project root:
 ```bash
 python run.py
 ```
+[![Run program](./media/run_program.gif)](./media/run_program.gif)
 ---
 ### [Loading the predefined fixtures](#table-of-content)
 The application stores sessions in `habit.db`. A separate SQLite file can be supplied when using the persistence classes directly, which is useful for tests.
@@ -96,5 +99,8 @@ python seed_fixtures.py
 ### 💡 Pro Tips:
 
 Instant Command Menu: Press Space at any screen or menu stage to pull up all available commands and keyboard shortcuts.
+
+example
+[![Press Space](./media/press_space.gif)](./media/press_space.gif)
 
 [⬆ Back to top](#top)

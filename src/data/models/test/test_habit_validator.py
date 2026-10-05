@@ -1,5 +1,5 @@
 import unittest
-from ..habit_validator import HabitValidator
+from src.data.models.habit_validator import HabitValidator
 from ..habit import Habit
 
 class TestHabitValidator(unittest.TestCase):

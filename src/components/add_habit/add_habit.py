@@ -8,11 +8,10 @@ from ..ui.command_autocomplete import ProgressBar
 BASE_DIR = Path(__file__).resolve().parent
 
 class Add_Habit:
-    """Manages the interactive terminal workflow for adding a new habit.
-
-    Controls form state, tracks user completion progress via a CLI progress bar,
-    checks for time slot conflicts against existing schedule entries, and handles
-    persistence.
+    """This class manages the interactive terminal workflow for adding a new habit session.
+    It also controls form state, user completion progress via a CLI progress bar, 
+    a class that checks for time slot conflicts against existing schedule entries, and a class
+    that handles persistence.
 
     Attributes:
         progress_bar (ProgressBar): Terminal progress indicator tracking completed fields.

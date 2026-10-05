@@ -1,4 +1,4 @@
-colarama>=0.4.6
 prompt-toolkit>=3.0.0
 rich>=13.0.0
 pytest>=8.0.0
+colorama

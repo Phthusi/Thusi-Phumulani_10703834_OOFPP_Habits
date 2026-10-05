@@ -55,6 +55,20 @@ Gifs can be used to illustrate steps for the user in action.
 - Go back to the home screen (select esc)
 - Clear the screen(select clear)
 - get help(select help)
+---
+
+## [Command Loop](#table-of-contents)
+
+
+Available commands:
+
+| Command                      | Description                  | format or rule(s)         | Gif                                           |
+| ---------------------------- | -----------------------------| ---------------------------------------------  | --------------------------------------------- |
+| `name`             | Sets the habit name        | name is required and must have more than 3 characters          | [![Set Name](../add_habit/media/enter_name.gif)](../add_habit/media/enter_name.gif)        |
+| `start_datetime`         | Sets the start date and time| YYYY-MM-DD HH:MM:SS e.g 2026-11-28 13:30:00  | [![Start Date](../add_habit/media/enter_datetime.gif)](../add_habit/media/enter_datetime.gif)  |
+| `duration` | Sets the session duration     |HH:MM:SS e.g 13:30:00   | [![Session Duration](../add_habit/media/enter_duration.gif)](../add_habit/media/enter_duration.gif)  |
+
+Each command maps directly to a handler method.
 
 ---
 
