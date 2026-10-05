@@ -10,7 +10,7 @@ class CompleteHabit(Habit):
     """Habit model with validation and persistence operations."""
 
     def __init__(self, name="default", session_duration="default", start_date="default",
-                 status="UPCOMING", id=None, periodicity="DAILY"):
+                 status="UPCOMING", id=None, periodicity=None):
         """Create a persistence-aware habit."""
         super().__init__(name, session_duration, start_date, status, id, periodicity)
         self.__validator = HabitValidator(self)

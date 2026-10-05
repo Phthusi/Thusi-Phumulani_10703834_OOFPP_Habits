@@ -10,7 +10,7 @@ class Habit:
 
     def __init__(self, name: str, session_duration: str, start_date,
                  status: str = "UPCOMING", id = None,
-                 periodicity = "DAILY"):
+                 periodicity = None):
         """Create a habit with its scheduling and tracking information."""
         self.__name = name
         self.__session_duration = session_duration
