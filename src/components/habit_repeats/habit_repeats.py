@@ -10,6 +10,7 @@ from ..ui.command_autocomplete import ProgressBar
 from ..ui.terminal_utils import ran_common_functions, retry_until_success
 from ..update_habit.update_habit_inputs import UpdateHabitInputs
 from ..shelf import Shelf
+from ...data.db_manager import Habits
 from colorama import Fore, Style, Back
 from ..time_project.time_manager import HabitDateTimeManager
 
@@ -31,6 +32,7 @@ class HabitRepeats:
         self.__update_habit_inputs = UpdateHabitInputs()
         self.__week_pattern_manager = WeekPatternManager()
         self.__month_pattern_manager = MonthPatternManager()        
+        self.__habits = Habits()
         self.__week_pattern = WeekPattern('default')
         self.__week_pattern_validator = WeekPatternValidator(self.__week_pattern)
         self.__month_pattern = MonthPattern('default')
@@ -372,6 +374,7 @@ class HabitRepeats:
             months_pattern (list[dict] | None): Custom months schedule structure, defaults to loaded `months_pattern`.
         """
         id, name, _ , duration, status, periodicity = copied_habit
+        copied_habit_id = id
         current_day,time = copied_habit[2].split(' ')
         habits_to_add = []
         
@@ -411,8 +414,16 @@ class HabitRepeats:
             id, name, start_date, session_duration, status, periodicity = habit
             success, id =CompleteHabit(name, session_duration, start_date, status,periodicity=periodicity).save_habit()
         
+        copied_habit = self.__habits.get_habit_by_id(copied_habit_id)[0]
+        updated_periodicity = periodicity
+
         if len(habits_to_add) > 0:
             self.__shelf.preserve_habit((id,name,start_date,session_duration,status,periodicity))
+
+        id, name, _ , duration, status, periodicity = copied_habit
+        copied_habit_periodicity_is_null = periodicity is None
+        if copied_habit_periodicity_is_null:
+            CompleteHabit(name, duration, start_date, status,periodicity=copied_habit,id=copied_habit_id).update_habit(periodicity=updated_periodicity)
     
     def save(self):
         """Saves custom habit repeating sessions based on active shelf copy and configured parameters.
