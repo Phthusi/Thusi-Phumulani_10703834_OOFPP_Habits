@@ -12,9 +12,7 @@ It’s a fully featured system for building **consistency, accountability, and g
   - [Table of content](#table-of-content)
     - [Loading the predefined fixtures](#loading-the-predefined-fixtures)
     - [Testing](#testing)
-
     
-
 1. ### [Requirements](#table-of-content)
 
    - Python 3.7+ (Python 3.10+ is recommended because the project uses structural pattern matching in the CLI.)
@@ -65,7 +63,7 @@ It’s a fully featured system for building **consistency, accountability, and g
 
      [![Press Space](./media/press_space.gif)](./media/press_space.gif)
 
-      #### Detailed :
+      #### Detailed:
       - [Add habit](/src/components/add_habit/Readme.md)
       - [Delete habit](/src/components/delete_habit/Readme.md)
       - [Update habit](/src/components/update_habit/Readme.md)
