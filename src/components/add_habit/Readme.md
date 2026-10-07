@@ -27,9 +27,6 @@ Gifs can be used to illustrate steps for the user in action.
 
   
 ## [High-Level Flow](#table-of-contents)
-### [Screen views](#table-of-contents) 
-[![Add Habit Image](../add_habit/media/add_habit.png)](../add_habit/media/add_habit.png)
-
 ### [Steps to create a habit](#table-of-contents)
   1.  ### user enters the add habit component screen.
   2.  ### enter field values
@@ -48,6 +45,8 @@ Gifs can be used to illustrate steps for the user in action.
 - get help(select help)
 
 ---
+### [Screen views](#table-of-contents) 
+[![Add Habit Image](../add_habit/media/add_habit.png)](../add_habit/media/add_habit.png)
 
 ## [Command Loop](#table-of-contents)
 

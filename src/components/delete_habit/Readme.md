@@ -25,25 +25,15 @@ Gifs can be used to illustrate steps for the user in action.
   - [Delete Component Purpose](#delete-component-purpose)
   - [Table of Contents](#table-of-contents)
   - [High-Level Flow](#high-level-flow)
+    - [Steps to delete a habit](#steps-to-delete-a-habit)
     - [Screen views](#screen-views)
       - [Delete habit screen without grabbing any habit](#delete-habit-screen-without-grabbing-any-habit)
       - [Delete habit screen view with grabbed any habit but didn't copy it from the shelf](#delete-habit-screen-view-with-grabbed-any-habit-but-didnt-copy-it-from-the-shelf)
       - [Delete habit screen view with grabbed any habit copied from the shelf](#delete-habit-screen-view-with-grabbed-any-habit-copied-from-the-shelf)
-    - [Steps to delete a habit](#steps-to-delete-a-habit)
   - [Testing](#testing)
 
-  
+---
 ## [High-Level Flow](#table-of-contents)
-### [Screen views](#table-of-contents) 
-  #### Delete habit screen without grabbing any habit
-  [![Add Habit Image](../delete_habit/media/delete_habit.png)](../delete_habit/media/delete_habit.png)
-
-  #### Delete habit screen view with grabbed any habit but didn't copy it from the shelf
-  [![Add Habit Image](../delete_habit/media/habit_on_shelf_not_copied.png)](../delete_habit/media/habit_on_shelf_not_copied.png)
-
-  #### Delete habit screen view with grabbed any habit copied from the shelf
-  [![Add Habit Image](../delete_habit/media/copied_habit_on_shelf_.png)](../delete_habit/media/copied_habit_on_shelf_.png)
-
 ### [Steps to delete a habit](#table-of-contents)
   1.  ### [Search for a habit you want to delete](/src/components/search_habits/Readme.md)
   2.  ### Copy habit to the shelf
@@ -55,6 +45,17 @@ Gifs can be used to illustrate steps for the user in action.
 - Go back to the home screen (select esc)
 - Clear the screen(select clear)
 - get help(select help)
+
+---
+### [Screen views](#table-of-contents) 
+  #### Delete habit screen without grabbing any habit
+  [![Add Habit Image](../delete_habit/media/delete_habit.png)](../delete_habit/media/delete_habit.png)
+
+  #### Delete habit screen view with grabbed any habit but didn't copy it from the shelf
+  [![Add Habit Image](../delete_habit/media/habit_on_shelf_not_copied.png)](../delete_habit/media/habit_on_shelf_not_copied.png)
+
+  #### Delete habit screen view with grabbed any habit copied from the shelf
+  [![Add Habit Image](../delete_habit/media/copied_habit_on_shelf_.png)](../delete_habit/media/copied_habit_on_shelf_.png)
 
 ---
 

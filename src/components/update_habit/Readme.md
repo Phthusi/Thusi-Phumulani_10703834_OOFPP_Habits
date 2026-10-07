@@ -26,24 +26,15 @@ Gifs can be used to illustrate steps for the user in action.
   - [Update Component Purpose](#update-component-purpose)
   - [Table of Contents](#table-of-contents)
   - [High-Level Flow](#high-level-flow)
+    - [Steps to update a habit](#steps-to-update-a-habit)
     - [Screen views](#screen-views)
       - [Update habit screen without grabbing any habit](#update-habit-screen-without-grabbing-any-habit)
       - [Update habit screen view with grabbed any habit but didn't copy it from the shelf](#update-habit-screen-view-with-grabbed-any-habit-but-didnt-copy-it-from-the-shelf)
       - [Update habit screen view with grabbed any habit copied from the shelf](#update-habit-screen-view-with-grabbed-any-habit-copied-from-the-shelf)
-    - [Steps to update a habit](#steps-to-update-a-habit)
   - [Testing](#testing)
 
   
 ## [High-Level Flow](#table-of-contents)
-### [Screen views](#table-of-contents) 
-  #### Update habit screen without grabbing any habit
-  [![Update Habit Image](../update_habit/media/update_habit_empty_shelf.png)](../update_habit/media/update_habit_empty_shelf.png)
-
-  #### Update habit screen view with grabbed any habit but didn't copy it from the shelf
-  [![Update Habit Image](../update_habit/media/update_habit_not_copied_from_shelf.png)](../update_habit/media/update_habit_not_copied_from_shelf.png)
-
-  #### Update habit screen view with grabbed any habit copied from the shelf
-  [![Update Habit Image](../update_habit/media/update_habit_copied_from_shelf.png)](../update_habit/media/update_habit_copied_from_shelf.png)
 
 ### [Steps to update a habit](#table-of-contents)
   1.  ### [Search for a habit you want to update](/src/components/search_habits/Readme.md)
@@ -58,6 +49,15 @@ Gifs can be used to illustrate steps for the user in action.
 - get help(select help)
 
 ---
+### [Screen views](#table-of-contents) 
+  #### Update habit screen without grabbing any habit
+  [![Update Habit Image](../update_habit/media/update_habit_empty_shelf.png)](../update_habit/media/update_habit_empty_shelf.png)
+
+  #### Update habit screen view with grabbed any habit but didn't copy it from the shelf
+  [![Update Habit Image](../update_habit/media/update_habit_not_copied_from_shelf.png)](../update_habit/media/update_habit_not_copied_from_shelf.png)
+
+  #### Update habit screen view with grabbed any habit copied from the shelf
+  [![Update Habit Image](../update_habit/media/update_habit_copied_from_shelf.png)](../update_habit/media/update_habit_copied_from_shelf.png)
 
 ## [Testing](#table-of-contents)
 ```bash

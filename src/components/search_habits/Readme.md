@@ -36,7 +36,7 @@ Gifs can be used to illustrate steps for the user in action.
 
   Gif example of the high level flow:
 
-  ![Add Habit Flow](../delete_habit/media/delete_habit.gif)
+  ![Add Habit Flow](../search_habits/media/search_habit.gif)
 - Go back to the home screen (select esc)
 - Clear the screen(select clear)
 - get help(select help)
