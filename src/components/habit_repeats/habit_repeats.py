@@ -159,12 +159,44 @@ class HabitRepeats:
             str: Lowercase space-separated weekday string.
         """
         history_file_name='week_pattern'
-        commands = []
+        commands = ['mon','tue','wed','thu','fri','sat','sun']
         self.__main_autocompleter = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
         self.__main_autocompleter.set_has_status(True)
         modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
         multiple_values = f"\nCurrent Value list : {Fore.LIGHTBLUE_EX if self.__week_pattern.week_patterns is None else Fore.LIGHTGREEN_EX}{self.__week_pattern.week_patterns if self.__week_pattern.week_patterns is not None else 'N/A'}{Fore.RESET}"
         return self.__main_autocompleter.prompt_input(message,location=f"Home/RepeatHabit/{modified_history_file_name}",field_pair=field_pair,example=f'Options\nmon, tue, wed, thu, fri, sat and sun\n{'-'*95}\nRules\n{'-'*95}\n - Enter Weekdays and separate them by a single space\n - Week days represent the days you choose per week, you must have at least one day\n - The order of putting the weekdays does not matter e.g mon tue fri wed is valid\n{'-'*95}\n[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands',multiple_values=multiple_values).lower()
+
+    def reset(self):
+        """Resets the internal state of the habit repeats manager, clearing all patterns and form fields."""
+        self.__habit_inputs = Habit_Inputs(BASE_DIR)
+        self.__update_habit_inputs = UpdateHabitInputs()
+        self.__week_pattern_manager = WeekPatternManager()
+        self.__month_pattern_manager = MonthPatternManager()        
+        self.__habits = Habits()
+        self.__week_pattern = WeekPattern('default')
+        self.__week_pattern_validator = WeekPatternValidator(self.__week_pattern)
+        self.__month_pattern = MonthPattern('default')
+        self.__month_pattern_validator = MonthPatternValidator(self.__week_pattern)
+        self.__months_pattern = MonthsPattern()
+        self.__months_pattern_validator = MonthsPatternValidator(self.__month_pattern)
+        self.__shelf = Shelf()
+        self.progress_bar = ProgressBar(7)
+        self.__number_of_weeks = 0
+        self.__number_of_days = 0
+        self.__number_of_months = 0
+        self.__habit_date_time_manger = HabitDateTimeManager()
+        self.__levels = {'level1':'➡️','level2':' ','level3':' ','level4':' '}
+        self.display_map = """
+    ----------------------------------------------------------------------------------------------------------------------------
+{level1}   [bold cyan]📌 LEVEL 1: PARAMETERS[/] [green]{week_pattern_name}[/] Week Pattern Name    {week_pattern} Week Pattern
+    ----------------------------------------------------------------------------------------------------------------------------
+{level2}   [bold cyan]📌 LEVEL 2: PARAMETERS[/] [green]{month_pattern_name}[/] Month Pattern Name   {month_pattern} Month Pattern
+    ----------------------------------------------------------------------------------------------------------------------------
+{level3}   [bold cyan]📌 LEVEL 3: PARAMETERS[/] [green]{months_pattern}[/] Months Pattern
+    ---------------------------------------------------------------------------------------------------------------------------- 
+{level4}    [bold cyan]🔒 LEVEL 4: ACTION(S) [/] Save"""
+        self.__form = Form({field: False for field in ['week_pattern_name','week_pattern','month_pattern','month_pattern_name','months_pattern']},self.display_map,levels=self.__levels)
+        self.__current_filled_fields = self.__form.number_of_filled_fields()
 
     @retry_until_success
     def set_habit_week_pattern(self,message):
@@ -317,12 +349,13 @@ class HabitRepeats:
             str: Lowercase string of space-delimited month identifiers.
         """
         history_file_name='months_pattern'
-        commands = []
+        commands = self.__month_pattern.monthPatterns.keys()
+
         self.__main_autocompleter = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
         self.__main_autocompleter.set_has_status(True)
         modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
-        multiple_values = f"\nCurrent Value list : {Fore.LIGHTBLUE_EX if self.__week_pattern.week_patterns is None else Fore.LIGHTGREEN_EX}{self.__week_pattern.week_patterns if self.__week_pattern.week_patterns is not None else 'N/A'}{Fore.RESET}"
-        return self.__main_autocompleter.prompt_input(message,location=f"Home/RepeatHabit/{modified_history_file_name}",field_pair=field_pair,example=f'Options\nmon, tue, wed, thu, fri, sat and sun\n{'-'*95}\nRules\n{'-'*95}\n - Enter Weekdays and separate them by a single space\n - Week days represent the days you choose per week, you must have at least one day\n - The order of putting the weekdays does not matter e.g mon tue fri wed is valid\n{'-'*95}\n[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands',multiple_values=multiple_values).lower()
+        multiple_values = f"\nCurrent Value list : {Fore.LIGHTBLUE_EX if self.__month_pattern.monthPatterns is None else Fore.LIGHTGREEN_EX}{self.__month_pattern.monthPatterns if self.__month_pattern.monthPatterns is not None else 'N/A'}{Fore.RESET}"
+        return self.__main_autocompleter.prompt_input(message,location=f"Home/RepeatHabit/{modified_history_file_name}",field_pair=field_pair,example=f'[↑/↓] History   •   [Enter] Select   •   [Esc] Exit  • Press space to view available commands',multiple_values=multiple_values).lower()
 
     @retry_until_success
     def set_habit_months_pattern(self,message):
@@ -339,7 +372,7 @@ class HabitRepeats:
             (True, 'months pattern saved successfully')
         """
         clear_screen()
-        months_pattern = self.__set_habit_months_pattern(message,(self.__form.get_field_status('months_pattern'),None if self.__week_pattern.get_name()=='default' else self.__week_pattern.get_name()))
+        months_pattern = self.__set_habit_months_pattern(message,(self.__form.get_field_status('months_pattern'),None if len(self.__month_pattern.get_month_pattern()) == 0 else self.__month_pattern.get_name()))
         # ********* start of common functions ************
         did_run_common_func = ran_common_functions(months_pattern)
         if did_run_common_func==False:
@@ -373,7 +406,7 @@ class HabitRepeats:
             copied_habit (tuple): Base habit tuple (id, name, datetime_str, duration, status, periodicity).
             months_pattern (list[dict] | None): Custom months schedule structure, defaults to loaded `months_pattern`.
         """
-        id, name, _ , duration, status, periodicity = copied_habit
+        id, name, start_date , duration, status, periodicity = copied_habit
         copied_habit_id = id
         current_day,time = copied_habit[2].split(' ')
         habits_to_add = []
@@ -420,11 +453,12 @@ class HabitRepeats:
         if len(habits_to_add) > 0:
             self.__shelf.preserve_habit((id,name,start_date,session_duration,status,periodicity))
 
-        id, name, _ , duration, status, periodicity = copied_habit
+        id, name, start_date , duration, status, periodicity = copied_habit
         copied_habit_periodicity_is_null = periodicity is None
         if copied_habit_periodicity_is_null:
             CompleteHabit(name, duration, start_date, status,periodicity=copied_habit,id=copied_habit_id).update_habit(periodicity=updated_periodicity)
-    
+        self.reset()
+
     def save(self):
         """Saves custom habit repeating sessions based on active shelf copy and configured parameters.
 

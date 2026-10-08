@@ -374,7 +374,7 @@ class Habit_Inputs:
             print(f'''CASE No:{count+1}
 {Back.BLUE}{Fore.WHITE}            New Habit                    {Back.RESET}         {Back.BLUE}{Fore.WHITE}             Habit                       {Back.RESET}         
  id               : {id_2}                             id               : {id_1}
- name             :{name_2}                 CLASHES  name             :{name_1}
+ name             :{name_2}               CLASHES  name             :{name_1}
  start_datetime   :{start_datetime_2}     WITH    start_datetime   :{start_datetime_1}
  session_duration :{duration_2}                        session_duration :{duration_1}
  status           :{status_2}                        status           :{status_1}

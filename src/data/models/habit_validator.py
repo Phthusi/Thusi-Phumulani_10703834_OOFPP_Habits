@@ -8,7 +8,7 @@ class HabitValidator:
 
     VALID_STATUSES = {"UPCOMING", "ONGOING", "IN_PROGRESS", "TO_BE_CONFIRMED",
                       "COMPLETED", "MISSED", "UNKNOWN"}
-    VALID_PERIODICITIES = {"DAILY", "WEEKLY"}
+    VALID_PERIODICITIES = {"DAILY", "WEEKLY","CUSTOM"}
 
     def __init__(self, habit):
         """Create a validator for ``habit``."""

@@ -46,8 +46,8 @@ Gifs can be used to illustrate steps for the user in action.
 
 | Command                      | Description                  | Gif                                           |
 | ---------------------------- | -----------------------------| --------------------------------------------- |
-| `run daily repeat pattern`             | Sets the habit name        |  [![daliy repeat](../habit_repeats/media/repeat_daily.gif)](../habit_repeats/media/repeat_daily.gif)        |
-| `run weekly repeat pattern`         | Sets the start date and time|  [![Start Date](../add_habit/media/enter_datetime.gif)](../add_habit/media/enter_datetime.gif)  |
+| `run daily repeat pattern`             | Sets the habit name        |  [![daily repeat](../habit_repeats/media/repeat_daily.gif)](../habit_repeats/media/repeat_daily.gif)        |
+| `run weekly repeat pattern`         | Sets the start date and time|  [![weekly repeat](../habit_repeats/media/repeat_weekly.gif)](../habit_repeats/media/repeat_weekly.gif)  |
 | `run custom repeat pattern` | Sets the session duration     | [![Session Duration](../add_habit/media/enter_duration.gif)](../add_habit/media/enter_duration.gif)  |
 
 Each command maps directly to a handler method.
