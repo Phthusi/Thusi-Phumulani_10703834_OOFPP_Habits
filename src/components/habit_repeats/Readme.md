@@ -2,27 +2,23 @@
 
 # Repeat Habit
 
+  The RepeatHabit component allows users to create recurring habit sessions from an existing habit session selected to be on the shelf and copied from the Shelf.
 
-## Repeat Component Purpose
+  The component supports several repetition modes:
 
+  Daily — repeats a habit for a specified number of days.
+  Weekly — repeats a selected week pattern for a specified number of weeks.
+  Custom — allows the user to build a more complex recurrence schedule using week, month, and multi-month patterns.
+  Monthly — currently under development.
 
-The **RepeatHabit** component allows users to safely delete a habit from the database via the command-line interface.
- 
-It ensures:
+  Before a repeat operation can be performed, the user must first copy a habit session from the Shelf.
 
-* Habit exists before deletion
-* Reflections and descriptions are preserved until deletion
-* User confirmation before removing
-
-This component follows a **command-driven interaction loop**, where each user action is mapped to appropriate methods.
-
-Gifs can be used to illustrate steps for the user in action.
+  The component uses a command-driven interaction loop, where each available command is mapped to a specific handler method.
 
 ---
 
 ## Table of Contents
 - [Repeat Habit](#repeat-habit)
-  - [Repeat Component Purpose](#repeat-component-purpose)
   - [Table of Contents](#table-of-contents)
   - [High-Level Flow](#high-level-flow)
     - [Steps to Repeatt a habit](#steps-to-repeatt-a-habit)
@@ -46,17 +42,23 @@ Gifs can be used to illustrate steps for the user in action.
 
 | Command                      | Description                  | Gif                                           |
 | ---------------------------- | -----------------------------| --------------------------------------------- |
-| `run daily repeat pattern`             | Sets the habit name        |  [![daily repeat](../habit_repeats/media/repeat_daily.gif)](../habit_repeats/media/repeat_daily.gif)        |
-| `run weekly repeat pattern`         | Sets the start date and time|  [![weekly repeat](../habit_repeats/media/repeat_weekly.gif)](../habit_repeats/media/repeat_weekly.gif)  |
-| `run custom repeat pattern` | Sets the session duration     | [![Session Duration](../habit_repeats/media/repeat_custom.gif)](../habit_repeats/media/repeat_custom.gif)  |
+| `run daily repeat pattern`             | Repeats the copied habit for a specified number of days       |  [![daily repeat](../habit_repeats/media/repeat_daily.gif)](../habit_repeats/media/repeat_daily.gif)        |
+| `run weekly repeat pattern`         | .Repeats a selected week pattern for a specified number of weeks.|  [![weekly repeat](../habit_repeats/media/repeat_weekly.gif)](../habit_repeats/media/repeat_weekly.gif)  |
+| `run custom repeat pattern` | Creates a custom recurrence schedule using week, month, and multi-month patterns.     | [![Session Duration](../habit_repeats/media/repeat_custom.gif)](../habit_repeats/media/repeat_custom.gif)  |
 
-Each command maps directly to a handler method.
 
-Here are other things you can do:
-- Go back to the home screen (select esc)
-- Clear the screen(select clear)
-- get help(select help)
+`The Repeat Habit command interface also supports common commands:`
+
+  - esc   —  exits the current Repeat Habit screen.
+
+  - clear  —  clears the terminal screen.
+
+  - Space  —  displays available commands.
+
+  - ↑ / ↓ — navigates through previously entered commands using command history.
+
 ---
+
 ### [Screen views](#table-of-contents) 
   #### Repeat habit screen without grabbing any habit or any habit on the shelf
   [![Repeat Habit Image](../habit_repeats/media/repeat_without_copy.png)](../habit_repeats/media/repeat_without_copy.png)

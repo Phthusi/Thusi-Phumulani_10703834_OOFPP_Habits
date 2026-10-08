@@ -10,8 +10,13 @@ It’s a fully featured system for building **consistency, accountability, and g
 - [Habit Tracker](#habit-tracker)
   - [Project Purpose](#project-purpose)
   - [Table of content](#table-of-content)
+    - [Requirements](#requirements)
+    - [Installation](#installation)
+    - [Core Concepts & Time Units](#core-concepts--time-units)
+    - [Tips](#pro-tips)
+    - [Run](#run)
     - [Loading the predefined fixtures](#loading-the-predefined-fixtures)
-    - [Testing](#testing)
+    - [User Action Details](#detailed-guides-for-specific-featuresuser-actions)
     
 1. ### [Requirements](#table-of-content)
 
@@ -63,12 +68,12 @@ It’s a fully featured system for building **consistency, accountability, and g
 
      [![Press Space](./media/press_space.gif)](./media/press_space.gif)
 
-      #### Detailed guides for specific features:
-      - [Add habit](/src/components/add_habit/Readme.md)
-      - [Delete habit](/src/components/delete_habit/Readme.md)
-      - [Update habit](/src/components/update_habit/Readme.md)
-      - [Search habit](/src/components/search_habits/Readme.md)
-      - [Habit repeats](/src/components/habit_repeats/Readme.md)
+      #### Detailed guides for specific features/user actions:
+      - [Adding or creating a habit session](/src/components/add_habit/Readme.md)
+      - [Deleting a habit session](/src/components/delete_habit/Readme.md)
+      - [Updating a habit session](/src/components/update_habit/Readme.md)
+      - [Searching for habit sessions or a habit session](/src/components/search_habits/Readme.md)
+      - [repeating a habit session daily,weekly,monthly etc](/src/components/habit_repeats/Readme.md)
 
    - `Command History: Use the Up (↑) and Down (↓) arrow keys to navigate and view the history of previously typed commands in the terminal.`
      
@@ -94,9 +99,5 @@ python -m unittest discover -s src -p "test*.py" -v
 ```
 [![Press Space](./media/run_tests.gif)](./media/press_space.gif)
 
-The tests cover the habit model and validation, datetime calculations, scheduling/clash detection, SQLite CRUD operations, collection queries, and functional analytics.
-
-For normal development and testing, keep fixture loading separate from the automated test database.
-
-
+The tests cover the habit model and validation, datetime calculations and scheduling/clash detection, SQLite CRUD operations.
 [⬆ Back to top](#top)
