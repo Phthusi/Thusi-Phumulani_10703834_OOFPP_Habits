@@ -61,25 +61,39 @@ It’s a fully featured system for building **consistency, accountability, and g
    ```
    [![Run program](./media/run_program.gif)](./media/run_program.gif)
 
+   #### Detailed guides for specific features/user actions:
+     - [Adding or creating a habit session](/src/components/add_habit/Readme.md)
+     - [Deleting a habit session](/src/components/delete_habit/Readme.md)
+     - [Updating a habit session](/src/components/update_habit/Readme.md)
+     - [Searching for habit sessions or a habit session](/src/components/search_habits/Readme.md)
+     - [repeating a habit session daily,weekly,monthly etc](/src/components/habit_repeats/Readme.md)
+
 
 5. ### [Pro Tips](#table-of-content)
 
-   - `Instant Command Menu: Press Space at any screen or menu stage to pull up all available commands and keyboard shortcuts.`
+    - `The home screen interface also supports common commands:`
 
-     [![Press Space](./media/press_space.gif)](./media/press_space.gif)
+       - esc   —  exits the current Home screen.
 
-      #### Detailed guides for specific features/user actions:
-      - [Adding or creating a habit session](/src/components/add_habit/Readme.md)
-      - [Deleting a habit session](/src/components/delete_habit/Readme.md)
-      - [Updating a habit session](/src/components/update_habit/Readme.md)
-      - [Searching for habit sessions or a habit session](/src/components/search_habits/Readme.md)
-      - [repeating a habit session daily,weekly,monthly etc](/src/components/habit_repeats/Readme.md)
+       - clear  —  clears the terminal screen.
 
-   - `Command History: Use the Up (↑) and Down (↓) arrow keys to navigate and view the history of previously typed commands in the terminal.`
-     
-     [![Press Space](./media/history_viewing.gif)](./media/history_viewing.gif)
-   - `Stopping the program or escaping the screen: Use esc to escape a particular screen or to sto the program.`
-      [![Escape](/media/escape.gif)](/media/escape.gif)
+       - Space  —  displays available commands.
+
+       - ↑ / ↓ — navigates through previously entered commands using command history.
+  
+   - `Visual examples:`
+     - `Instant Command Menu: Press Space at any screen or menu stage to pull up all available commands and keyboard shortcuts.`
+
+       [![Press Space](./media/press_space.gif)](./media/press_space.gif)
+
+        
+     - `Command History: Use the Up (↑) and Down (↓) arrow keys to navigate and view the history of previously typed commands in the terminal.`
+       
+       [![Press Space](./media/history_viewing.gif)](./media/history_viewing.gif)
+     - `Stopping the program or escaping the screen: Use esc to escape a particular screen or to sto the program.`
+        [![Escape](/media/escape.gif)](/media/escape.gif)
+
+
 ---
 ### [Loading the predefined fixtures](#table-of-content)
    The application stores sessions in `habit.db`. A separate SQLite file can be supplied when using the persistence classes directly, which is useful for tests.
@@ -100,4 +114,5 @@ python -m unittest discover -s src -p "test*.py" -v
 [![Press Space](./media/run_tests.gif)](./media/press_space.gif)
 
 The tests cover the habit model and validation, datetime calculations and scheduling/clash detection, SQLite CRUD operations.
+
 [⬆ Back to top](#top)
