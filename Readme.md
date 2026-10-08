@@ -10,13 +10,8 @@ It’s a fully featured system for building **consistency, accountability, and g
 - [Habit Tracker](#habit-tracker)
   - [Project Purpose](#project-purpose)
   - [Table of content](#table-of-content)
-    - [Requirements](#requirements)
-    - [Installation](#installation)
-    - [Core Concepts & Time Units](#core-concepts--time-units)
-    - [Tips](#pro-tips)
-    - [Run](#run)
     - [Loading the predefined fixtures](#loading-the-predefined-fixtures)
-    - [Component Details](#detailed-guides-for-specific-features)
+    - [Testing](#testing)
     
 1. ### [Requirements](#table-of-content)
 
@@ -64,7 +59,7 @@ It’s a fully featured system for building **consistency, accountability, and g
 
 5. ### [Pro Tips](#table-of-content)
 
-   - Instant Command Menu: Press Space at any screen or menu stage to pull up all available commands and keyboard shortcuts.
+   - `Instant Command Menu: Press Space at any screen or menu stage to pull up all available commands and keyboard shortcuts.`
 
      [![Press Space](./media/press_space.gif)](./media/press_space.gif)
 
@@ -75,9 +70,11 @@ It’s a fully featured system for building **consistency, accountability, and g
       - [Search habit](/src/components/search_habits/Readme.md)
       - [Habit repeats](/src/components/habit_repeats/Readme.md)
 
-   - Command History: Use the Up (↑) and Down (↓) arrow keys to navigate and view the history of previously typed commands in the terminal.
+   - `Command History: Use the Up (↑) and Down (↓) arrow keys to navigate and view the history of previously typed commands in the terminal.`
      
      [![Press Space](./media/history_viewing.gif)](./media/history_viewing.gif)
+   - `Stopping the program or escaping the screen: Use esc to escape a particular screen or to sto the program.`
+      [![Escape](/media/escape.gif)](/media/escape.gif)
 ---
 ### [Loading the predefined fixtures](#table-of-content)
    The application stores sessions in `habit.db`. A separate SQLite file can be supplied when using the persistence classes directly, which is useful for tests.

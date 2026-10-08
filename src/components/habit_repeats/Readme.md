@@ -6,7 +6,7 @@
 ## Repeat Component Purpose
 
 
-The **DeleteHabitController** component allows users to safely delete a habit from the database via the command-line interface.
+The **RepeatHabit** component allows users to safely delete a habit from the database via the command-line interface.
  
 It ensures:
 
@@ -28,7 +28,7 @@ Gifs can be used to illustrate steps for the user in action.
     - [Steps to Repeatt a habit](#steps-to-repeatt-a-habit)
   - [Command Loop](#command-loop)
     - [Screen views](#screen-views)
-      - [Repeat habit screen without grabbing any habit](#repeat-habit-screen-without-grabbing-any-habit)
+      - [Repeat habit screen without grabbing any habit or any habit on the shelf](#repeat-habit-screen-without-grabbing-any-habit-or-any-habit-on-the-shelf)
       - [Repeat habit screen view with grabbed any habit but didn't copy it from the shelf](#repeat-habit-screen-view-with-grabbed-any-habit-but-didnt-copy-it-from-the-shelf)
       - [Repeat habit screen view with grabbed any habit copied from the shelf](#repeat-habit-screen-view-with-grabbed-any-habit-copied-from-the-shelf)
   - [Testing](#testing)
@@ -48,7 +48,7 @@ Gifs can be used to illustrate steps for the user in action.
 | ---------------------------- | -----------------------------| --------------------------------------------- |
 | `run daily repeat pattern`             | Sets the habit name        |  [![daily repeat](../habit_repeats/media/repeat_daily.gif)](../habit_repeats/media/repeat_daily.gif)        |
 | `run weekly repeat pattern`         | Sets the start date and time|  [![weekly repeat](../habit_repeats/media/repeat_weekly.gif)](../habit_repeats/media/repeat_weekly.gif)  |
-| `run custom repeat pattern` | Sets the session duration     | [![Session Duration](../add_habit/media/enter_duration.gif)](../add_habit/media/enter_duration.gif)  |
+| `run custom repeat pattern` | Sets the session duration     | [![Session Duration](../habit_repeats/media/repeat_custom.gif)](../habit_repeats/media/repeat_custom.gif)  |
 
 Each command maps directly to a handler method.
 
@@ -58,14 +58,14 @@ Here are other things you can do:
 - get help(select help)
 ---
 ### [Screen views](#table-of-contents) 
-  #### Repeat habit screen without grabbing any habit
-  ![Add Habit Image](../delete_habit/media/delete_habit.png)
+  #### Repeat habit screen without grabbing any habit or any habit on the shelf
+  [![Repeat Habit Image](../habit_repeats/media/repeat_without_copy.png)](../habit_repeats/media/repeat_without_copy.png)
 
   #### Repeat habit screen view with grabbed any habit but didn't copy it from the shelf
-  ![Add Habit Image](../delete_habit/media/habit_on_shelf_not_copied.png)
+  [![Repeat Habit Image](../habit_repeats/media/repeat_select_habit_without_copy.png)](../habit_repeats/media/repeat_select_habit_without_copy.png)
 
   #### Repeat habit screen view with grabbed any habit copied from the shelf
-  ![Add Habit Image](../delete_habit/media/copied_habit_on_shelf_.png)
+  ![Repeat Habit Image](../habit_repeats/media/repeat_select_habit_with_copy.png)
 
 
 ## [Testing](#table-of-contents)
