@@ -7,6 +7,7 @@ This **Habit Tracker** is a Python habit-tracking command-line interface applica
 
 It’s a fully featured system for building **consistency, accountability, and growth tracking**.
 
+
 ## Table of content
 - [Habit Tracker](#habit-tracker)
   - [Project Purpose](#project-purpose)
