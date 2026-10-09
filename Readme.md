@@ -6,17 +6,14 @@
 This **Habit Tracker** is a Python habit-tracking command-line interface application using object-oriented modelling, SQLite persistence, functional analytics, and a command-line interface, designed to help users to track and manage habits.
 
 It’s a fully featured system for building **consistency, accountability, and growth tracking**.
+
 ## Table of content
 - [Habit Tracker](#habit-tracker)
   - [Project Purpose](#project-purpose)
   - [Table of content](#table-of-content)
-    - [Requirements](#requirements)
-    - [Installation](#installation)
-    - [Core Concepts & Time Units](#core-concepts--time-units)
-    - [Tips](#pro-tips)
-    - [Run](#run)
+      - [Detailed guides for specific features/user actions:](#detailed-guides-for-specific-featuresuser-actions)
     - [Loading the predefined fixtures](#loading-the-predefined-fixtures)
-    - [User Action Details](#detailed-guides-for-specific-featuresuser-actions)
+    - [Testing](#testing)
     
 1. ### [Requirements](#table-of-content)
 
