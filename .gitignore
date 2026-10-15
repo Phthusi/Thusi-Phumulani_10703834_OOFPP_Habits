@@ -5,7 +5,7 @@
 **/history/*.txt
 **/history/.gitkeep
 */view_history/*.txt
-src/main_history/main.txt
+*/main_history/*.txt
 # Optional: compiled Python files
 *.py[cod]
 *$py.class
