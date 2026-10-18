@@ -870,6 +870,9 @@ class HabitRepeats:
                     break
                 case 'clear':
                     clear_screen()
+                case 'help':
+                    ran_common_functions('help',history_file_name='habit_repeats')
+                    continue
             if user_input=='copy habit from shelf':
                 self.__update_habit_inputs.set_habit_is_copied_once(True)
                 funct = command_functions[user_input]

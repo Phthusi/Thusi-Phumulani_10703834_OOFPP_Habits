@@ -2,9 +2,8 @@
 
 # Update Habit
 
-
+<!-- start-purpose -->
 ## Update Component Purpose
-
 
 The **Update Habit Component** component allows users to update, complete, and view habits in the command-line interface.
 
@@ -16,11 +15,13 @@ It provides functionality to:
 * View individual or multiple habits
 
 The component follows a **command-driven loop**, where each command maps to a handler method.
+<!-- end-purpose -->
 
 Gifs can be used to illustrate steps for the user in action.
 
 ---
 
+<!-- start-table-of-content -->
 ## Table of Contents
 - [Update Habit](#update-habit)
   - [Update Component Purpose](#update-component-purpose)
@@ -32,14 +33,16 @@ Gifs can be used to illustrate steps for the user in action.
       - [Update habit screen view with grabbed any habit but didn't copy it from the shelf](#update-habit-screen-view-with-grabbed-any-habit-but-didnt-copy-it-from-the-shelf)
       - [Update habit screen view with grabbed any habit copied from the shelf](#update-habit-screen-view-with-grabbed-any-habit-copied-from-the-shelf)
   - [Testing](#testing)
+<!-- end-table-of-content -->
 
-  
+<!-- start-high-level-view -->
 ## [High-Level Flow](#table-of-contents)
 
 ### [Steps to update a habit](#table-of-contents)
   1.  ### [Search for a habit you want to update](/src/components/search_habits/Readme.md)
   2.  ### Copy habit to the shelf
   3.  ### Update habit
+<!-- end-high-level-view -->
 
   Gif example of the high level flow:
 

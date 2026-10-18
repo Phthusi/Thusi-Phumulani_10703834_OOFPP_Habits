@@ -65,7 +65,7 @@ class SearchHabit:
             history_file_name = 'search_habit'
             user_input = self.__my_input("Enter command: ",history_file_name,commands,example=f'{'-'*105}\nNB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands\n{'-'*105}')
             # ********* start of common functions ************        
-            did_run_common_func = ran_common_functions(user_input)
+            did_run_common_func = ran_common_functions(user_input,history_file_name='search_habits')
             if did_run_common_func==False or did_run_common_func==True:
                 if user_input == 'esc':
                     break

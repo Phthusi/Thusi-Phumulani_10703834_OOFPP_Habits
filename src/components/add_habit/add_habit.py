@@ -1,7 +1,7 @@
 from ..habit_input import Habit_Inputs
 from pathlib import Path
 from ...data.db_manager import Habits
-from ..ui.terminal_utils import clear_screen
+from ..ui.terminal_utils import clear_screen, ran_common_functions
 from ..ui.command_autocomplete import AutoCompleter
 from ..ui.command_autocomplete import ProgressBar
 
@@ -114,7 +114,10 @@ class Add_Habit:
                     break
                 case 'clear':
                     clear_screen()
-            
+                case 'help':
+                    ran_common_functions('help',history_file_name=history_file_name)        
+                    continue
+
             if user_input not in commands:
                 print('invalid input')
                 continue

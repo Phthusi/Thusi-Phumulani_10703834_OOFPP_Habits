@@ -9,16 +9,15 @@
 
 # Search Habit
 
-
+<!-- start-purpose -->
 ## Search Component Purpose
 
-
 The **Search Habit Component** component provides functionality to **search for habits** based on various criteria.
-
+<!-- end-purpose -->
 Gifs can be used to illustrate steps for the user in action.
 
 ---
-
+<!-- start-table-of-content -->
 ## Table of Contents
 - [Search Habit](#search-habit)
   - [Search Component Purpose](#search-component-purpose)
@@ -26,14 +25,15 @@ Gifs can be used to illustrate steps for the user in action.
   - [High-Level Flow](#high-level-flow)
     - [Steps to search for a habit or habits](#steps-to-search-for-a-habit-or-habits)
   - [Testing](#testing)
+<!-- end-table-of-content -->
 
-  
+<!-- start-high-level-view -->
 ## [High-Level Flow](#table-of-contents)
 
 ### [Steps to search for a habit or habits](#table-of-contents)
   1.  ### Search for the habit(s) you want based on the criteria of your choice.
   2.  ### Select the habit so that it can be acted on.
-
+<!-- end-high-level-view -->
   Gif example of the high level flow:
 
   [![Add Habit Flow](../search_habits/media/search_habit.gif)](../search_habits/media/search_habit.gif)

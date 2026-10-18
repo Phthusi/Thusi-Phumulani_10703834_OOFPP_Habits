@@ -2,19 +2,19 @@
 
 # Add Habit
 
-
+<!-- start-purpose -->
 ## Add Component Purpose
-
 The **Add Habit** component is responsible for guiding the user through creating a new habit in the command-line interface.
 
 It collects all required habit fields, validates user input, and finally saves the habit.
 
 This component follows a **command-driven interaction loop**, where each user action is mapped to appropriate methods.
+<!-- end-purpose -->
 
 Gifs can be used to illustrate steps for the user in action.
 
 ---
-
+<!-- start-table-of-content -->
 ## Table of Contents
 - [Add Habit](#add-habit)
   - [Add Component Purpose](#add-component-purpose)
@@ -24,8 +24,9 @@ Gifs can be used to illustrate steps for the user in action.
     - [Screen views](#screen-views)
   - [Command Loop](#command-loop)
   - [Testing](#testing)
+<!-- end-table-of-content -->
 
-  
+<!-- start-high-level-view -->
 ## [High-Level Flow](#table-of-contents)
 ### [Steps to create a habit](#table-of-contents) 
   1.  ### user enters the add habit component screen.
@@ -35,11 +36,11 @@ Gifs can be used to illustrate steps for the user in action.
       - Enter session duration 
   3.  ### save habit
       - Save the habit
-
+<!-- end-high-level-view -->
 
       Gif example of the high level flow:
 
-      [![Add Habit Flow](../add_habit/media/add_habit.gif)](../add_habit/media/add_habit.gif)
+  [![Add Habit Flow](../add_habit/media/add_habit.gif)](../add_habit/media/add_habit.gif)
 - Go back to the home screen (select esc)
 - Clear the screen(select clear)
 - get help(select help)
@@ -49,7 +50,6 @@ Gifs can be used to illustrate steps for the user in action.
 [![Add Habit Image](../add_habit/media/add_habit.png)](../add_habit/media/add_habit.png)
 
 ## [Command Loop](#table-of-contents)
-
 
 Available commands:
 

@@ -1,6 +1,7 @@
 import time
 import functools
 import os
+from pathlib import Path
 
 call_history = []
 
@@ -63,7 +64,7 @@ def trace_call(function):
         return success,message
     return wrapper
 
-def ran_common_functions(user_input,function=None):
+def ran_common_functions(user_input,history_file_name=None,message=None):
     """Executes shared CLI shortcut commands based on user input strings.
 
     Args:
@@ -76,10 +77,10 @@ def ran_common_functions(user_input,function=None):
     """
     match user_input:
         case 'help':
-            if function==None:
+            if history_file_name==None:
                 print('to be written')
             else:
-                function()
+                help(history_file_name)
             return True
         case 'clear':
             clear_screen()
@@ -121,3 +122,34 @@ def temporary_message(message, duration=2):
     print(message, end="", flush=True)
     time.sleep(duration)
     print("\r" + " " * len(message) + "\r", end="", flush=True)
+
+
+def help(history_file_name):
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    file_name = BASE_DIR / f"{history_file_name}/Readme.md"
+    lines = []
+    with open(file_name) as f:
+        lines = f.readlines()
+    start_purpose_index = lines.index('<!-- start-purpose -->\n')
+    end_purpose_index = lines.index('<!-- end-purpose -->\n')
+    
+    start_high_level_view_index = lines.index('<!-- start-high-level-view -->\n')
+    end_high_level_view_index = lines.index('<!-- end-high-level-view -->\n')
+
+    print(''.join(lines[start_purpose_index+1:end_purpose_index])
+          .replace('*','')
+          .replace('#','')
+          .replace('[','')
+          .replace(']','')
+          .replace('(table-of-contents)','')
+          .replace('â€”','->'))
+    
+    print(''.join(lines[start_high_level_view_index+1:end_high_level_view_index])
+          .replace('*','')
+          .replace('#','')
+          .replace('[','')
+          .replace(']','')
+          .replace('(table-of-contents)','')
+          .replace('â€”','->'))
+    
+    input('Press enter to continue')

@@ -1,7 +1,7 @@
 >[Go back home](../../../Readme.md)
 
+<!-- start-purpose -->
 # Repeat Habit
-
   The RepeatHabit component allows users to create recurring habit sessions from an existing habit session selected to be on the shelf and copied from the Shelf.
 
   The component supports several repetition modes:
@@ -14,9 +14,10 @@
   Before a repeat operation can be performed, the user must first copy a habit session from the Shelf.
 
   The component uses a command-driven interaction loop, where each available command is mapped to a specific handler method.
+<!-- end-purpose -->
 
 ---
-
+<!-- start-table-of-content -->
 ## Table of Contents
 - [Repeat Habit](#repeat-habit)
   - [Table of Contents](#table-of-contents)
@@ -28,14 +29,16 @@
       - [Repeat habit screen view with grabbed any habit but didn't copy it from the shelf](#repeat-habit-screen-view-with-grabbed-any-habit-but-didnt-copy-it-from-the-shelf)
       - [Repeat habit screen view with grabbed any habit copied from the shelf](#repeat-habit-screen-view-with-grabbed-any-habit-copied-from-the-shelf)
   - [Testing](#testing)
-
+<!-- end-table-of-content -->
   
+<!-- start-high-level-view -->
 ## [High-Level Flow](#table-of-contents)
 ### [Steps to Repeatt a habit](#table-of-contents)
   1.  ### [Search for a habit you want to delete](/src/components/search_habits/Readme.md)
   2.  ### Copy habit to the shelf
   3.  ### Choose a repeat type(daily, monthly etc)
   4. ### Follow instructions there
+<!-- end-high-level-view -->
 
 ## [Command Loop](#table-of-contents)
 

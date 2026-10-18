@@ -2,9 +2,8 @@
 
 # Delete Habit
 
-
+<!-- start-purpose -->
 ## Delete Component Purpose
-
 
 The **DeleteHabitController** component allows users to safely delete a habit from the database via the command-line interface.
 
@@ -15,11 +14,12 @@ It ensures:
 * User confirmation before removing
 
 This component follows a **command-driven interaction loop**, where each user action is mapped to appropriate methods.
+<!-- end-purpose -->
 
 Gifs can be used to illustrate steps for the user in action.
 
 ---
-
+<!-- start-table-of-content -->
 ## Table of Contents
 - [Delete Habit](#delete-habit)
   - [Delete Component Purpose](#delete-component-purpose)
@@ -31,13 +31,16 @@ Gifs can be used to illustrate steps for the user in action.
       - [Delete habit screen view with grabbed any habit but didn't copy it from the shelf](#delete-habit-screen-view-with-grabbed-any-habit-but-didnt-copy-it-from-the-shelf)
       - [Delete habit screen view with grabbed any habit copied from the shelf](#delete-habit-screen-view-with-grabbed-any-habit-copied-from-the-shelf)
   - [Testing](#testing)
+<!-- end-table-of-content -->
 
 ---
+<!-- start-high-level-view -->
 ## [High-Level Flow](#table-of-contents)
 ### [Steps to delete a habit](#table-of-contents)
   1.  ### [Search for a habit you want to delete](/src/components/search_habits/Readme.md)
   2.  ### Copy habit to the shelf
   3.  ### Delete habit
+<!-- end-high-level-view -->
 
   Gif example of the high level flow:
 
