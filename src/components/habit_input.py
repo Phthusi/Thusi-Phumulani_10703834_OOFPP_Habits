@@ -111,7 +111,7 @@ class Habit_Inputs:
             self.__main_form.set_field_status('name',False)
             return True, 'success...'
         # ********* start of common functions ************
-        did_run_common_func = ran_common_functions(habit_name)
+        did_run_common_func = ran_common_functions(habit_name,history_file_name='add_habit')
         if did_run_common_func==False:
             return True, 'Escaping...'
         elif did_run_common_func==True:

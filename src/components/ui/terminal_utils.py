@@ -124,17 +124,45 @@ def temporary_message(message, duration=2):
     print("\r" + " " * len(message) + "\r", end="", flush=True)
 
 
-def help(history_file_name):
+def help(history_file_name,target=None):
     BASE_DIR = Path(__file__).resolve().parent.parent
     file_name = BASE_DIR / f"{history_file_name}/Readme.md"
     lines = []
     with open(file_name) as f:
         lines = f.readlines()
-    start_purpose_index = lines.index('<!-- start-purpose -->\n')
-    end_purpose_index = lines.index('<!-- end-purpose -->\n')
-    
-    start_high_level_view_index = lines.index('<!-- start-high-level-view -->\n')
-    end_high_level_view_index = lines.index('<!-- end-high-level-view -->\n')
+
+    line = '-'*100
+    if target:
+        try:
+            start_target_index = lines.index(f'<!-- start-{target} -->\n')
+            lines[start_target_index+1] = line+'\n'+lines[start_target_index+1].replace('## ','')+line+'\n'
+            end_target_index = lines.index(f'<!-- end-{target} -->\n')
+        except Exception:
+            start_target_index = 0
+            end_target_index = 0
+        if start_target_index==end_target_index:
+            print(f'Cannot find content to display\nplease ensure that you have things like this <!-- start-{target} --> in your readme file')
+        input('Press enter to continue')
+        return
+    try:
+        start_purpose_index = lines.index('<!-- start-purpose -->\n')
+        lines[start_purpose_index+1] = line+'\n'+lines[start_purpose_index+1].replace('Purpose','').replace('## ','')+line+'\n'
+        end_purpose_index = lines.index('<!-- end-purpose -->\n')
+    except Exception:
+        start_purpose_index = 0
+        end_purpose_index = 0
+
+    try:    
+        start_high_level_view_index = lines.index('<!-- start-high-level-view -->\n')
+        end_high_level_view_index = lines.index('<!-- end-high-level-view -->\n')
+    except Exception:
+        start_high_level_view_index = 0
+        end_high_level_view_index = 0
+
+    if end_high_level_view_index==start_high_level_view_index or start_purpose_index==end_purpose_index:
+        print('Cannot find content to display\nplease ensure that you have things like this <!-- start-high-level-view --> in your readme file')
+        input('Press enter to continue')
+        return
 
     print(''.join(lines[start_purpose_index+1:end_purpose_index])
           .replace('*','')
