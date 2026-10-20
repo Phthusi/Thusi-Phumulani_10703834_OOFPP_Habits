@@ -3,7 +3,6 @@
 # Add Habit
 
 <!-- start-purpose -->
-
 ## Add Component Purpose
 The **Add Habit** component is responsible for guiding the user through creating a new habit in the command-line interface.
 
