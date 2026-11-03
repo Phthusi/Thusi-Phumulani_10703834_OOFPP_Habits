@@ -108,10 +108,9 @@ It’s a fully featured system for building **consistency, accountability, and g
    #### Detailed guides for specific features/user actions:
      - [Adding or creating a habit session](/src/components/add_habit/Readme.md)
      - [Deleting a habit session](/src/components/delete_habit/Readme.md)
-     - [Updating a habit session](/src/components/update_habit/Readme.md)
+     - [Updating a habit session or Complete a habit session](/src/components/update_habit/Readme.md)
      - [Searching for habit sessions or a habit session](/src/components/search_habits/Readme.md)
      - [repeating a habit session daily,weekly,monthly etc](/src/components/habit_repeats/Readme.md)
-
 ---
 ### [Loading the predefined fixtures](#table-of-content)
    The application stores sessions in `habit.db`. A separate SQLite file can be supplied when using the persistence classes directly, which is useful for tests.
