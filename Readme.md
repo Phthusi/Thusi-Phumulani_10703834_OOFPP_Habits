@@ -12,11 +12,14 @@ It’s a fully featured system for building **consistency, accountability, and g
 - [Habit Tracker](#habit-tracker)
   - [Project Purpose](#project-purpose)
   - [Table of content](#table-of-content)
-      - [Detailed guides for specific features/user actions:](#detailed-guides-for-specific-featuresuser-actions)
-    - [Notification(s) screens](#notifications-screens)
-  - [](#)
+    - [Requirements](#requirements)
+    - [Installation](#installation)
+    - [Core Concepts & Time Units](#core-concepts--time-units)
+    - [Tips](#pro-tips)
+    - [Run](#run)
     - [Loading the predefined fixtures](#loading-the-predefined-fixtures)
-    - [Testing](#testing)
+    - [Notification(s) screens](#notifications-screens)
+    - [User Action Details](#detailed-guides-for-specific-featuresuser-actions)
     
 1. ### [Requirements](#table-of-content)
 
