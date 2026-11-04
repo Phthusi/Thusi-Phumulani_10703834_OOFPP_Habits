@@ -12,14 +12,11 @@ It’s a fully featured system for building **consistency, accountability, and g
 - [Habit Tracker](#habit-tracker)
   - [Project Purpose](#project-purpose)
   - [Table of content](#table-of-content)
-    - [Requirements](#requirements)
-    - [Installation](#installation)
-    - [Core Concepts & Time Units](#core-concepts--time-units)
-    - [Tips](#pro-tips)
-    - [Run](#run)
-    - [Loading the predefined fixtures](#loading-the-predefined-fixtures)
+      - [Detailed guides for specific features/user actions:](#detailed-guides-for-specific-featuresuser-actions)
     - [Notification(s) screens](#notifications-screens)
-    - [User Action Details](#detailed-guides-for-specific-featuresuser-actions)
+  - [](#)
+    - [Loading the predefined fixtures](#loading-the-predefined-fixtures)
+    - [Testing](#testing)
     
 1. ### [Requirements](#table-of-content)
 
@@ -114,11 +111,11 @@ It’s a fully featured system for building **consistency, accountability, and g
      - [repeating a habit session daily,weekly,monthly etc](/src/components/habit_repeats/Readme.md)
 ---
 ### [Notification(s) screens](#table-of-content)
-When you have a session that you must update the home screen will look as shown below:
+When you have a session that you must complete the home screen will look as shown below:
 
 [![Notification](/media/home_screen_notification.png)](/media/home_screen_notification.png)
 
-When you have a session that you must the other screens will look as shown below:
+When you have a session that you must complete other screens(screens that are not home) will look as shown below:
 
 [![Notification](/media/notification_on_other_screens.png)](/media/notification_on_other_screens.png)
 ---
