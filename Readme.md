@@ -12,13 +12,11 @@ It’s a fully featured system for building **consistency, accountability, and g
 - [Habit Tracker](#habit-tracker)
   - [Project Purpose](#project-purpose)
   - [Table of content](#table-of-content)
-    - [Requirements](#requirements)
-    - [Installation](#installation)
-    - [Core Concepts & Time Units](#core-concepts--time-units)
-    - [Tips](#pro-tips)
-    - [Run](#run)
+      - [Detailed guides for specific features/user actions:](#detailed-guides-for-specific-featuresuser-actions)
+    - [Notification(s) screens](#notifications-screens)
+  - [](#)
     - [Loading the predefined fixtures](#loading-the-predefined-fixtures)
-    - [User Action Details](#detailed-guides-for-specific-featuresuser-actions)
+    - [Testing](#testing)
     
 1. ### [Requirements](#table-of-content)
 
@@ -108,9 +106,18 @@ It’s a fully featured system for building **consistency, accountability, and g
    #### Detailed guides for specific features/user actions:
      - [Adding or creating a habit session](/src/components/add_habit/Readme.md)
      - [Deleting a habit session](/src/components/delete_habit/Readme.md)
-     - [Updating a habit session or Complete a habit session](/src/components/update_habit/Readme.md)
+     - [Updating or Completing a habit session](/src/components/update_habit/Readme.md)
      - [Searching for habit sessions or a habit session](/src/components/search_habits/Readme.md)
      - [repeating a habit session daily,weekly,monthly etc](/src/components/habit_repeats/Readme.md)
+---
+### [Notification(s) screens](#table-of-content)
+When you have a session that you must update the home screen will look as shown below:
+
+[![Notification](/media/home_screen_notification.png)](/media/home_screen_notification.png)
+
+When you have a session that you must the other screens will look as shown below:
+
+[![Notification](/media/notification_on_other_screens.png)](/media/notification_on_other_screens.png)
 ---
 ### [Loading the predefined fixtures](#table-of-content)
    The application stores sessions in `habit.db`. A separate SQLite file can be supplied when using the persistence classes directly, which is useful for tests.

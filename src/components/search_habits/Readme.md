@@ -24,6 +24,8 @@ Gifs can be used to illustrate steps for the user in action.
   - [Table of Contents](#table-of-contents)
   - [High-Level Flow](#high-level-flow)
     - [Steps to search for a habit or habits](#steps-to-search-for-a-habit-or-habits)
+      - [search for a habit session](#search-for-a-habit-session)
+      - [search and complete a habit session](#search-and-complete-a-habit-session)
   - [Testing](#testing)
 <!-- end-table-of-content -->
 
@@ -35,8 +37,14 @@ Gifs can be used to illustrate steps for the user in action.
   2.  ### Select the habit so that it can be acted on.
 <!-- end-high-level-view -->
   Gif example of the high level flow:
+  #### search for a habit session
+  [![Search Habit Flow](../search_habits/media/search_habit.gif)](../search_habits/media/search_habit.gif)
+                          
+                                              OR
 
-  [![Add Habit Flow](../search_habits/media/search_habit.gif)](../search_habits/media/search_habit.gif)
+  #### search and complete a habit session
+  [![Search and Complete Habit Flow](../update_habit/media/habit_to_complete.gif)](../update_habit/media/habit_to_complete.gif)
+  
 - Go back to the home screen (select esc)
 - Clear the screen(select clear)
 - get help(select help)

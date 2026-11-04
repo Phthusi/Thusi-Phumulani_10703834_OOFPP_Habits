@@ -22,6 +22,8 @@ Gifs can be used to illustrate steps for the user in action.
   - [High-Level Flow](#high-level-flow)
     - [Steps to create a habit](#steps-to-create-a-habit)
     - [Screen views](#screen-views)
+    - [Here are features we have:](#here-are-features-we-have)
+      - [NB: For how things change as you fill in please look at the Gifs below. Another thing is that you cannot be locked to any level after filling everything in level 1.](#nb-for-how-things-change-as-you-fill-in-please-look-at-the-gifs-below-another-thing-is-that-you-cannot-be-locked-to-any-level-after-filling-everything-in-level-1)
   - [Command Loop](#command-loop)
   - [Testing](#testing)
 <!-- end-table-of-content -->
@@ -48,6 +50,21 @@ Gifs can be used to illustrate steps for the user in action.
 ---
 ### [Screen views](#table-of-contents) 
 [![Add Habit Image](../add_habit/media/add_habit.png)](../add_habit/media/add_habit.png)
+
+### Here are features we have:
+- #### Completion bar :
+
+  This is used to show the progress of filling fields.
+
+  [![Progress bar](../add_habit/media/progress_bar.png)](../add_habit/media/progress_bar.png)
+
+- #### Fields and Levels:
+
+  There are different levels and fields. There is Level one on the left and level 2. The padlock at level 2 means the action of saving is locked. If you fill all of the fields in level 1 then the padlock will open for you to save the habit. Things in level 1 can be filled anyhow it doesn't matter.
+
+  [![Progress bar](../add_habit/media/key_fields.png)](../add_habit/media/key_fields.png)
+
+#### NB: For how things change as you fill in please look at the Gifs below. Another thing is that you cannot be locked to any level after filling everything in level 1.
 
 ## [Command Loop](#table-of-contents)
 
