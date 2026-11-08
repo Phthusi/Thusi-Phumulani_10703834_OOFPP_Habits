@@ -5,18 +5,18 @@
 <!-- start-purpose -->
 ## Delete Component Purpose
 
-The **DeleteHabitController** component allows users to safely delete a habit from the database via the command-line interface.
+The Delete Habit component allows users to safely delete a habit from the database through the command-line interface.
 
-It ensures:
+It ensures that:
 
-* Habit exists before deletion
-* Reflections and descriptions are preserved until deletion
-* User confirmation before removing
+* the habit exists before deletion
+* reflections and descriptions are preserved until deletion
+* the user confirms the action before the habit is removed
 
-This component follows a **command-driven interaction loop**, where each user action is mapped to appropriate methods.
+This component follows a command-driven interaction loop, where each user action is mapped to an appropriate method.
 <!-- end-purpose -->
 
-Gifs can be used to illustrate steps for the user in action.
+GIFs can be used to illustrate the steps for the user.
 
 ---
 <!-- start-table-of-content -->
@@ -25,60 +25,60 @@ Gifs can be used to illustrate steps for the user in action.
   - [Delete Component Purpose](#delete-component-purpose)
   - [Table of Contents](#table-of-contents)
   - [High-Level Flow](#high-level-flow)
-    - [Steps to delete a habit](#steps-to-delete-a-habit)
-    - [Screen views](#screen-views)
-      - [Elements of the delete screen:](#elements-of-the-delete-screen)
-      - [Delete habit screen without grabbing any habit](#delete-habit-screen-without-grabbing-any-habit)
-      - [Delete habit screen view with grabbed any habit but didn't copy it from the shelf](#delete-habit-screen-view-with-grabbed-any-habit-but-didnt-copy-it-from-the-shelf)
-      - [Delete habit screen view with grabbed any habit copied from the shelf](#delete-habit-screen-view-with-grabbed-any-habit-copied-from-the-shelf)
+    - [Steps to Delete a Habit](#steps-to-delete-a-habit)
+    - [Screen Views](#screen-views)
+      - [Elements of the Delete Screen](#elements-of-the-delete-screen)
+      - [Delete Habit Screen Without a Habit on the Shelf](#delete-habit-screen-without-a-habit-on-the-shelf)
+      - [Delete Habit Screen With a Habit on the Shelf but Not Copied](#delete-habit-screen-with-a-habit-on-the-shelf-but-not-copied)
+      - [Delete Habit Screen With a Habit Copied from the Shelf](#delete-habit-screen-with-a-habit-copied-from-the-shelf)
   - [Testing](#testing)
 <!-- end-table-of-content -->
 
 ---
 <!-- start-high-level-view -->
 ## [High-Level Flow](#table-of-contents)
-### [Steps to delete a habit](#table-of-contents)
-  1.  ### [Search for a habit you want to delete](/src/components/search_habits/Readme.md)
-  2.  ### Copy habit to the shelf
-  3.  ### Delete habit
+### [Steps to Delete a Habit](#table-of-contents)
+1. ### [Search for the habit you want to delete](./src/components/search_habits/Readme.md)
+2. ### Copy the habit to the shelf
+3. ### Delete the habit
 <!-- end-high-level-view -->
 
-  Gif example of the high level flow:
+GIF example of the high-level flow:
 
-  [![Add Habit Flow](../delete_habit/media/delete_habit.gif)](../delete_habit/media/delete_habit.gif)
-- Go back to the home screen (select esc)
-- Clear the screen(select clear)
-- get help(select help)
+[![Delete Habit Flow](../delete_habit/media/delete_habit.gif)](../delete_habit/media/delete_habit.gif)
+- Go back to the home screen (press `Esc`)
+- Clear the screen (press `clear`)
+- Get help (press `help`)
 
 ---
-### [Screen views](#table-of-contents)
-  The Delete screen is made up of what I call the elements of the delete screen. They are explained and shown below. `Please refer to gifs to see how the elements of the delete screen  change in different circumstances.`
+### [Screen Views](#table-of-contents)
+The Delete screen is made up of what I call the "elements of the delete screen." These are explained and shown below. Please refer to the GIFs to see how these elements change during the process.
 
-  #### Elements of the delete screen:
+#### Elements of the Delete Screen:
 
-  - #### The Shelf: 
-    This is where we put the habit session so that it be can be accessed to update,delete, complete etc. The picture shown below shows if the shelf has a habit session or not. Please note the shelf can only have 1 habit session.
-    
-    [![Delete Habit Shelf Image](../delete_habit/media/deletes_shelf.png)](../delete_habit/media/deletes_shelf.png)
+- #### The Shelf
+  This is where the habit session is placed so that it can be accessed for update, delete, completion, and other actions. The image below shows whether the shelf has a habit session or not. Please note that the shelf is a temporary workspace used for active operations.
 
-  - #### The Status: 
-    This is where we see if the habit has been copied from the shelf or not.
+  [![Delete Habit Shelf Image](../delete_habit/media/deletes_shelf.png)](../delete_habit/media/deletes_shelf.png)
 
-    [![Delete Habit Status Image](../delete_habit/media/deletes_status.png)](../delete_habit/media/deletes_status.png)
+- #### The Status
+  This is where we can see whether the habit has been copied from the shelf or not.
 
-  - #### The Habit Id:
-    This is where you see the habit ID of the habit session that has been copied from the shelf.
-    
-    [![Delete Habit Id Image](../delete_habit/media/deletes_habit_id.png)](../delete_habit/media/deletes_habit_id.png)
+  [![Delete Habit Status Image](../delete_habit/media/deletes_status.png)](../delete_habit/media/deletes_status.png)
 
-  #### Delete habit screen without grabbing any habit
-  [![Delete Habit Image](../delete_habit/media/delete_habit.png)](../delete_habit/media/delete_habit.png)
+- #### The Habit ID
+  This is where you see the ID of the habit session that has been copied from the shelf.
 
-  #### Delete habit screen view with grabbed any habit but didn't copy it from the shelf
-  [![Delete Habit Image](../delete_habit/media/habit_on_shelf_not_copied.png)](../delete_habit/media/habit_on_shelf_not_copied.png)
+  [![Delete Habit ID Image](../delete_habit/media/deletes_habit_id.png)](../delete_habit/media/deletes_habit_id.png)
 
-  #### Delete habit screen view with grabbed any habit copied from the shelf
-  [![Delete Habit Image](../delete_habit/media/copied_habit_on_shelf_.png)](../delete_habit/media/copied_habit_on_shelf_.png)
+#### Delete Habit Screen Without a Habit on the Shelf
+[![Delete Habit Image](../delete_habit/media/delete_habit.png)](../delete_habit/media/delete_habit.png)
+
+#### Delete Habit Screen With a Habit on the Shelf but Not Copied
+[![Delete Habit Image](../delete_habit/media/habit_on_shelf_not_copied.png)](../delete_habit/media/habit_on_shelf_not_copied.png)
+
+#### Delete Habit Screen With a Habit Copied from the Shelf
+[![Delete Habit Image](../delete_habit/media/copied_habit_on_shelf_.png)](../delete_habit/media/copied_habit_on_shelf_.png)
 
 ---
 
@@ -86,4 +86,5 @@ Gifs can be used to illustrate steps for the user in action.
 ```bash
 python -m unittest discover -s src/components/delete_habit/test
 ```
+
 [⬆ Back to top](#top)

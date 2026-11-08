@@ -3,159 +3,351 @@
 [![Habit Image](./media/habit_tracker_image.png)](./media/habit_tracker_image.png)
 
 ## Project Purpose
-This **Habit Tracker** is a Python habit-tracking command-line interface application using object-oriented modelling, SQLite persistence, functional analytics, and a command-line interface, designed to help users to track and manage habits.
+This Habit Tracker is a Python-based habit-tracking command-line application that uses object-oriented modelling, SQLite persistence, functional analytics, and a terminal interface. It is designed to support consistency, accountability, and personal growth.
 
-It’s a fully featured system for building **consistency, accountability, and growth tracking**.
+It is a fully featured system for building consistency, accountability, and growth tracking.
 
-
-## Table of content
+## Table of Contents
 - [Habit Tracker](#habit-tracker)
   - [Project Purpose](#project-purpose)
-  - [Table of content](#table-of-content)
+  - [Table of Contents](#table-of-contents)
     - [Requirements](#requirements)
     - [Installation](#installation)
     - [Core Concepts & Time Units](#core-concepts--time-units)
-    - [Tips](#pro-tips)
+    - [Pro Tips](#pro-tips)
     - [Run](#run)
-    - [Loading the predefined fixtures](#loading-the-predefined-fixtures)
-    - [Notification(s) screens](#notifications-screens)
-    - [User Action Details](#detailed-guides-for-specific-featuresuser-actions)
-    - [Important Functionalities]()
-    - [Help method Functionality]()
-     
-1. ### [Requirements](#table-of-content)
+    - [Loading the Predefined Fixtures](#loading-the-predefined-fixtures)
+    - [Notification Screens](#notification-screens)
+    - [Detailed Guides for Specific Features and User Actions](#detailed-guides-for-specific-features-and-user-actions)
+    - [Testing](#testing)
 
-   - Python 3.7+ (Python 3.10+ is recommended because the project uses structural pattern matching in the CLI.)
-   - Dependencies in `requirements.txt`
+## Requirements
 
-2. ### [Installation](#table-of-content)
+- Python 3.7+ (Python 3.10+ is recommended because the project uses structural pattern matching in the CLI.)
+- Dependencies listed in `requirements.txt`
 
-    ```bash
-      python -m pip install -r requirements.txt
-    ```
-    [![Requirements](./media/requirements.gif)](./media/requirements.gif)
+## Installation
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+[![Requirements](./media/requirements.gif)](./media/requirements.gif)
+
 ---
 
+## Core Concepts & Time Units
+This project is organized into projects, each represented as a main folder with subfolders inside. These subfolders are points where the user enters data. The images below show how to navigate the project structure.
 
-3. ### [Core Concepts & Time Units](#table-of-content)
-   This is the project of projects, each project is treated as a main folder
-   with sub-folders inside. The sub-folders are points at which a user has to put in an input. You look at what is shown below to see where you are in the project:
-   <!-- picture showing main and other project -->
-    [![Press Space](./media/location_example.png)](./media/location_example.png)
+<!-- picture showing main and other project -->
+[![Project Structure](./media/location_example.png)](./media/location_example.png)
 
-   To navigate inside a project you must press
-   space you will get something like what you see below:
-   <!-- picture showing options -->
-    [![Press Space](./media/options.png)](./media/options.png)
-    
-   NB: To move out of the subfolder or project must use esc
+To navigate inside a project, press the space bar. This opens a menu similar to the one shown below:
 
-   In this project we roughly have 3 types of projects:
-    1. The ones that acts on a habit(habit repeat, delete habit, update habit).
-    2. The one that searches, finds and selects what you want to act on(Search habits).
-    3. The one that creates habit sessions(add habit).
-     
-    In order for you to use the projects that act on a habit you must first search and select the habit you want to act on. That habit will be added on what we call a shelf. What is in a shelf can be accessed by any project that can act on it. Before you can act on a habit session you must copy it from the shelf in that project you want to use to act on it. e.g you want to update a habit, you must go search for it and select it. The navigate back to update then copy the habit from the shelf and then you act act on it i.e update it.
+<!-- picture showing options -->
+[![Available Options](./media/options.png)](./media/options.png)
 
-    These are important definitions you must know to understand how this works:
-   - #### Time Scale Definitions:
+Note: To move out of a subfolder or project, use `Esc`.
 
-     - 1 Week: Defined as 7 days.
+In this project, there are roughly three types of projects:
+1. Projects that act on habits (for example, repeat, delete, and update habits).
+2. Projects that search, find, and select the habit to be acted on.
+3. Projects that create habit sessions.
 
-     - 1 Month: Defined as 4 weeks (28 days).
+To use the projects that act on a habit, you must first search for and select the habit you want to work on. That habit is then added to what is called a shelf. The contents of the shelf can be used for later actions such as updating, deleting, or completing a habit.
 
-   - #### Session Creation: 
-     All workflows originate by adding an initial habit session. Parameters pass through HabitValidator and clash check routines before being persisted to habit.db.
-     
-   - #### Habit Session Statuses: 
-     Each habit session has a status. Here are the statuses and their meaning below:
-     - UPCOMING : This means the habit session has not started yet.
-     - ONGOING : This means the habit session has started and it has not finished.
-     - TO_BE_CONFIRMED : This means the habit session has started and finished but not marked as completed(`please go to the update method to see how this works`)
-     - MISSED : This means that 24 hours(from the start or end of the habit session) has passed without you completing that habit session.
-     - COMPLETED : This means you did what you were supposed to do during that session and the process of marking the habit as completed was done.
+These are important definitions you should understand:
 
-   - ##### The Active "Shelf": 
-     Upon creation or selection, the active session is loaded into the Shelf state (Shelf.preserve_habit()).
+### Time Scale Definitions
+- 1 Week = 7 days
+- 1 Month = 4 weeks (28 days)
 
-   - #### Downstream Operations:
+### Session Creation
+All workflows begin by adding an initial habit session. Parameters pass through `HabitValidator` and clash-check routines before being persisted to `habit.db`.
 
-     - Repeat Habits: Uses the session held on the Shelf to calculate future recurrences using HabitDateTimeManager (stepping by 7 days for weekly repeats, or 28 days for monthly repeats).
+### Habit Session Statuses
+Each habit session has a status. The most important statuses are described below:
+- `UPCOMING`: The session has not started yet.
+- `ONGOING`: The session has started and is still in progress.
+- `TO_BE_CONFIRMED`: The session has started and ended, but it has not been marked as completed yet. Please see the update flow for details.
+- `MISSED`: More than 24 hours have passed since the start or end of the session without it being completed.
+- `COMPLETED`: The planned activity was done and the session was marked as completed.
 
-     - Update & Delete: Modifies or purges the staged shelf session across both SQLite database storage and local cache.
+### The Active Shelf
+When a session is created or selected, the active session is loaded into the shelf state (`Shelf.preserve_habit()`).
 
+### Downstream Operations
+- Repeat Habits: Uses the session currently on the shelf to calculate future recurrences. Weekly repeats advance by 7 days, and monthly repeats advance by 28 days.
+- Update & Delete: Modifies or removes the staged shelf session in both the SQLite database and the local cache.
 
-4. ### [Pro Tips](#table-of-content)
-
-    - `The home screen interface also supports common commands:`
-
-       - esc   —  exits the current Home screen.
-
-       - clear  —  clears the terminal screen.
-
-       - Space  —  displays available commands.
-
-       - ↑ / ↓ — navigates through previously entered commands using command history.
-  
-   - `Visual examples:`
-     - `Instant Command Menu: Press Space at any screen or menu stage to pull up all available commands and keyboard shortcuts.`
-
-       [![Press Space](./media/press_space.gif)](./media/press_space.gif)
-
-        
-     - `Command History: Use the Up (↑) and Down (↓) arrow keys to navigate and view the history of previously typed commands in the terminal.`
-       
-       [![Press Space](./media/history_viewing.gif)](./media/history_viewing.gif)
-     - `Stopping the program or escaping the screen: Use esc to escape a particular screen or to sto the program.`
-        [![Escape](/media/escape.gif)](/media/escape.gif)
-
-5. ### [Run](#table-of-content)
-
-   From the project root:
-
-   ```bash
-   python run.py
-   ```
-   [![Run program](./media/run_program.gif)](./media/run_program.gif)
-
-   #### Detailed guides for specific features/user actions:
-     - [Adding or creating a habit session](/src/components/add_habit/Readme.md)
-     - [Deleting a habit session](/src/components/delete_habit/Readme.md)
-     - [Updating or Completing a habit session](/src/components/update_habit/Readme.md)
-     - [Searching for habit sessions or a habit session](/src/components/search_habits/Readme.md)
-     - [repeating a habit session daily,weekly,monthly etc](/src/components/habit_repeats/Readme.md)
 ---
-### [Notification(s) screens](#table-of-content)
-When you have a session that you must complete the home screen will look as shown below:
 
-[![Notification](/media/home_screen_notification.png)](/media/home_screen_notification.png)
+## Pro Tips
 
-When you have a session that you must complete other screens(screens that are not home) will look as shown below:
+- The home screen interface supports common commands:
+  - `Esc` — exits the current screen
+  - `clear` — clears the terminal screen
+  - `Space` — displays available commands
+  - `↑ / ↓` — navigates through command history
 
-[![Notification](/media/notification_on_other_screens.png)](/media/notification_on_other_screens.png)
+- Visual examples:
+  - Instant Command Menu: Press `Space` at any screen or menu to open all available commands and keyboard shortcuts.
+
+    [![Press Space](./media/press_space.gif)](./media/press_space.gif)
+
+  - Command History: Use the up and down arrow keys to view previously entered commands.
+
+    [![Command History](./media/history_viewing.gif)](./media/history_viewing.gif)
+
+  - Exiting the program or closing a screen: Use `Esc` to leave a particular screen or stop the program.
+
+    [![Escape](./media/escape.gif)](./media/escape.gif)
+
 ---
-### [Loading the predefined fixtures](#table-of-content)
-   The application stores sessions in `habit.db`. A separate SQLite file can be supplied when using the persistence classes directly, which is useful for tests.
 
-   The project includes five predefined habits and four weeks of example tracking data in `fixtures/habits_fixture.json`. To load them into the default database:
+## Run
+From the project root:
 
-   ```bash
-   python seed_fixtures.py
-   ```
+```bash
+python run.py
+```
+
+[![Run Program](./media/run_program.gif)](./media/run_program.gif)
+
+### Detailed Guides for Specific Features and User Actions
+- [Adding or Creating a Habit Session](./src/components/add_habit/Readme.md)
+- [Deleting a Habit Session](./src/components/delete_habit/Readme.md)
+- [Updating or Completing a Habit Session](./src/components/update_habit/Readme.md)
+- [Searching for Habit Sessions](./src/components/search_habits/Readme.md)
+- [Repeating a Habit Daily, Weekly, or Monthly](./src/components/habit_repeats/Readme.md)
+
 ---
-### [Help method Functionality](#table-of-content)
 
-### [Important Functionalities](#table-of-content)
+## Notification Screens
+When you have a session that must be completed, the home screen will look like the example below:
 
-### [Testing](#table-of-content)
+[![Notification](./media/home_screen_notification.png)](./media/home_screen_notification.png)
 
+When you have a session that must be completed on other screens, those screens will look like the example below:
+
+[![Notification on Other Screens](./media/notification_on_other_screens.png)](./media/notification_on_other_screens.png)
+
+---
+
+## Loading the Predefined Fixtures
+The application stores sessions in `habit.db`. A separate SQLite file can also be supplied when using the persistence classes directly, which is useful for tests.
+
+The project includes five predefined habits and four weeks of example tracking data in `fixtures/habits_fixture.json`. To load them into the default database:
+
+```bash
+python seed_fixtures.py
+```
+
+---
+
+## Testing
 Run the complete automated test suite with:
 
 ```bash
 python -m unittest discover -s src -p "test*.py" -v
 ```
-[![Press Space](./media/run_tests.gif)](./media/press_space.gif)
 
-The tests cover the habit model and validation, datetime calculations and scheduling/clash detection, SQLite CRUD operations.
+[![Run Tests](./media/run_tests.gif)](./media/run_tests.gif)
+
+The tests cover the habit model and validation, datetime calculations, scheduling, clash detection, and SQLite CRUD operations.
 
 [⬆ Back to top](#top)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
