@@ -2,7 +2,7 @@
 
 <!-- start-purpose -->
 # Repeat Habit
-The RepeatHabit component allows users to create recurring habit sessions from an existing habit session selected to be on the shelf and copied from the shelf.
+The RepeatHabit component allows users to create recurring habit sessions from an existing habit session selected for the shelf and then copied from the shelf.
 
 The component supports several repetition modes:
 
@@ -34,7 +34,7 @@ The component uses a command-driven interaction loop, where each available comma
 <!-- start-high-level-view -->
 ## [High-Level Flow](#table-of-contents)
 ### [Steps to Repeat a Habit](#table-of-contents)
-1. ### [Search for a habit you want to repeat](./src/components/search_habits/Readme.md)
+1. ### [Search for a habit you want to repeat](../search_habits/Readme.md)
 2. ### Copy the habit to the shelf
 3. ### Choose a repeat type (daily, weekly, custom, or monthly)
 4. ### Follow the on-screen instructions
@@ -48,7 +48,7 @@ The component uses a command-driven interaction loop, where each available comma
 | `run weekly repeat pattern` | Repeats a selected week pattern for a specified number of weeks | [![Weekly Repeat](../habit_repeats/media/repeat_weekly.gif)](../habit_repeats/media/repeat_weekly.gif) |
 | `run custom repeat pattern` | Creates a custom recurrence schedule using week, month, and multi-month patterns | [![Custom Repeat](../habit_repeats/media/repeat_custom.gif)](../habit_repeats/media/repeat_custom.gif) |
 
-The Repeat Habit command interface also supports common commands:
+The Repeat Habit command interface also supports the following common commands:
 
 - `Esc` — exits the current Repeat Habit screen.
 - `clear` — clears the terminal screen.
