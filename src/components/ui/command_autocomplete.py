@@ -70,9 +70,10 @@ def display_urget_updates(location):
         else:
             print(f'''\n{Back.LIGHTBLACK_EX}                                                                                                         
   {message.replace('Notifications   : ',"").replace('You','').replace('⚠',Fore.YELLOW+'⚠'+Fore.WHITE)+' '}                  
-                                                                                                         ''')
+                                                                                                         '''+Back.BLACK)
             Fore.RESET
             Style.RESET_ALL
+            Back.RESET
 class ProgressBar:
     """Renders terminal progress indicators using Rich panels and progress widgets.
 
