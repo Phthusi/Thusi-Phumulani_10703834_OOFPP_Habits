@@ -12,12 +12,17 @@ It’s a fully featured system for building **consistency, accountability, and g
 - [Habit Tracker](#habit-tracker)
   - [Project Purpose](#project-purpose)
   - [Table of content](#table-of-content)
-      - [Detailed guides for specific features/user actions:](#detailed-guides-for-specific-featuresuser-actions)
-    - [Notification(s) screens](#notifications-screens)
-  - [](#)
+    - [Requirements](#requirements)
+    - [Installation](#installation)
+    - [Core Concepts & Time Units](#core-concepts--time-units)
+    - [Tips](#pro-tips)
+    - [Run](#run)
     - [Loading the predefined fixtures](#loading-the-predefined-fixtures)
-    - [Testing](#testing)
-    
+    - [Notification(s) screens](#notifications-screens)
+    - [User Action Details](#detailed-guides-for-specific-featuresuser-actions)
+    - [Important Functionalities]()
+    - [Help method Functionality]()
+     
 1. ### [Requirements](#table-of-content)
 
    - Python 3.7+ (Python 3.10+ is recommended because the project uses structural pattern matching in the CLI.)
@@ -38,9 +43,10 @@ It’s a fully featured system for building **consistency, accountability, and g
    <!-- picture showing main and other project -->
     [![Press Space](./media/location_example.png)](./media/location_example.png)
 
-   To choose a project, navigating inside it you must press
+   To navigate inside a project you must press
    space you will get something like what you see below:
    <!-- picture showing options -->
+    [![Press Space](./media/options.png)](./media/options.png)
     
    NB: To move out of the subfolder or project must use esc
 
@@ -60,6 +66,14 @@ It’s a fully featured system for building **consistency, accountability, and g
 
    - #### Session Creation: 
      All workflows originate by adding an initial habit session. Parameters pass through HabitValidator and clash check routines before being persisted to habit.db.
+     
+   - #### Habit Session Statuses: 
+     Each habit session has a status. Here are the statuses and their meaning below:
+     - UPCOMING : This means the habit session has not started yet.
+     - ONGOING : This means the habit session has started and it has not finished.
+     - TO_BE_CONFIRMED : This means the habit session has started and finished but not marked as completed(`please go to the update method to see how this works`)
+     - MISSED : This means that 24 hours(from the start or end of the habit session) has passed without you completing that habit session.
+     - COMPLETED : This means you did what you were supposed to do during that session and the process of marking the habit as completed was done.
 
    - ##### The Active "Shelf": 
      Upon creation or selection, the active session is loaded into the Shelf state (Shelf.preserve_habit()).
@@ -129,6 +143,10 @@ When you have a session that you must complete other screens(screens that are no
    python seed_fixtures.py
    ```
 ---
+### [Help method Functionality](#table-of-content)
+
+### [Important Functionalities](#table-of-content)
+
 ### [Testing](#table-of-content)
 
 Run the complete automated test suite with:
