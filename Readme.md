@@ -3,13 +3,39 @@
 [![Habit Image](./media/habit_tracker_image.png)](./media/habit_tracker_image.png)
 
 ## Project Purpose
-This Habit Tracker is a Python-based habit-tracking command-line application that uses object-oriented modelling, SQLite persistence, functional analytics, and a terminal interface. It is designed to support consistency, accountability, and personal growth.
+This Habit Tracker is a Python-based habit-tracking command-line application that uses object-oriented modelling, SQLite persistence, functional analytics, and a terminal interface. It is designed to help users build and maintain productive routines through structured habit tracking and guided command-line workflows.
 
 It is a fully featured system for building consistency, accountability, and growth tracking.
+
+## Project Features
+This project includes a full set of habit-tracking features for creating, managing, and reviewing routines from a terminal interface.
+
+### Core features
+- Habit creation and validation: add new habits with a name, start date/time, duration, and status validation.
+- Habit search and filtering: find habits by date, time, duration, name, and status; also view pending tasks awaiting confirmation.
+- Habit update and completion: update existing habit details and mark sessions as completed when appropriate.
+- Habit deletion: safely remove habits after selecting the active habit and confirming the action.
+- Habit repetition: repeat a habit daily, weekly, or monthly using the active shelf session as the base.
+- Active shelf workflow: keep a selected habit available for follow-up actions across screens.
+- Notification and status tracking: surface missed, ongoing, upcoming, and completion-pending habit states.
+- SQLite persistence: store and retrieve habits using a database-backed model with cached data access.
+- Project-based CLI navigation: work through a command-driven menu system with autocompletion, history, and guided prompts.
+- Fixture-based demos: load predefined example data to explore the application quickly.
+
+### Feature areas in the project
+- Add Habit: create a new habit session from the terminal.
+- Search Habit: filter existing habits using multiple criteria.
+- Update Habit: edit session attributes or complete a pending task.
+- Delete Habit: remove a selected habit safely.
+- Repeat Habit: generate future schedule instances from an existing habit.
+- CLI utilities: use keyboard shortcuts, screen navigation, and form validation throughout the app.
 
 ## Table of Contents
 - [Habit Tracker](#habit-tracker)
   - [Project Purpose](#project-purpose)
+  - [Project Features](#project-features)
+    - [Core features](#core-features)
+    - [Feature areas in the project](#feature-areas-in-the-project)
   - [Table of Contents](#table-of-contents)
     - [Requirements](#requirements)
     - [Installation](#installation)
@@ -37,7 +63,7 @@ python -m pip install -r requirements.txt
 ---
 
 ## Core Concepts & Time Units
-This project is organized into projects, each represented as a main folder with subfolders inside. These subfolders are points where the user enters data. The images below show how to navigate the project structure.
+This project is organized into projects, each represented as a main folder with subfolders inside. These subfolders are points where the user enters data. The images below show how to navigate the project.
 
 <!-- picture showing main and other project -->
 [![Project Structure](./media/location_example.png)](./media/location_example.png)
@@ -51,10 +77,10 @@ Note: To move out of a subfolder or project, use `Esc`. To navigate the menu you
 
 In this project, there are roughly three types of projects:
 1. Projects that act on habit sessions (for example, repeat, delete, and update habits).
-2. Projects that search, find, and select the habit  session to be acted on.
+2. Projects that search, find, and select the habit session to be acted on.
 3. Projects that create habit sessions.
 
-To use the projects that act on a habit session, you must first search for and select the habit session you want to work on. That habit session is then added to what is called a shelf. The contents added to the shelf can be used for later actions such as updating, deleting, or completing a habit session.
+To use the projects that act on a habit session, you must first search for and select the habit session you want to work on. That habit session is then added to what is called a shelf. The content is then available for operations like update, delete, and repeat.
 
 These are important definitions you should understand:
 
@@ -157,197 +183,3 @@ python -m unittest discover -s src -p "test*.py" -v
 The tests cover the habit model and validation, datetime calculations, scheduling, clash detection, and SQLite CRUD operations.
 
 [⬆ Back to top](#top)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
