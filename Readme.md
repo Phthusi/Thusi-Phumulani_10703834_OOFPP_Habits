@@ -12,14 +12,11 @@ It’s a fully featured system for building **consistency, accountability, and g
 - [Habit Tracker](#habit-tracker)
   - [Project Purpose](#project-purpose)
   - [Table of content](#table-of-content)
-    - [Requirements](#requirements)
-    - [Installation](#installation)
-    - [Core Concepts & Time Units](#core-concepts--time-units)
-    - [Tips](#pro-tips)
-    - [Run](#run)
-    - [Loading the predefined fixtures](#loading-the-predefined-fixtures)
+      - [Detailed guides for specific features/user actions:](#detailed-guides-for-specific-featuresuser-actions)
     - [Notification(s) screens](#notifications-screens)
-    - [User Action Details](#detailed-guides-for-specific-featuresuser-actions)
+  - [](#)
+    - [Loading the predefined fixtures](#loading-the-predefined-fixtures)
+    - [Testing](#testing)
     
 1. ### [Requirements](#table-of-content)
 
@@ -39,12 +36,13 @@ It’s a fully featured system for building **consistency, accountability, and g
    This is the project of projects, each project is treated as a main folder
    with sub-folders inside. The sub-folders are points at which a user has to put in an input. You look at what is shown below to see where you are in the project:
    <!-- picture showing main and other project -->
+    [![Press Space](./media/location_example.png)](./media/location_example.png)
 
    To choose a project, navigating inside it you must press
    space you will get something like what you see below:
    <!-- picture showing options -->
-
-   To move out of the subfolder or project must use esc
+    
+   NB: To move out of the subfolder or project must use esc
 
    In this project we roughly have 3 types of projects:
     1. The ones that acts on a habit(habit repeat, delete habit, update habit).
