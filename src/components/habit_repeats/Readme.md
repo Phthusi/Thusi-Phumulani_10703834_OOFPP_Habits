@@ -35,7 +35,7 @@ The component uses a command-driven interaction loop, where each available comma
 ## [High-Level Flow](#table-of-contents)
 ### [Steps to Repeat a Habit](#table-of-contents)
 1. ### [Search for a habit you want to repeat](../search_habits/Readme.md)
-2. ### Copy the habit to the shelf
+2. ### Copy habit session from the shelf
 3. ### Choose a repeat type (daily, weekly, custom, or monthly)
 4. ### Follow the on-screen instructions
 <!-- end-high-level-view -->

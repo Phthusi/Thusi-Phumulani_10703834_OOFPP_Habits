@@ -39,7 +39,7 @@ GIFs can be used to illustrate the steps for the user.
 ## [High-Level Flow](#table-of-contents)
 ### [Steps to Delete a Habit](#table-of-contents)
 1. ### [Search for the habit you want to delete](./src/components/search_habits/Readme.md)
-2. ### Copy the habit to the shelf
+2. ### Copy habit session from the shelf
 3. ### Delete the habit
 <!-- end-high-level-view -->
 

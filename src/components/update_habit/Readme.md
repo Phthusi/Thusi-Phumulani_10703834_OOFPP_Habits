@@ -43,7 +43,7 @@ Gifs can be used to illustrate steps for the user in action.
 
 ### [Steps to update a habit](#table-of-contents)
   1.  ### [Search for a habit you want to update or Complete](/src/components/search_habits/Readme.md)
-  2.  ### Copy habit to the shelf
+  2.  ### Copy habit session from the shelf
   3.  ### Update habit
 <!-- end-high-level-view -->
 

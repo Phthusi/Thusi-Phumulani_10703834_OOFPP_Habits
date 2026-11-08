@@ -47,14 +47,14 @@ To navigate inside a project, press the space bar. This opens a menu similar to 
 <!-- picture showing options -->
 [![Available Options](./media/options.png)](./media/options.png)
 
-Note: To move out of a subfolder or project, use `Esc`.
+Note: To move out of a subfolder or project, use `Esc`. To navigate the menu you must press the up arrow and the down arrow(`↑ / ↓`), to choose an option you must press `Enter`
 
 In this project, there are roughly three types of projects:
-1. Projects that act on habits (for example, repeat, delete, and update habits).
-2. Projects that search, find, and select the habit to be acted on.
+1. Projects that act on habit sessions (for example, repeat, delete, and update habits).
+2. Projects that search, find, and select the habit  session to be acted on.
 3. Projects that create habit sessions.
 
-To use the projects that act on a habit, you must first search for and select the habit you want to work on. That habit is then added to what is called a shelf. The contents of the shelf can be used for later actions such as updating, deleting, or completing a habit.
+To use the projects that act on a habit session, you must first search for and select the habit session you want to work on. That habit session is then added to what is called a shelf. The contents added to the shelf can be used for later actions such as updating, deleting, or completing a habit session.
 
 These are important definitions you should understand:
 
