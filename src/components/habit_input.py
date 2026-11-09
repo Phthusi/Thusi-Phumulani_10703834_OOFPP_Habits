@@ -111,7 +111,7 @@ class Habit_Inputs:
             self.__main_form.set_field_status('name',False)
             return True, 'success...'
         # ********* start of common functions ************
-        did_run_common_func = ran_common_functions(habit_name,history_file_name='add_habit')
+        did_run_common_func = ran_common_functions(habit_name,history_file_name='add_habit',target='table',table_section='name')
         if did_run_common_func==False:
             return True, 'Escaping...'
         elif did_run_common_func==True:
@@ -178,7 +178,7 @@ class Habit_Inputs:
             return True, 'success...'
 
         # ********* start of common functions ************        
-        did_run_common_func = ran_common_functions(habit_start_datetime)
+        did_run_common_func = ran_common_functions(habit_start_datetime,f"add_habit",target='table',table_section='start_datetime')
         if did_run_common_func==False:
             return True, 'Escaping...'
         elif did_run_common_func==True:
@@ -264,7 +264,7 @@ class Habit_Inputs:
             return True, 'success...'
         
         # ********* start of common functions ************        
-        did_run_common_func = ran_common_functions(habit_session_duration)
+        did_run_common_func = ran_common_functions(habit_session_duration,"add_habit",target='table',table_section='duration')
         if did_run_common_func==False:
             return True, 'Escaping...'
         elif did_run_common_func==True:

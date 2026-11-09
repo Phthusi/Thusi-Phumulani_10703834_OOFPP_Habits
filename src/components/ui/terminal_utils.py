@@ -2,6 +2,7 @@ import time
 import functools
 import os
 from pathlib import Path
+from colorama import Fore,Back, Style
 
 call_history = []
 
@@ -64,7 +65,7 @@ def trace_call(function):
         return success,message
     return wrapper
 
-def ran_common_functions(user_input,history_file_name=None,message=None):
+def ran_common_functions(user_input,history_file_name=None,message=None,target=None,table_section=None):
     """Executes shared CLI shortcut commands based on user input strings.
 
     Args:
@@ -80,7 +81,7 @@ def ran_common_functions(user_input,history_file_name=None,message=None):
             if history_file_name==None:
                 print('to be written')
             else:
-                help(history_file_name)
+                help(history_file_name,target,table_section)
             return True
         case 'clear':
             clear_screen()
@@ -123,8 +124,16 @@ def temporary_message(message, duration=2):
     time.sleep(duration)
     print("\r" + " " * len(message) + "\r", end="", flush=True)
 
+def match_content(word,cleaned_rows):
+    print('----------------------------------------------------------------------------------------------------')
+    print(f'{Style.BRIGHT+word.capitalize()+Style.NORMAL} ')
+    print('----------------------------------------------------------------------------------------------------')
+    print(f'{ cleaned_rows[word][0].capitalize()}\n')
+    print(f'{Fore.LIGHTBLACK_EX + "press ctrl and click the URL to see the GIF\n"}'+Fore.WHITE)
+    print(f'{Style.BRIGHT}URL : { Style.NORMAL+ Back.LIGHTYELLOW_EX + Style.BRIGHT + cleaned_rows[word][-1].split('(')[1].replace(')','').replace(']','') + Back.RESET + Style.NORMAL}\n')
 
-def help(history_file_name,target=None):
+def help(history_file_name,target=None,table_section=None):
+    clear_screen()
     BASE_DIR = Path(__file__).resolve().parent.parent
     file_name = BASE_DIR / f"{history_file_name}/Readme.md"
     lines = []
@@ -135,9 +144,15 @@ def help(history_file_name,target=None):
     if target:
         try:
             start_target_index = lines.index(f'<!-- start-{target} -->\n')
-            lines[start_target_index+1] = line+'\n'+lines[start_target_index+1].replace('## ','')+line+'\n'
+            lines[start_target_index+1] = lines[start_target_index+1].replace('## ','')
             end_target_index = lines.index(f'<!-- end-{target} -->\n')
-        except Exception:
+            table_list = lines[start_target_index+1:end_target_index]
+            table_list = [i for i in table_list if i.strip()!='']
+            table_rows = list({i:[k.strip() for k in j.split('|') if k.strip()!=''] for i,j in enumerate(table_list[1:])}.values())
+            cleaned_rows = {i[0].replace('`',''):i[1:] for i in table_rows}
+            match_content(table_section,cleaned_rows)
+        except Exception as e:
+            print(e)
             start_target_index = 0
             end_target_index = 0
         if start_target_index==end_target_index:

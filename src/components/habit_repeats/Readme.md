@@ -41,13 +41,13 @@ The component uses a command-driven interaction loop, where each available comma
 <!-- end-high-level-view -->
 
 ## [Command Loop](#table-of-contents)
-
+<!-- start-table -->
 | Command | Description | GIF |
 | ------- | ----------- | --- |
 | `run daily repeat pattern` | Repeats the copied habit for a specified number of days | [![Daily Repeat](../habit_repeats/media/repeat_daily.gif)](../habit_repeats/media/repeat_daily.gif) |
 | `run weekly repeat pattern` | Repeats a selected week pattern for a specified number of weeks | [![Weekly Repeat](../habit_repeats/media/repeat_weekly.gif)](../habit_repeats/media/repeat_weekly.gif) |
 | `run custom repeat pattern` | Creates a custom recurrence schedule using week, month, and multi-month patterns | [![Custom Repeat](../habit_repeats/media/repeat_custom.gif)](../habit_repeats/media/repeat_custom.gif) |
-
+<!-- end-table -->
 The Repeat Habit command interface also supports the following common commands:
 
 - `Esc` — exits the current Repeat Habit screen.

@@ -521,9 +521,12 @@ class HabitRepeats:
             match user_input:
                 case 'esc':
                     break
+                case 'help':    
+                    ran_common_functions('help',history_file_name='habit_repeats',target='table',table_section='run custom repeat pattern')
+                    continue
                 case 'clear':
                     clear_screen()
-            
+                    continue
             if user_input not in commands:
                 print('invalid input')
                 continue
@@ -758,9 +761,12 @@ class HabitRepeats:
             match user_input:
                 case 'esc':
                     break
+                case 'help':
+                    ran_common_functions('help',history_file_name='habit_repeats',target='table',table_section='run daily repeat pattern')
+                    continue
                 case 'clear':
                     clear_screen()
-            
+                    continue         
             if user_input not in commands:
                 print('invalid input')
                 input('Press Enter to continue')
@@ -804,9 +810,12 @@ class HabitRepeats:
             match user_input:
                 case 'esc':
                     break
+                case 'help':    
+                    ran_common_functions('help',history_file_name='habit_repeats',target='table',table_section='run weekly repeat pattern')
+                    continue
                 case 'clear':
                     clear_screen()
-            
+                    continue
             if user_input not in commands:
                 print('invalid input')
                 input('Press Enter to continue')

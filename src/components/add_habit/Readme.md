@@ -69,12 +69,13 @@ GIF example of the high-level flow:
 ## [Command Loop](#table-of-contents)
 
 Available commands:
-
+<!-- start-table -->
 | Command | Description | Format or Rule(s) | GIF |
 | ------- | ----------- | ------------------ | --- |
 | `name` | Sets the habit name | Name is required and must be more than 3 characters | [![Set Name](../add_habit/media/enter_name.gif)](../add_habit/media/enter_name.gif) |
 | `start_datetime` | Sets the start date and time | `YYYY-MM-DD HH:MM:SS`, for example `2026-11-28 13:30:00` | [![Start Date](../add_habit/media/enter_datetime.gif)](../add_habit/media/enter_datetime.gif) |
 | `duration` | Sets the session duration | `HH:MM:SS`, for example `13:30:00` | [![Session Duration](../add_habit/media/enter_duration.gif)](../add_habit/media/enter_duration.gif) |
+<!-- end-table -->
 
 Each command maps directly to a handler method.
 
