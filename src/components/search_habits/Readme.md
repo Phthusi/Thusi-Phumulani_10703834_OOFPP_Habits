@@ -79,39 +79,39 @@ From the search screen, choose **get habit(s)**, then choose one filter category
 
 <!-- start-date-filters -->
 ### Date filters
-| Option | Result | Input format | Example |
+| Option | What it matches | Input format | Example |
 | --- | --- | --- | --- |
-| `before` | Sessions with a scheduled date earlier than the entered date. The selected date itself is excluded. | `YYYY-MM-DD` | `2026-06-30` |
-| `after` | Sessions with a scheduled date later than the entered date. The selected date itself is excluded. | `YYYY-MM-DD` | `2026-06-30` |
-| `on` | Sessions scheduled on the exact entered date. | `YYYY-MM-DD` | `2026-06-30` |
+| `before` | It matches sessions with a scheduled date earlier than the entered date. The selected date itself is excluded. | `YYYY-MM-DD` | `2026-06-30` |
+| `after` | It matches sessions with a scheduled date later than the entered date. The selected date itself is excluded. | `YYYY-MM-DD` | `2026-06-30` |
+| `on` | It matches sessions scheduled on the exact entered date. | `YYYY-MM-DD` | `2026-06-30` |
 <!-- end-date-filters -->
 
 <!-- start-time-filters -->
 ### Time filters
-| Option | Result | Input format | Example |
+| Option | What it matches | Input format | Example |
 | --- | --- | --- | --- |
-| `before` | Sessions whose scheduled clock time is earlier than the entered time. The entered time itself is excluded. | `HH:MM:SS` | `15:30:45` |
-| `after` | Sessions whose scheduled clock time is later than the entered time. The entered time itself is excluded. | `HH:MM:SS` | `20:18:50` |
-| `on` | Sessions scheduled at exactly the entered clock time. | `HH:MM:SS` | `04:15:09` |
+| `before` | It matches sessions whose scheduled clock time is earlier than the entered time. The entered time itself is excluded. | `HH:MM:SS` | `15:30:45` |
+| `after` | It matches sessions whose scheduled clock time is later than the entered time. The entered time itself is excluded. | `HH:MM:SS` | `20:18:50` |
+| `on` | It matches sessions scheduled at exactly the entered clock time. | `HH:MM:SS` | `04:15:09` |
 <!-- end-time-filters -->
 
 Time searches compare the time-of-day component and do not filter by date.
 
 <!-- start-duration-filters -->
 ### Duration filters
-| Option | Result | Input format | Example |
+| Option | What it matches | Input format | Example |
 | --- | --- | --- | --- |
-| `less than` | Sessions with a duration shorter than the entered duration. | `HH:MM:SS` | `01:15:40` |
-| `greater than` | Sessions with a duration longer than the entered duration. | `HH:MM:SS` | `05:37:48` |
-| `on` | Sessions whose duration exactly equals the entered duration. | `HH:MM:SS` | `01:15:40` |
+| `less than` | It matches sessions with a duration shorter than the entered duration. | `HH:MM:SS` | `01:15:40` |
+| `greater than` | It matches sessions with a duration longer than the entered duration. | `HH:MM:SS` | `05:37:48` |
+| `on` | It matches sessions whose duration exactly equals the entered duration. | `HH:MM:SS` | `01:15:40` |
 <!-- end-duration-filters -->
 
-The `before`/`after` date and time options and the `less than`/`greater than` duration options use strict comparisons, so an exact match is not included in those results.
+The `before`/`after` date and time options and the `less than`/`greater than` duration options use strict comparisons, so an exact match is not included in those What it matchess.
 
 <!-- start-name-filters -->
 ### Name filters
 
-| Option | Result | Example input | Example match |
+| Option | What it matches | Example input | Example match |
 | --- | --- | --- | --- |
 | `is` | Matches the complete habit name exactly. | `Read` | Habit named `Read` |
 | `has` | Matches habit names containing the entered text. | `read` | A habit name containing the exact substring `read` |
@@ -124,10 +124,10 @@ Name matching is case-sensitive: the search uses the supplied text without conve
 
 | Option | Matches |
 | --- | --- |
-| `MISSED` | Sessions whose status is `MISSED`. |
-| `ONGOING` | Sessions whose status is `ONGOING`. |
-| `UPCOMING` | Sessions whose status is `UPCOMING`. |
-| `habit to complete` | Sessions marked `TO_BE_CONFIRMED`, meaning they are waiting for the user to confirm completion. |
+| `MISSED` | It matches sessions whose status is `MISSED`. |
+| `ONGOING` | It matches sessions whose status is `ONGOING`. |
+| `UPCOMING` | It matches sessions whose status is `UPCOMING`. |
+| `habit to complete` | It matches sessions marked `TO_BE_CONFIRMED`, meaning they are waiting for the user to confirm completion. |
 <!-- end-status-and-completion-filters -->
 
 The status menu accepts the three displayed status values without regard to the case typed; the input is converted to uppercase before the search. `TO_BE_CONFIRMED` is available through **habit to complete**, rather than the regular status menu.
@@ -137,7 +137,7 @@ The status menu accepts the three displayed status values without regard to the 
 - Dates must use `YYYY-MM-DD`; times and durations must use `HH:MM:SS` (24-hour clock for times).
 - Invalid date, time, or duration formats are rejected by input validation.
 - Use **Space** to display available menu choices, **Enter** to select, and **Esc** to leave a submenu.
-- Search results can be selected and placed on the shelf for other actions. Choose **view selected habit** to inspect the currently selected session.
+- Search What it matchess can be selected and placed on the shelf for other actions. Choose **view selected habit** to inspect the currently selected session.
 
 ---
 ## [Testing](#table-of-contents)
