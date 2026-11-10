@@ -65,7 +65,7 @@ def trace_call(function):
         return success,message
     return wrapper
 
-def ran_common_functions(user_input,history_file_name=None,message=None,target=None,table_section=None):
+def ran_common_functions(user_input,history_file_name=None,message=None,target=None,table_section=None,has_url=True):
     """Executes shared CLI shortcut commands based on user input strings.
 
     Args:
@@ -81,7 +81,7 @@ def ran_common_functions(user_input,history_file_name=None,message=None,target=N
             if history_file_name==None:
                 print('to be written')
             else:
-                help(history_file_name,target,table_section)
+                help(history_file_name,target,table_section,has_url)
             return True
         case 'clear':
             clear_screen()
@@ -106,7 +106,7 @@ def find_message(message):
         case 'clear':
             return 'clearing screen...'
         case 'help':
-            return 'help function'
+            return ''
     return None
 
 def temporary_message(message, duration=2):
@@ -124,15 +124,16 @@ def temporary_message(message, duration=2):
     time.sleep(duration)
     print("\r" + " " * len(message) + "\r", end="", flush=True)
 
-def match_content(word,cleaned_rows):
+def match_content(word,cleaned_rows,has_url=True):
     print('----------------------------------------------------------------------------------------------------')
     print(f'{Style.BRIGHT+word.capitalize()+Style.NORMAL} ')
     print('----------------------------------------------------------------------------------------------------')
     print(f'{ cleaned_rows[word][0].capitalize()}\n')
-    print(f'{Fore.LIGHTBLACK_EX + "press ctrl and click the URL to see the GIF\n"}'+Fore.WHITE)
-    print(f'{Style.BRIGHT}URL : { Style.NORMAL+ Back.LIGHTYELLOW_EX + Style.BRIGHT + cleaned_rows[word][-1].split('(')[1].replace(')','').replace(']','') + Back.RESET + Style.NORMAL}\n')
+    if has_url:
+        print(f'{Fore.LIGHTBLACK_EX + "press ctrl and click the URL to see the GIF\n"}'+Fore.WHITE)
+        print(f'{Style.BRIGHT}URL : { Style.NORMAL+ Back.LIGHTYELLOW_EX + Style.BRIGHT + cleaned_rows[word][-1].split('(')[1].replace(')','').replace(']','') + Back.RESET + Style.NORMAL}\n')
 
-def help(history_file_name,target=None,table_section=None):
+def help(history_file_name,target=None,table_section=None,has_url=True):
     clear_screen()
     BASE_DIR = Path(__file__).resolve().parent.parent
     file_name = BASE_DIR / f"{history_file_name}/Readme.md"
@@ -150,7 +151,7 @@ def help(history_file_name,target=None,table_section=None):
             table_list = [i for i in table_list if i.strip()!='']
             table_rows = list({i:[k.strip() for k in j.split('|') if k.strip()!=''] for i,j in enumerate(table_list[1:])}.values())
             cleaned_rows = {i[0].replace('`',''):i[1:] for i in table_rows}
-            match_content(table_section,cleaned_rows)
+            match_content(table_section,cleaned_rows,has_url)
         except Exception as e:
             print(e)
             start_target_index = 0

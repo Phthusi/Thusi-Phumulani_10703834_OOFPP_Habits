@@ -59,58 +59,67 @@ Gifs can be used to illustrate steps for the user in action.
 
 ---
 
+<!-- start-search-filter -->
 ## Search Filters
 
 From the search screen, choose **get habit(s)**, then choose one filter category. Each filter runs its own search and displays the matching habit sessions. The current menus do not combine multiple filters into one query.
 
+<!-- start-filter-overview -->
 ### Filter overview
 
-| Filter category | Available options | What it matches |
+| Filter category | What it matches | Available options |
 | --- | --- | --- |
-| `date` | `before`, `after`, `on` | Sessions scheduled before, after, or on a calendar date. |
-| `time` | `before`, `after`, `on` | Sessions scheduled before, after, or at a clock time. |
-| `duration` | `less than`, `greater than`, `on` | Session durations shorter than, longer than, or equal to a duration. |
-| `name` | `is`, `has` | Habit names that exactly match a value or contain it. |
-| `status` | `MISSED`, `ONGOING`, `UPCOMING` | Sessions with the selected status. |
-| `habit to complete` | No additional input | Sessions awaiting completion confirmation (`TO_BE_CONFIRMED`). |
+| `date` |It matches sessions scheduled before, after, or on a calendar date. | `before`, `after`, `on` | 
+| `time` | Sessions scheduled before, after, or at a clock time. |`before`, `after`, `on` |
+| `duration` |It matches session durations shorter than, longer than, or equal to a duration. | `less than`, `greater than`, `on` |
+| `name` | It matches Habit names that exactly match a value or contain it. | `is`, `has` | 
+| `status` | It matches sessions with the selected status. | `MISSED`, `ONGOING`, `UPCOMING` |
+| `habit to complete` | It matches sessions awaiting completion confirmation (`TO_BE_CONFIRMED`). | No additional input | 
+<!-- end-filter-overview -->
 
+<!-- start-date-filters -->
 ### Date filters
-
 | Option | Result | Input format | Example |
 | --- | --- | --- | --- |
 | `before` | Sessions with a scheduled date earlier than the entered date. The selected date itself is excluded. | `YYYY-MM-DD` | `2026-06-30` |
 | `after` | Sessions with a scheduled date later than the entered date. The selected date itself is excluded. | `YYYY-MM-DD` | `2026-06-30` |
 | `on` | Sessions scheduled on the exact entered date. | `YYYY-MM-DD` | `2026-06-30` |
+<!-- end-date-filters -->
 
+<!-- start-time-filters -->
 ### Time filters
-
 | Option | Result | Input format | Example |
 | --- | --- | --- | --- |
 | `before` | Sessions whose scheduled clock time is earlier than the entered time. The entered time itself is excluded. | `HH:MM:SS` | `15:30:45` |
 | `after` | Sessions whose scheduled clock time is later than the entered time. The entered time itself is excluded. | `HH:MM:SS` | `20:18:50` |
 | `on` | Sessions scheduled at exactly the entered clock time. | `HH:MM:SS` | `04:15:09` |
+<!-- end-time-filters -->
 
 Time searches compare the time-of-day component and do not filter by date.
 
+<!-- start-duration-filters -->
 ### Duration filters
-
 | Option | Result | Input format | Example |
 | --- | --- | --- | --- |
 | `less than` | Sessions with a duration shorter than the entered duration. | `HH:MM:SS` | `01:15:40` |
 | `greater than` | Sessions with a duration longer than the entered duration. | `HH:MM:SS` | `05:37:48` |
 | `on` | Sessions whose duration exactly equals the entered duration. | `HH:MM:SS` | `01:15:40` |
+<!-- end-duration-filters -->
 
 The `before`/`after` date and time options and the `less than`/`greater than` duration options use strict comparisons, so an exact match is not included in those results.
 
+<!-- start-name-filters -->
 ### Name filters
 
 | Option | Result | Example input | Example match |
 | --- | --- | --- | --- |
 | `is` | Matches the complete habit name exactly. | `Read` | Habit named `Read` |
 | `has` | Matches habit names containing the entered text. | `read` | A habit name containing the exact substring `read` |
+<!-- end-name-filters -->
 
 Name matching is case-sensitive: the search uses the supplied text without converting the stored name or search term to a common case.
 
+<!-- start-status-and-completion-filters -->
 ### Status and completion filters
 
 | Option | Matches |
@@ -119,6 +128,7 @@ Name matching is case-sensitive: the search uses the supplied text without conve
 | `ONGOING` | Sessions whose status is `ONGOING`. |
 | `UPCOMING` | Sessions whose status is `UPCOMING`. |
 | `habit to complete` | Sessions marked `TO_BE_CONFIRMED`, meaning they are waiting for the user to confirm completion. |
+<!-- end-status-and-completion-filters -->
 
 The status menu accepts the three displayed status values without regard to the case typed; the input is converted to uppercase before the search. `TO_BE_CONFIRMED` is available through **habit to complete**, rather than the regular status menu.
 

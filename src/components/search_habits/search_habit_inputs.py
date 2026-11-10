@@ -76,7 +76,7 @@ class SearchHabitInputs(Habit_Inputs):
         clear_screen()
         user_input = self.__my_input('Enter habit status: ',history_file_name,commands,base='Home/SearchHabit/Filter/')
         # ********* start of common functions ************        
-        did_run_common_func = ran_common_functions(user_input)
+        did_run_common_func = ran_common_functions(user_input,history_file_name='search_habits',target='filter-overview',table_section='status',has_url=False)
         message_to_display = find_message(user_input)
         if did_run_common_func==False:
             return True, message_to_display
@@ -118,7 +118,7 @@ class SearchHabitInputs(Habit_Inputs):
         clear_screen()
         user_input = self.__my_input('Enter time: ',history_file_name,commands,base='Home/SearchHabit/Filter/Time/',example='Input Format  : HH:MM:SS\nInput Example : 15:30:45\nHours = 15, Minutes = 30, Seconds = 45'+f'\n{'-'*105}\nNB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands\n{'-'*105}')
         # ********* start of common functions ************        
-        did_run_common_func = ran_common_functions(user_input)
+        did_run_common_func = ran_common_functions(user_input,history_file_name='search_habits',target='date-filters',table_section='before',has_url=False)
         message_to_display = find_message(user_input)
         if did_run_common_func==False:
             return True, message_to_display
@@ -144,7 +144,7 @@ class SearchHabitInputs(Habit_Inputs):
         clear_screen()
         user_input = self.__my_input('Enter name: ',history_file_name,commands,base='Home/SearchHabit/Filter/Name/')
         # ********* start of common functions ************        
-        did_run_common_func = ran_common_functions(user_input)
+        did_run_common_func = ran_common_functions(user_input,history_file_name='search_habits',target='name-filters',table_section='at',has_url=False)
         message_to_display = find_message(user_input)
         if did_run_common_func==False:
             return True, message_to_display
@@ -168,7 +168,7 @@ class SearchHabitInputs(Habit_Inputs):
         clear_screen()
         user_input = self.__my_input('Enter duration: ',history_file_name,commands,base='Home/SearchHabit/Filter/Duration/',example='Input Format  : HH:MM:SS\nInput Example : 01:15:40\nHours = 1, Minutes = 15, seconds = 40'+f'\n{'-'*105}\nNB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands\n{'-'*105}')
         # ********* start of common functions ************        
-        did_run_common_func = ran_common_functions(user_input)
+        did_run_common_func = ran_common_functions(user_input,history_file_name='search_habits',target='duration-filters',table_section='less than',has_url=False)
         message_to_display = find_message(user_input)
         if did_run_common_func==False:
             return True, message_to_display
@@ -196,7 +196,7 @@ class SearchHabitInputs(Habit_Inputs):
         # ********* start of common functions ************        
         if not self._Habit_Inputs__datetime_validator.validate_duration(user_input):
             return False,f'\'{user_input}\' does not have a valid duration format'
-        did_run_common_func = ran_common_functions(user_input)
+        did_run_common_func = ran_common_functions(user_input,history_file_name='search_habits',target='duration-filters',table_section='greater than',has_url=False)
         message_to_display = find_message(user_input)
         if did_run_common_func==False:
             return True, message_to_display
@@ -222,7 +222,7 @@ class SearchHabitInputs(Habit_Inputs):
         clear_screen()
         user_input = self.__my_input('Enter duration: ',history_file_name,commands,base='Home/SearchHabit/Filter/Duration/')
         # ********* start of common functions ************        
-        did_run_common_func = ran_common_functions(user_input)
+        did_run_common_func = ran_common_functions(user_input,history_file_name='search_habits',target='duration-filters',table_section='at',has_url=False)
         message_to_display = find_message(user_input)
         if did_run_common_func==False:
             return True, message_to_display
@@ -246,7 +246,7 @@ class SearchHabitInputs(Habit_Inputs):
         clear_screen()
         user_input = self.__my_input('Enter Date: ',history_file_name,commands,base='Home/SearchHabit/Filter/Date/',example='Input Format  : YYYY-MM-DD\nInput Example : 2026-06-30\nyear = 2026, month = June, day = 30th'+f'\n{'-'*105}\nNB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands\n{'-'*105}')
         # ********* start of common functions ************        
-        did_run_common_func = ran_common_functions(user_input)
+        did_run_common_func = ran_common_functions(user_input,history_file_name='search_habits',target='date-filters',table_section='before',has_url=False)
         message_to_display = find_message(user_input)
         if did_run_common_func==False:
             return True, message_to_display
@@ -272,7 +272,7 @@ class SearchHabitInputs(Habit_Inputs):
         clear_screen()
         user_input = self.__my_input('Enter time: ',history_file_name,commands,base='Home/SearchHabit/Filter/Time/',example='Input Format  : HH:MM:SS\nInput Example : 20:18:50\nHours = 20, Minutes = 18, Seconds=50'+f'\n{'-'*105}\nNB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands\n{'-'*105}')
         # ********* start of common functions ************        
-        did_run_common_func = ran_common_functions(user_input)
+        did_run_common_func = ran_common_functions(user_input,history_file_name='search_habits',target='time-filters',table_section='after',has_url=False)
         message_to_display = find_message(user_input)
         if did_run_common_func==False:
             return True, message_to_display
@@ -298,7 +298,7 @@ class SearchHabitInputs(Habit_Inputs):
         clear_screen()
         user_input = self.__my_input('Enter Name: ',history_file_name,commands,base='Home/SearchHabit/Filter/Name/')
         # ********* start of common functions ************        
-        did_run_common_func = ran_common_functions(user_input)
+        did_run_common_func = ran_common_functions(user_input,history_file_name='search_habits',target='name-filters',table_section='is',has_url=False)
         message_to_display = find_message(user_input)
         if did_run_common_func==False:
             return True, message_to_display
@@ -322,7 +322,7 @@ class SearchHabitInputs(Habit_Inputs):
         clear_screen()
         user_input = self.__my_input('Enter time: ',history_file_name,commands,base='Home/SearchHabit/Filter/Time/',example='Input Format  : HH:MM:SS\nInput Example : 04:15:09\nHours = 4, Minutes = 15, Seconds=9'+f'\n{'-'*105}\nNB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands\n{'-'*105}')
         # ********* start of common functions ************        
-        did_run_common_func = ran_common_functions(user_input)
+        did_run_common_func = ran_common_functions(user_input,history_file_name='search_habits',target='time-filters',table_section='on',has_url=False)
         message_to_display = find_message(user_input)
         if did_run_common_func==False:
             return True, message_to_display
@@ -348,7 +348,7 @@ class SearchHabitInputs(Habit_Inputs):
         clear_screen()
         user_input = self.__my_input('Select the Date filter: ',history_file_name,commands,base='Home/SearchHabit/Filter/Date/',example='Input Format  : YYYY-MM-DD\nInput Example : 2026-06-30\nyear = 2026, month = June, day = 30th'+f'\n{'-'*105}\nNB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands\n{'-'*105}')
         # ********* start of common functions ************        
-        did_run_common_func = ran_common_functions(user_input)
+        did_run_common_func = ran_common_functions(user_input,history_file_name='search_habits',target='time-filters',table_section='on',has_url=False)
         message_to_display = find_message(user_input)
         if did_run_common_func==False:
             return True, message_to_display
@@ -374,7 +374,7 @@ class SearchHabitInputs(Habit_Inputs):
         clear_screen()
         user_input = self.__my_input('Select the Date filter: ',history_file_name,commands,base='Home/SearchHabit/Filter/Date/',example='Input Format  : YYYY-MM-DD\nInput Example : 2026-06-30\nyear = 2026, month = June, day = 30th'+f'\n{'-'*105}\nNB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands\n{'-'*105}')
         # ********* start of common functions ************        
-        did_run_common_func = ran_common_functions(user_input)
+        did_run_common_func = ran_common_functions(user_input,history_file_name='search_habits',target='date-filters',table_section='after',has_url=False)
         message_to_display = find_message(user_input)
         if did_run_common_func==False:
             return True, message_to_display
@@ -401,7 +401,7 @@ class SearchHabitInputs(Habit_Inputs):
             commands = list(command_functions.keys())
             user_input = self.__my_input('Select the time filter: ',history_file_name,commands,base='Home/SearchHabit/Filter/',example=f'NB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands')
             # ********* start of common functions ************        
-            did_run_common_func = ran_common_functions(user_input)
+            did_run_common_func = ran_common_functions(user_input,history_file_name='search_habits',target='filter-overview',table_section='time',has_url=False)
             if did_run_common_func==False or did_run_common_func==True:
                 if user_input == 'esc':
                     break
@@ -428,7 +428,7 @@ class SearchHabitInputs(Habit_Inputs):
             commands = list(command_functions.keys())
             user_input = self.__my_input('Select the Duration Filter: ',history_file_name,commands,base='Home/SearchHabit/Filter/',example=f'\n{'-'*105}\nNB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands\n{'-'*105}')
             # ********* start of common functions ************        
-            did_run_common_func = ran_common_functions(user_input)
+            did_run_common_func = ran_common_functions(user_input,history_file_name='search_habits',target='filter-overview',table_section='duration',has_url=False)
             if did_run_common_func==False or did_run_common_func==True:
                 if user_input == 'esc':
                     break
@@ -450,13 +450,13 @@ class SearchHabitInputs(Habit_Inputs):
             'after':self.__get_habits_after_date,
             'on':self.__get_habits_at_date,
         }
-
+        
         while True:        
             clear_screen()
             commands = list(command_functions.keys())
             user_input = self.__my_input('Select the Date Filter: ',history_file_name,commands,base='Home/SearchHabit/Filter/',example=f'NB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands')
             # ********* start of common functions ************        
-            did_run_common_func = ran_common_functions(user_input)
+            did_run_common_func = ran_common_functions(user_input,history_file_name='search_habits',target='filter-overview',table_section='date',has_url=False)
             if did_run_common_func==False or did_run_common_func==True:
                 if user_input == 'esc':
                     break
@@ -483,7 +483,7 @@ class SearchHabitInputs(Habit_Inputs):
             commands = list(command_functions.keys())
             user_input = self.__my_input('Select the Name Filter: ',history_file_name,commands,base='Home/SearchHabit/Filter/',example=f'NB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands')
             # ********* start of common functions ************        
-            did_run_common_func = ran_common_functions(user_input)
+            did_run_common_func = ran_common_functions(user_input,history_file_name='search_habits',target='filter-overview',table_section='name',has_url=False)
             if did_run_common_func==False or did_run_common_func==True:
                 if user_input == 'esc':
                     break
@@ -523,6 +523,15 @@ class SearchHabitInputs(Habit_Inputs):
             if did_run_common_func==False or did_run_common_func==True:
                 if user_input == 'esc':
                     break
+                if user_input == 'help':
+                    clear_screen()
+                    print('------------------------------------------------------------------------------------------------------')
+                    print('Search Filters')
+                    print('------------------------------------------------------------------------------------------------------')
+                    print(f"""choose one filter category. Each filter runs its own search and displays the matching habit sessions.
+The current menus do not combine multiple filters into one query.
+""")
+                    input('Press enter to continue')
                 continue
             # ********** end of common functions ************            
             elif user_input in commands:
