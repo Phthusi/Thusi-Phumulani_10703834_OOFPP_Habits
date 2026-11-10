@@ -1,6 +1,0 @@
-things that need help
-1. main
-2. complete session(needs documentation too)
-3. Home/SearchHabit/Filter(Home/SearchHabit/Filter/Date)
-4. document how the help works
-5. document the screens
