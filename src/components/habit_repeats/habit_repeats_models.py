@@ -79,7 +79,7 @@ class WeekPattern:
             >>> wp.set_name('workout_routine')
         """
         self.__name = name
-        
+
     def __repr__(self):
         """Returns a string representation of the week pattern.
 
@@ -114,7 +114,19 @@ class WeekPatternManager:
             ['mon', 'tue']
         """
         return WeekPattern.week_patterns.get(name,None)
-    
+
+    def delete_week_list(self,week_names_list):
+        """Deletes multiple week patterns from the class-level registry.
+
+        Args:
+            week_names_list (list[str]): List of pattern names to remove.
+
+        Example:
+            >>> wp.delete_weeks(['week1', 'week2'])
+        """
+        for name in week_names_list:
+            WeekPattern.week_patterns.pop(name,None)
+
     def get_saved_weeks(self):
         """Retrieves all registered week patterns.
 
@@ -301,6 +313,18 @@ class MonthPatternManager:
             ['w1', 'w2', 'w3', 'w4']
         """
         return MonthPattern.monthPatterns.get(name,None)
+
+    def delete_month_list(self,month_names_list):
+        """Deletes multiple month patterns from the class-level registry.
+
+        Args:
+            month_names_list (list[str]): List of month pattern names to remove.
+
+        Example:
+            >>> manager.delete_month_list(['m1', 'm2'])
+        """
+        for name in month_names_list:
+            MonthPattern.monthPatterns.pop(name,None)
 
     def delete_month_pattern(self,name):
         """Removes a saved month pattern from the registry.

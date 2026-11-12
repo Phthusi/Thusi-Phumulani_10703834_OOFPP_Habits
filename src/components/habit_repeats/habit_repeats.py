@@ -408,7 +408,7 @@ class HabitRepeats:
         """
         id, name, start_date , duration, status, periodicity = copied_habit
         copied_habit_id = id
-        current_day,time = copied_habit[2].split(' ')
+        current_day,time = str(copied_habit[2]).split(' ')
         habits_to_add = []
         
         if months_pattern is None:
@@ -443,10 +443,14 @@ class HabitRepeats:
             input('Press enter to continue')
         
         id = 0
+        count = 0
         for habit in habits_to_add:
             id, name, start_date, session_duration, status, periodicity = habit
             success, id =CompleteHabit(name, session_duration, start_date, status,periodicity=periodicity).save_habit()
-        
+            
+            if success:
+                count += 1
+
         copied_habit = self.__habits.get_habit_by_id(copied_habit_id)[0]
         updated_periodicity = periodicity
 
@@ -457,6 +461,9 @@ class HabitRepeats:
         copied_habit_periodicity_is_null = periodicity is None
         if copied_habit_periodicity_is_null:
             CompleteHabit(name, duration, start_date, status,periodicity=copied_habit,id=copied_habit_id).update_habit(periodicity=updated_periodicity)
+
+        print(f'{Fore.LIGHTGREEN_EX}successfully saved {count} habit(s) out of {len(habits_to_add)}{Fore.RESET}')
+        input('Press enter to continue')
         self.reset()
 
     def save(self):
@@ -666,7 +673,8 @@ class HabitRepeats:
         filtered_months_pattern = [{list(i.keys())[0]: list(i.values())[0]} for i in self.__months_pattern.get_months_pattern()]
 
         self.__save_habit_repeats(copied_habit,months_pattern=filtered_months_pattern)
-        print(f"Week data saved: {self.__number_of_weeks} weeks")
+        self.__month_pattern_manager.delete_month_list(added_months)
+        # print(f"Week data saved: {self.__number_of_weeks} weeks")
         return True, 'Success...'
 
     @retry_until_success
@@ -735,7 +743,9 @@ class HabitRepeats:
         filtered_months_pattern = [{list(i.keys())[0]: list(i.values())[0]} for i in self.__months_pattern.get_months_pattern()]
 
         self.__save_habit_repeats(copied_habit,months_pattern=filtered_months_pattern)
-        print(f"Day data saved: {self.__number_of_days} days")
+        self.__month_pattern_manager.delete_month_list(added_months)
+        self.__week_pattern_manager.delete_week_list(added_weeks)
+        # print(f"Day data saved: {self.__number_of_days} days")
         return True, 'Success...'
 
     def run_daily_repeats(self):

@@ -288,14 +288,15 @@ class Habit_Inputs:
         habits = Habits().get_habit_by_status_excluding_some_statuses(['MISSED','UNKNOWN'])
         datetime1 = self.__habit.get_start_date()
         duration1 = self.__datetime_manager.convert_duration(self.__habit.get_session_duration())
+        next_id = max((habit[0] for habit in habits), default=0) + 1
         habit_to_be_added = f'''{Fore.WHITE}
 {Back.BLUE}{Fore.WHITE}       Habit to be added                 {Back.RESET}
- id               :{self.__habit.get_id()}
+ id               :{next_id}
  name             :{self.__habit.get_name()}
  start_datetime   :{datetime1}
  session_duration :{self.__habit.get_session_duration()}
- status           :N/A
- periodicity      :{self.__habit.get_periodicity()}
+ status           :UPCOMING
+ periodicity      :N/A
 -----------------------------------------
 '''
         for habit in habits:
@@ -317,7 +318,6 @@ class Habit_Inputs:
 '''
                 return False, f'❌ Sorry Habit not saved, The following Habits are Clashing: \n{habit_to_be_added} \nAND {habit_from_db}'
         clear_screen()
-        next_id = max((habit[0] for habit in habits), default=0) + 1
         self.__shelf.preserve_habit((next_id,self.__habit.get_name(),self.__habit.get_start_date(),self.__habit.get_session_duration(),'UPCOMING',self.__habit.get_periodicity()))
         return True, f'✅ Habit saved successfully....\n{habit_to_be_added.replace("Habit to be added","Habit added")}'
 
