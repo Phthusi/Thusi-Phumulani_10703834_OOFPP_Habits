@@ -244,7 +244,8 @@ class HabitRepeats:
             str: Lowercase string containing four space-separated week identifiers.
         """
         history_file_name='month_pattern'
-        commands = self.__week_pattern.week_patterns.keys()
+        commands = list(self.__week_pattern.week_patterns.keys())
+        commands.append('skip')
         self.__main_autocompleter = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
         self.__main_autocompleter.set_has_status(True)
         modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
@@ -349,7 +350,8 @@ class HabitRepeats:
             str: Lowercase string of space-delimited month identifiers.
         """
         history_file_name='months_pattern'
-        commands = self.__month_pattern.monthPatterns.keys()
+        commands = list(self.__month_pattern.monthPatterns.keys())
+        commands.append('skip')
 
         self.__main_autocompleter = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
         self.__main_autocompleter.set_has_status(True)
