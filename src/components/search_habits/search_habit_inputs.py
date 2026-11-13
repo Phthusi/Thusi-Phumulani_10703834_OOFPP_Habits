@@ -2,7 +2,7 @@ from ..ui.command_autocomplete import AutoCompleter,Form
 from ..ui.terminal_utils import ran_common_functions, retry_until_success, find_message,clear_screen
 from ...data.db_manager import CompleteHabit, Habits
 from ..habit_input import Habit_Inputs 
-from colorama import Fore
+from colorama import Fore, Style
 from ..shelf import Shelf
 from ..view import View
 from ..time_project.time_manager_validator import HabitDateTimeManagerValidator
@@ -74,6 +74,9 @@ class SearchHabitInputs(Habit_Inputs):
         commands = ['MISSED','ONGOING','UPCOMING']
         history_file_name = 'status'
         clear_screen()
+        print(Fore.LIGHTBLACK_EX + f'Search Pool        : You have {len(self.get_all_habits())} habit(s) to search through.' + Style.RESET_ALL)
+        print(Fore.LIGHTBLACK_EX + f'Available Statuses : {str(set([habit[4] for habit in self.get_all_habits()])).replace("{","").replace("}","").replace("{","").replace("}","").replace("'","")}' + Style.RESET_ALL)
+        
         user_input = self.__my_input('Enter habit status: ',history_file_name,commands,base='Home/SearchHabit/Filter/')
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(user_input)
@@ -91,6 +94,9 @@ class SearchHabitInputs(Habit_Inputs):
         results = self.__habit_search.get_habit_by_status(user_input)
         self.__view.display_habits(results,'Home/SearchHabit/Filter/Status/',search_input=f'status is {user_input}')
         return True,'success...'
+
+    def get_all_habits(self):
+        return self.__habit_search.get_habits()
 
     @retry_until_success
     def handle_get_habits_to_complete(self):
@@ -116,6 +122,9 @@ class SearchHabitInputs(Habit_Inputs):
         commands =  []
         history_file_name = 'before'
         clear_screen()
+        print(Fore.LIGHTBLACK_EX + f'Search Pool        : You have {len(self.get_all_habits())} habit(s) to search through.' + Style.RESET_ALL)
+        print(Fore.LIGHTBLACK_EX + f'Time Range         : The habits are between {Fore.BLUE+min(self.get_all_habits(),key=lambda habit: habit[2].split(' ')[1])[2].split(' ')[1]+Fore.LIGHTBLACK_EX} and ' + f'{Fore.BLUE + max(self.get_all_habits(),key=lambda habit: habit[2].split(' ')[1])[2].split(' ')[1] + Fore.LIGHTBLACK_EX}' + Style.RESET_ALL)
+
         user_input = self.__my_input('Enter time: ',history_file_name,commands,base='Home/SearchHabit/Filter/Time/',example='Input Format  : HH:MM:SS\nInput Example : 15:30:45\nHours = 15, Minutes = 30, Seconds = 45'+f'\n{'-'*105}\nNB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands\n{'-'*105}')
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(user_input)
@@ -166,6 +175,9 @@ class SearchHabitInputs(Habit_Inputs):
         commands =  []
         history_file_name = 'less_than'
         clear_screen()
+        print(Fore.LIGHTBLACK_EX + f'Search Pool        : You have {len(self.get_all_habits())} habit(s) to search through.' + Style.RESET_ALL)
+        print(Fore.LIGHTBLACK_EX + f'Duration Range     : The habits are between {Fore.BLUE+min(self.get_all_habits(),key=lambda habit: habit[3])[3]+Fore.LIGHTBLACK_EX} and ' + f'{Fore.BLUE + max(self.get_all_habits(),key=lambda habit: habit[3])[3] + Fore.LIGHTBLACK_EX}' + Style.RESET_ALL)
+        
         user_input = self.__my_input('Enter duration: ',history_file_name,commands,base='Home/SearchHabit/Filter/Duration/',example='Input Format  : HH:MM:SS\nInput Example : 01:15:40\nHours = 1, Minutes = 15, seconds = 40'+f'\n{'-'*105}\nNB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands\n{'-'*105}')
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(user_input)
@@ -192,6 +204,9 @@ class SearchHabitInputs(Habit_Inputs):
         commands =  []
         history_file_name = 'greater_than'
         clear_screen()
+        print(Fore.LIGHTBLACK_EX + f'Search Pool        : You have {len(self.get_all_habits())} habit(s) to search through.' + Style.RESET_ALL)
+        print(Fore.LIGHTBLACK_EX + f'Duration Range     : The habits are between {Fore.BLUE+min(self.get_all_habits(),key=lambda habit: habit[3])[3]+Fore.LIGHTBLACK_EX} and ' + f'{Fore.BLUE + max(self.get_all_habits(),key=lambda habit: habit[3])[3] + Fore.LIGHTBLACK_EX}' + Style.RESET_ALL)
+        
         user_input = self.__my_input('Enter duration: ',history_file_name,commands,base='Home/SearchHabit/Filter/Duration/',example='Input Format  : HH:MM:SS\nInput Example : 05:37:48\nHours = 5, Minutes = 37, seconds = 48'+f'\n{'-'*105}\nNB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands\n{'-'*105}')
         # ********* start of common functions ************        
         if not self._Habit_Inputs__datetime_validator.validate_duration(user_input):
@@ -220,6 +235,9 @@ class SearchHabitInputs(Habit_Inputs):
         commands =  []
         history_file_name = 'at'
         clear_screen()
+        print(Fore.LIGHTBLACK_EX + f'Search Pool        : You have {len(self.get_all_habits())} habit(s) to search through.' + Style.RESET_ALL)
+        print(Fore.LIGHTBLACK_EX + f'Duration Range     : The habits are between {Fore.BLUE+min(self.get_all_habits(),key=lambda habit: habit[3])[3]+Fore.LIGHTBLACK_EX} and ' + f'{Fore.BLUE + max(self.get_all_habits(),key=lambda habit: habit[3])[3] + Fore.LIGHTBLACK_EX}' + Style.RESET_ALL)
+        
         user_input = self.__my_input('Enter duration: ',history_file_name,commands,base='Home/SearchHabit/Filter/Duration/')
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(user_input)
@@ -244,6 +262,8 @@ class SearchHabitInputs(Habit_Inputs):
         commands =  []
         history_file_name = 'before'
         clear_screen()
+        print(Fore.LIGHTBLACK_EX + f'Search Pool        : You have {len(self.get_all_habits())} habit(s) to search through.' + Style.RESET_ALL)
+        print(Fore.LIGHTBLACK_EX + f'Date Range         : The habits are between {Fore.BLUE+min(self.get_all_habits(),key=lambda habit: habit[2])[2]+Fore.LIGHTBLACK_EX} and ' + f'{Fore.BLUE + max(self.get_all_habits(),key=lambda habit: habit[2])[2] + Fore.LIGHTBLACK_EX}' + Style.RESET_ALL)
         user_input = self.__my_input('Enter Date: ',history_file_name,commands,base='Home/SearchHabit/Filter/Date/',example='Input Format  : YYYY-MM-DD\nInput Example : 2026-06-30\nyear = 2026, month = June, day = 30th'+f'\n{'-'*105}\nNB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands\n{'-'*105}')
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(user_input)
@@ -270,6 +290,9 @@ class SearchHabitInputs(Habit_Inputs):
         commands =  []
         history_file_name = 'after'
         clear_screen()
+        print(Fore.LIGHTBLACK_EX + f'Search Pool        : You have {len(self.get_all_habits())} habit(s) to search through.' + Style.RESET_ALL)
+        print(Fore.LIGHTBLACK_EX + f'Time Range         : The habits are between {Fore.BLUE+min(self.get_all_habits(),key=lambda habit: habit[2].split(' ')[1])[2].split(' ')[1]+Fore.LIGHTBLACK_EX} and ' + f'{Fore.BLUE + max(self.get_all_habits(),key=lambda habit: habit[2].split(' ')[1])[2].split(' ')[1] + Fore.LIGHTBLACK_EX}' + Style.RESET_ALL)
+
         user_input = self.__my_input('Enter time: ',history_file_name,commands,base='Home/SearchHabit/Filter/Time/',example='Input Format  : HH:MM:SS\nInput Example : 20:18:50\nHours = 20, Minutes = 18, Seconds=50'+f'\n{'-'*105}\nNB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands\n{'-'*105}')
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(user_input)
@@ -320,6 +343,9 @@ class SearchHabitInputs(Habit_Inputs):
         commands =  []
         history_file_name = 'on'
         clear_screen()
+        print(Fore.LIGHTBLACK_EX + f'Search Pool        : You have {len(self.get_all_habits())} habit(s) to search through.' + Style.RESET_ALL)
+        print(Fore.LIGHTBLACK_EX + f'Time Range         : The habits are between {Fore.BLUE+min(self.get_all_habits(),key=lambda habit: habit[2].split(' ')[1])[2].split(' ')[1]+Fore.LIGHTBLACK_EX} and ' + f'{Fore.BLUE + max(self.get_all_habits(),key=lambda habit: habit[2].split(' ')[1])[2].split(' ')[1] + Fore.LIGHTBLACK_EX}' + Style.RESET_ALL)
+
         user_input = self.__my_input('Enter time: ',history_file_name,commands,base='Home/SearchHabit/Filter/Time/',example='Input Format  : HH:MM:SS\nInput Example : 04:15:09\nHours = 4, Minutes = 15, Seconds=9'+f'\n{'-'*105}\nNB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands\n{'-'*105}')
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(user_input)
@@ -346,6 +372,9 @@ class SearchHabitInputs(Habit_Inputs):
         commands =  []
         history_file_name = 'on'
         clear_screen()
+        print(Fore.LIGHTBLACK_EX + f'Search Pool        : You have {len(self.get_all_habits())} habit(s) to search through.' + Style.RESET_ALL)
+        print(Fore.LIGHTBLACK_EX + f'Date Range         : The habits are between {Fore.BLUE+min(self.get_all_habits(),key=lambda habit: habit[2])[2]+Fore.LIGHTBLACK_EX} and ' + f'{Fore.BLUE + max(self.get_all_habits(),key=lambda habit: habit[2])[2] + Fore.LIGHTBLACK_EX}' + Style.RESET_ALL)
+
         user_input = self.__my_input('Select the Date filter: ',history_file_name,commands,base='Home/SearchHabit/Filter/Date/',example='Input Format  : YYYY-MM-DD\nInput Example : 2026-06-30\nyear = 2026, month = June, day = 30th'+f'\n{'-'*105}\nNB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands\n{'-'*105}')
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(user_input)
@@ -372,6 +401,9 @@ class SearchHabitInputs(Habit_Inputs):
         commands =  []
         history_file_name = 'after'
         clear_screen()
+        print(Fore.LIGHTBLACK_EX + f'Search Pool        : You have {len(self.get_all_habits())} habit(s) to search through.' + Style.RESET_ALL)
+        print(Fore.LIGHTBLACK_EX + f'Date Range         : The habits are between {Fore.BLUE+min(self.get_all_habits(),key=lambda habit: habit[2])[2]+Fore.LIGHTBLACK_EX} and ' + f'{Fore.BLUE + max(self.get_all_habits(),key=lambda habit: habit[2])[2] + Fore.LIGHTBLACK_EX}' + Style.RESET_ALL)
+
         user_input = self.__my_input('Select the Date filter: ',history_file_name,commands,base='Home/SearchHabit/Filter/Date/',example='Input Format  : YYYY-MM-DD\nInput Example : 2026-06-30\nyear = 2026, month = June, day = 30th'+f'\n{'-'*105}\nNB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands\n{'-'*105}')
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(user_input)
@@ -396,9 +428,12 @@ class SearchHabitInputs(Habit_Inputs):
             'on':self.__get_habits_at,
         }
 
-        while True:        
+        while True:                   
             clear_screen()
             commands = list(command_functions.keys())
+            print(Fore.LIGHTBLACK_EX + f'Search Pool        : You have {len(self.get_all_habits())} habit(s) to search through.' + Style.RESET_ALL)
+            print(Fore.LIGHTBLACK_EX + f'Time Range         : The habits are between {Fore.BLUE+min(self.get_all_habits(),key=lambda habit: habit[2].split(' ')[1])[2].split(' ')[1]+Fore.LIGHTBLACK_EX} and ' + f'{Fore.BLUE + max(self.get_all_habits(),key=lambda habit: habit[2].split(' ')[1])[2].split(' ')[1] + Fore.LIGHTBLACK_EX}' + Style.RESET_ALL)
+            
             user_input = self.__my_input('Select the time filter: ',history_file_name,commands,base='Home/SearchHabit/Filter/',example=f'NB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands')
             # ********* start of common functions ************        
             did_run_common_func = ran_common_functions(user_input)
@@ -425,7 +460,13 @@ class SearchHabitInputs(Habit_Inputs):
         }
         while True:        
             clear_screen()
+            print(Fore.LIGHTBLACK_EX + f'Search Pool        : You have {len(self.get_all_habits())} habit(s) to search through.' + Style.RESET_ALL)
+            print(Fore.LIGHTBLACK_EX + f'Duration Range     : The habits are between {Fore.BLUE+min(self.get_all_habits(),key=lambda habit: habit[3])[3]+Fore.LIGHTBLACK_EX} and ' + f'{Fore.BLUE + max(self.get_all_habits(),key=lambda habit: habit[3])[3] + Fore.LIGHTBLACK_EX}' + Style.RESET_ALL)
+            
             commands = list(command_functions.keys())
+            print(Fore.LIGHTBLACK_EX + f'Search Pool        : You have {len(self.get_all_habits())} habit(s) to search through.' + Style.RESET_ALL)
+            print(Fore.LIGHTBLACK_EX + f'Duration Range     : The habits are between {Fore.BLUE+min(self.get_all_habits(),key=lambda habit: habit[3])[3]+Fore.LIGHTBLACK_EX} and ' + f'{Fore.BLUE + max(self.get_all_habits(),key=lambda habit: habit[3])[3] + Fore.LIGHTBLACK_EX}' + Style.RESET_ALL)
+
             user_input = self.__my_input('Select the Duration Filter: ',history_file_name,commands,base='Home/SearchHabit/Filter/',example=f'\n{'-'*105}\nNB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands\n{'-'*105}')
             # ********* start of common functions ************        
             did_run_common_func = ran_common_functions(user_input)
@@ -454,6 +495,8 @@ class SearchHabitInputs(Habit_Inputs):
         while True:        
             clear_screen()
             commands = list(command_functions.keys())
+            print(Fore.LIGHTBLACK_EX + f'Search Pool        : You have {len(self.get_all_habits())} habit(s) to search through.' + Style.RESET_ALL)
+            print(Fore.LIGHTBLACK_EX + f'Date Range         : The habits are between {Fore.BLUE+min(self.get_all_habits(),key=lambda habit: habit[2])[2]+Fore.LIGHTBLACK_EX} and ' + f'{Fore.BLUE + max(self.get_all_habits(),key=lambda habit: habit[2])[2] + Fore.LIGHTBLACK_EX}' + Style.RESET_ALL)            
             user_input = self.__my_input('Select the Date Filter: ',history_file_name,commands,base='Home/SearchHabit/Filter/',example=f'NB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands')
             # ********* start of common functions ************        
             did_run_common_func = ran_common_functions(user_input)
@@ -481,6 +524,7 @@ class SearchHabitInputs(Habit_Inputs):
         while True:        
             clear_screen()
             commands = list(command_functions.keys())
+            print(Fore.LIGHTBLACK_EX + f'Search Pool        : You have {len(self.__search_habit_inputs.get_all_habits())} habit(s) to search through.' + Style.RESET_ALL)
             user_input = self.__my_input('Select the Name Filter: ',history_file_name,commands,base='Home/SearchHabit/Filter/',example=f'NB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands')
             # ********* start of common functions ************        
             did_run_common_func = ran_common_functions(user_input)
@@ -517,6 +561,11 @@ class SearchHabitInputs(Habit_Inputs):
         while True:        
             clear_screen()
             commands = list(command_functions.keys())
+            print(Fore.LIGHTBLACK_EX + f'Search Pool        : You have {len(self.get_all_habits())} habit(s) to search through.' + Style.RESET_ALL)
+            print(Fore.LIGHTBLACK_EX + f'Date Range         : The habits are between {Fore.BLUE+min(self.get_all_habits(),key=lambda habit: habit[2])[2]+Fore.LIGHTBLACK_EX} and ' + f'{Fore.BLUE + max(self.get_all_habits(),key=lambda habit: habit[2])[2] + Fore.LIGHTBLACK_EX}' + Style.RESET_ALL)
+            print(Fore.LIGHTBLACK_EX + f'Duration Range     : The habits are between {Fore.BLUE+min(self.get_all_habits(),key=lambda habit: habit[3])[3]+Fore.LIGHTBLACK_EX} and ' + f'{Fore.BLUE + max(self.get_all_habits(),key=lambda habit: habit[3])[3] + Fore.LIGHTBLACK_EX}' + Style.RESET_ALL)
+            print(Fore.LIGHTBLACK_EX + f'Available Statuses : {str(set([habit[4] for habit in self.get_all_habits()])).replace("{","").replace("}","").replace("{","").replace("}","").replace("'","")}' + Style.RESET_ALL)
+            
             user_input = self.__my_input('How would you like to search for habits: ',history_file_name,commands,example=f'\nNB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands')
             # ********* start of common functions ************        
             did_run_common_func = ran_common_functions(user_input)

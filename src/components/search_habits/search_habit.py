@@ -1,5 +1,6 @@
 from .search_habit_inputs import SearchHabitInputs,retry_until_success,ran_common_functions, AutoCompleter
 from ..ui.terminal_utils import clear_screen
+from colorama import Fore, Style
 from ..ui.command_autocomplete import ProgressBar
 from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent
@@ -62,7 +63,13 @@ class SearchHabit:
         while True:        
             clear_screen()
             commands = list(command_functions.keys())
+            # (54, 'running', '2027-01-20 16:32:00', '00:01:00', 'UPCOMING', 'WEEKLY')
             history_file_name = 'search_habit'
+            print(Fore.LIGHTBLACK_EX + f'Search Pool        : You have {len(self.__search_habit_inputs.get_all_habits())} habit(s) to search through.' + Style.RESET_ALL)
+            print(Fore.LIGHTBLACK_EX + f'Date Range         : The habits are between {Fore.BLUE+min(self.__search_habit_inputs.get_all_habits(),key=lambda habit: habit[2])[2]+Fore.LIGHTBLACK_EX} and ' + f'{Fore.BLUE + max(self.__search_habit_inputs.get_all_habits(),key=lambda habit: habit[2])[2] + Fore.LIGHTBLACK_EX}' + Style.RESET_ALL)
+            print(Fore.LIGHTBLACK_EX + f'Duration Range     : The habits are between {Fore.BLUE+min(self.__search_habit_inputs.get_all_habits(),key=lambda habit: habit[3])[3]+Fore.LIGHTBLACK_EX} and ' + f'{Fore.BLUE + max(self.__search_habit_inputs.get_all_habits(),key=lambda habit: habit[3])[3] + Fore.LIGHTBLACK_EX}' + Style.RESET_ALL)
+            print(Fore.LIGHTBLACK_EX + f'Available Statuses : {str(set([habit[4] for habit in self.__search_habit_inputs.get_all_habits()])).replace("{","").replace("}","").replace("{","").replace("}","").replace("'","")}' + Style.RESET_ALL)
+            
             user_input = self.__my_input("Enter command: ",history_file_name,commands,example=f'{'-'*105}\nNB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands\n{'-'*105}')
             # ********* start of common functions ************        
             did_run_common_func = ran_common_functions(user_input,history_file_name='search_habits')
