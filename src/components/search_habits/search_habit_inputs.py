@@ -5,7 +5,6 @@ from ..habit_input import Habit_Inputs
 from colorama import Fore, Style
 from ..shelf import Shelf
 from ..view import View
-from ..time_project.time_manager_validator import HabitDateTimeManagerValidator
 
 from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent 
