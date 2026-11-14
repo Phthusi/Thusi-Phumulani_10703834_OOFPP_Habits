@@ -124,7 +124,8 @@ def temporary_message(message, duration=2):
     print("\r" + " " * len(message) + "\r", end="", flush=True)
 
 
-def help(history_file_name,target=None):
+def help(history_file_name,target=None,table_section=None,has_url=True):
+    clear_screen()
     BASE_DIR = Path(__file__).resolve().parent.parent
     file_name = BASE_DIR / f"{history_file_name}/Readme.md"
     lines = []
@@ -135,9 +136,15 @@ def help(history_file_name,target=None):
     if target:
         try:
             start_target_index = lines.index(f'<!-- start-{target} -->\n')
-            lines[start_target_index+1] = line+'\n'+lines[start_target_index+1].replace('## ','')+line+'\n'
+            lines[start_target_index+1] = lines[start_target_index+1].replace('## ','')
             end_target_index = lines.index(f'<!-- end-{target} -->\n')
-        except Exception:
+            table_list = lines[start_target_index+1:end_target_index]
+            table_list = [i for i in table_list if i.strip()!='']
+            table_rows = list({i:[k.strip() for k in j.split('|') if k.strip()!=''] for i,j in enumerate(table_list[1:])}.values())
+            cleaned_rows = {i[0].replace('`',''):i[1:] for i in table_rows}
+            match_content(table_section,cleaned_rows,has_url)
+        except Exception as e:
+            print(e)
             start_target_index = 0
             end_target_index = 0
         if start_target_index==end_target_index:
