@@ -64,7 +64,7 @@ def trace_call(function):
         return success,message
     return wrapper
 
-def ran_common_functions(user_input,history_file_name=None,message=None):
+def ran_common_functions(user_input,history_file_name=None,message=None,target=None,table_section=None,has_url=True):
     """Executes shared CLI shortcut commands based on user input strings.
 
     Args:
@@ -80,7 +80,7 @@ def ran_common_functions(user_input,history_file_name=None,message=None):
             if history_file_name==None:
                 print('to be written')
             else:
-                help(history_file_name)
+                help(history_file_name,target,table_section,has_url)
             return True
         case 'clear':
             clear_screen()
