@@ -460,9 +460,6 @@ class SearchHabitInputs(Habit_Inputs):
         }
         while True:        
             clear_screen()
-            print(Fore.LIGHTBLACK_EX + f'Search Pool        : You have {len(self.get_all_habits())} habit(s) to search through.' + Style.RESET_ALL)
-            print(Fore.LIGHTBLACK_EX + f'Duration Range     : The habits are between {Fore.BLUE+min(self.get_all_habits(),key=lambda habit: habit[3])[3]+Fore.LIGHTBLACK_EX} and ' + f'{Fore.BLUE + max(self.get_all_habits(),key=lambda habit: habit[3])[3] + Fore.LIGHTBLACK_EX}' + Style.RESET_ALL)
-            
             commands = list(command_functions.keys())
             print(Fore.LIGHTBLACK_EX + f'Search Pool        : You have {len(self.get_all_habits())} habit(s) to search through.' + Style.RESET_ALL)
             print(Fore.LIGHTBLACK_EX + f'Duration Range     : The habits are between {Fore.BLUE+min(self.get_all_habits(),key=lambda habit: habit[3])[3]+Fore.LIGHTBLACK_EX} and ' + f'{Fore.BLUE + max(self.get_all_habits(),key=lambda habit: habit[3])[3] + Fore.LIGHTBLACK_EX}' + Style.RESET_ALL)
