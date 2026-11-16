@@ -2,7 +2,7 @@ from ..ui.command_autocomplete import AutoCompleter,Form
 from ..ui.terminal_utils import ran_common_functions, retry_until_success, find_message,clear_screen
 from ...data.db_manager import CompleteHabit, Habits
 from ..habit_input import Habit_Inputs 
-from colorama import Fore, Style
+from colorama import Fore, Style,Back
 from ..shelf import Shelf
 from ..view import View
 
@@ -373,7 +373,6 @@ class SearchHabitInputs(Habit_Inputs):
         clear_screen()
         print(Fore.LIGHTBLACK_EX + f'Search Pool        : You have {Fore.YELLOW}{Fore.YELLOW}{Fore.YELLOW}{len(self.get_all_habits())} habit(s){Fore.LIGHTBLACK_EX}{Fore.LIGHTBLACK_EX}{Fore.LIGHTBLACK_EX} to search through.' + Style.RESET_ALL)
         print(Fore.LIGHTBLACK_EX + f'Date Range         : The habits are between {Fore.BLUE+min(self.get_all_habits(),key=lambda habit: habit[2])[2].split(' ')[0]+Fore.LIGHTBLACK_EX} and ' + f'{Fore.BLUE + max(self.get_all_habits(),key=lambda habit: habit[2])[2].split(' ')[0] + Fore.LIGHTBLACK_EX}' + Style.RESET_ALL)
-
         user_input = self.__my_input('Select the Date filter: ',history_file_name,commands,base='Home/SearchHabit/Filter/Date/',example='Input Format  : YYYY-MM-DD\nInput Example : 2026-06-30\nyear = 2026, month = June, day = 30th'+f'\n{'-'*105}\nNB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands\n{'-'*105}')
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(user_input)
@@ -520,7 +519,7 @@ class SearchHabitInputs(Habit_Inputs):
         while True:        
             clear_screen()
             commands = list(command_functions.keys())
-            print(Fore.LIGHTBLACK_EX + f'Search Pool        : You have {len(self.__search_habit_inputs.get_all_habits())} habit(s) to search through.' + Style.RESET_ALL)
+            print(Fore.LIGHTBLACK_EX + f'Search Pool        : You have {len(self.get_all_habits()) } habit(s) to search through.' + Style.RESET_ALL)
             user_input = self.__my_input('Select the Name Filter: ',history_file_name,commands,base='Home/SearchHabit/Filter/',example=f'NB: ⌨️  [↑/↓] History   •   [Enter] Select   •   [Esc]  Exit  • Press space to view available commands')
             # ********* start of common functions ************        
             did_run_common_func = ran_common_functions(user_input)
