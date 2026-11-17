@@ -2,6 +2,7 @@ import time
 import functools
 import os
 from pathlib import Path
+from colorama import Back, Style, Fore
 
 call_history = []
 
@@ -105,7 +106,7 @@ def find_message(message):
         case 'clear':
             return 'clearing screen...'
         case 'help':
-            return 'help function'
+            return ''
     return None
 
 def temporary_message(message, duration=2):
@@ -122,6 +123,15 @@ def temporary_message(message, duration=2):
     print(message, end="", flush=True)
     time.sleep(duration)
     print("\r" + " " * len(message) + "\r", end="", flush=True)
+
+def match_content(word,cleaned_rows,has_url=True):
+    print('----------------------------------------------------------------------------------------------------')
+    print(f'{Style.BRIGHT+word.capitalize()+Style.NORMAL} ')
+    print('----------------------------------------------------------------------------------------------------')
+    print(f'{ cleaned_rows[word][0].capitalize()}\n')
+    if has_url:
+        print(f'{Fore.LIGHTBLACK_EX + "press ctrl and click the URL to see the GIF\n"}'+Fore.WHITE)
+        print(f'{Style.BRIGHT}URL : { Style.NORMAL+ Back.LIGHTYELLOW_EX + Style.BRIGHT + cleaned_rows[word][-1].split('(')[1].replace(')','').replace(']','') + Back.RESET + Style.NORMAL}\n')
 
 
 def help(history_file_name,target=None,table_section=None,has_url=True):
