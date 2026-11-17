@@ -61,9 +61,9 @@ class DB_Interface:
             self.get_all_habits()
         return result
 
-    def get_cached_data(self) :
+    def get_cached_data(self,db_is_updated=False) :
         """Return the current cache, refreshing it after a flagged update."""
-        if self.is_db_updated:
+        if self.is_db_updated or db_is_updated:
             self.get_all_habits()
             self.is_db_updated = False
         return list(self.__cached_data)

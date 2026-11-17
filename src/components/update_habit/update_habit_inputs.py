@@ -277,17 +277,29 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
             return True, 'At least have one filled field'
         
         success,message = self._Habit_Inputs__habit.update_habit(**self.update_field_dict())
+        self.__habits.get_habits(True)
         habit = self.__habits.get_habit_by_id(self.__habit.get_id())[0]
         self.__shelf.preserve_habit(tuple(habit))
-        self.__is_habit_found_in_shelf = False
+        self.__update_habit_validator = UpdateHabitValidator()
         self.__number_of_habit_fields = None
-        self.__field_names = []
+        self.__field_names  = []
+        self.__habit_is_copied_once = False
+        self.__is_habit_found_in_shelf = False
+        self.__main_form = Form({field: False for field in ['id','number_of_habit_fields']})
+        self.__display_map = """
+[cyan]📌 LEVEL 1: PARAMETERS[/] [green]{name}[/] Name [blue] {start_datetime}[/] Start Datetime [green] {duration}[/] Duration  | [cyan]🔒 LEVEL 2: ACTION(S) [/] Complete update"""
+        self.__display_form = Form({field: False for field in ['name','start_datetime','duration']},self.__display_map)
+        self.__fiiled_form = Form({field: True for field in ['name','start_datetime','duration']},self.__display_map)
+        self.__fields_to_update_form = None
         self.__selected_habit_tuple = None
         self.__current_fields = dict()
         self.__habit = None
+        self.__habit_copy = None
+        self.__view = View()
+        self.__shelf = Shelf()
+        self.__habits = Habits()
         self.__copied_habit_status = "No habit has been copied from the shelf, please copy the habit from the shelf"
-        self.__main_form.reset_fields()
-        self.__display_form.reset_fields()
+        self._Habit_Inputs__habit.reset()
         return True,message
     
     def get_display_form(self):
@@ -305,4 +317,3 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
             display_map (str): Format string template containing field placeholders.
         """
         self.__display_map = display_map
-# gimp

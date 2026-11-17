@@ -16,6 +16,13 @@ class CompleteHabit(Habit):
         self.__validator = HabitValidator(self)
         self.__db_interface = DB_Interface()
 
+    def reset(self, name="default", session_duration="default", start_date="default",
+                status="UPCOMING", id=None, periodicity=None):
+        """Create a persistence-aware habit reset."""
+        super().__init__(name, session_duration, start_date, status, id, periodicity)
+        self.__validator = HabitValidator(self)
+        self.__db_interface = DB_Interface()
+
     def save_habit(self):
         """Validate and persist this habit."""
         valid, message = self.__validator.validate()
@@ -138,9 +145,9 @@ class Habits:
         """Create a habit collection backed by ``database_name`` when supplied."""
         self.__db_interface = DB_Interface(database_name)
 
-    def get_habits(self):
+    def get_habits(self,db_updated=False):
         """Return all stored habit tuples."""
-        return self.__db_interface.get_cached_data()
+        return self.__db_interface.get_cached_data(db_updated)
 
     def id_is_available(self, habit_id):
         """Return whether a habit ID exists."""
