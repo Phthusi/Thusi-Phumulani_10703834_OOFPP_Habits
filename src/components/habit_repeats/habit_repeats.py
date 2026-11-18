@@ -483,6 +483,8 @@ class HabitRepeats:
         if status == 'MISSED':
             return False, 'sorry we cannot perform this operation for MISSED sessions'
         self.__save_habit_repeats((id, name, start_datetime , duration, status, 'CUSTOM'))
+        self.__month_pattern_manager.clear()
+        self.__week_pattern_manager.clear()
         return True,'success...'
 
     def run_custom_repeats(self):
@@ -680,6 +682,8 @@ class HabitRepeats:
 
         self.__save_habit_repeats(copied_habit,months_pattern=filtered_months_pattern)
         self.__month_pattern_manager.delete_month_list(added_months)
+        self.__week_pattern_manager.clear()
+        self.__month_pattern_manager.clear()
         # print(f"Week data saved: {self.__number_of_weeks} weeks")
         return True, 'Success...'
 
@@ -897,12 +901,11 @@ class HabitRepeats:
                 case 'help':
                     ran_common_functions('help',history_file_name='habit_repeats')
                     continue
-
             if user_input=='copy habit from shelf':
                 self.__update_habit_inputs.set_habit_is_copied_once(True)
                 funct = command_functions[user_input]
                 funct()
-
+            
             # if self.__update_habit_inputs.get_habit() is None:
             #     print('Copy the habit sesssion from the shelf before completing it')
             #     input('Press Enter to continue')

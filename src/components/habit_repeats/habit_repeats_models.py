@@ -195,7 +195,7 @@ class WeekPatternManager:
         Example:
             >>> WeekPatternManager.clear()
         """
-        WeekPattern.week_patterns = []
+        WeekPattern.week_patterns = {}
 
 class MonthPattern:
     """Represents a 4-week structured month schedule built from saved week pattern references.
@@ -392,7 +392,7 @@ class MonthPatternManager:
         Example:
             >>> MonthPatternManager.clear()
         """
-        MonthPattern.monthPatterns = []
+        MonthPattern.monthPatterns = {}
 
 class MonthsPattern:
     """Represents a multi-month schedule pattern combining multiple month pattern references.
