@@ -897,15 +897,16 @@ class HabitRepeats:
                 case 'help':
                     ran_common_functions('help',history_file_name='habit_repeats')
                     continue
+
             if user_input=='copy habit from shelf':
                 self.__update_habit_inputs.set_habit_is_copied_once(True)
                 funct = command_functions[user_input]
                 funct()
-            
-            if self.__update_habit_inputs.get_habit() is None:
-                print('Copy the habit sesssion from the shelf before completing it')
-                input('Press Enter to continue')
-                continue
+
+            # if self.__update_habit_inputs.get_habit() is None:
+            #     print('Copy the habit sesssion from the shelf before completing it')
+            #     input('Press Enter to continue')
+            #     continue
 
             if user_input not in commands:
                 print('invalid input')
