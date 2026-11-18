@@ -4,7 +4,7 @@ from ..habit_input import Habit_Inputs
 from .update_habit_validator import UpdateHabitValidator
 from ..shelf import Shelf
 from ..view import View
-from colorama import Fore
+from colorama import Fore,Style
 from ...data.db_manager import CompleteHabit,Habits
 from ..ui.terminal_utils import clear_screen
 
@@ -44,7 +44,7 @@ class UpdateHabitInputs(Habit_Inputs):
         self.__habits = Habits()
         self.__copied_habit_status = "No habit has been copied from the shelf, please copy the habit from the shelf"
 
-    def __my_input(self,message,history_file_name,commands,field_pair=None):
+    def __my_input(self,message,history_file_name,commands,field_pair=None,example=None):
         """Presents an autocompleted terminal input prompt with status indicator headers.
 
         Args:
@@ -59,7 +59,7 @@ class UpdateHabitInputs(Habit_Inputs):
         self.__main_auto_completer = AutoCompleter(BASE_DIR / f"history/{history_file_name}",commands)
         self.__main_auto_completer.set_has_status(True)
         modified_history_file_name = "".join(list(map(lambda word:word.capitalize(),history_file_name.split('_'))))
-        return self.__main_auto_completer.prompt_input(message,location=f"Home/UpdateHabit/{modified_history_file_name}",field_pair=field_pair).lower()
+        return self.__main_auto_completer.prompt_input(message,location=f"Home/UpdateHabit/{modified_history_file_name}",field_pair=field_pair,example=example).lower()
 
     def get_habit(self):
         """Retrieves the active habit instance.
@@ -155,8 +155,12 @@ Habit ID      : {Fore.LIGHTGREEN_EX}{self.__habit._Habit__id}''')
         
         commands = ['name','start_datetime','duration']
         history_file_name = 'choose_fields_to_update'
-        
-        habit_field = self.__my_input(message,history_file_name,commands)
+        example = f'''NB: Each field (name, start_datetime, duration, etc.) has a corresponding reset command (e.g. `reset_name`, `reset_duration`).
+At each location (e.g. `[📍Location] Home/AddHabit/HabitName`), press Space to access it.
+--------------------------------------------------------------------------------------------
+[↑/↓] Navigate history  •  [Enter] Select  •  [Esc] Exit  •  [Space] View available commands
+'''
+        habit_field = self.__my_input(message,history_file_name,commands,example=example)
         # ********* start of common functions ************        
         did_run_common_func = ran_common_functions(habit_field)
         message_to_display = find_message(habit_field)
